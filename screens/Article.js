@@ -248,55 +248,50 @@ const Article = ({ route }) => {
 
 
 
-    const handleDoubleTap = (item, index) => {
-        const now = Date.now();
-        const DOUBLE_PRESS_DELAY = 300;
-        if (lastTap && (now - lastTap) < DOUBLE_PRESS_DELAY) {
-            setCurrentIndex(index); // Save the index of the tapped item
-            setIsModalVisible(true); // Open the modal
-        } else {
-            lastTap = now;
-        }
+    const handleSingleTap = (item, index) => {
+        setCurrentIndex(index); // Save the index of the tapped item
+        setIsModalVisible(true); // Open the modal
     };
+
 
 
 
 
     // Function to render either an image or a video based on the file extension
-    const renderMedia = ({item, index}) => {
-        const mediaHeight = screenWidth * (9 / 16); // Maintain 16:9 aspect ratio
-
-        // Determine if this video should be playing based on its visibility and modal state
-        const shouldVideoPlay = item.isVideo && item.url === visibleItem && !isModalVisible;
+    const renderMedia = ({ item, index }) => {
+        // Set the desired width and height based on screen width and 16:9 aspect ratio
+        const mediaWidth = screenWidth - 20; // Subtracting padding value (10 on each side)
+        const mediaHeight = mediaWidth * (9 / 16); // Maintain 16:9 aspect ratio
 
         if (item.isVideo) {
             return (
-                <TouchableOpacity onPress={() => handleDoubleTap(item, index)} activeOpacity={0.8} style={{marginVertical:5}}>
+                <TouchableOpacity onPress={() => handleSingleTap(item, index)} activeOpacity={0.8} style={{ marginVertical: 5, paddingHorizontal: 10 }}>
                     <Video
                         source={{ uri: item.url }}
                         rate={1.0}
                         volume={1.0}
                         isMuted={false}
-                        resizeMode="contain"
-                        shouldPlay={shouldVideoPlay} // Only play if this video is currently visible and the modal is not open
+                        resizeMode="cover" // Change to "contain" if you want to fit the whole video within the frame without cropping
+                        shouldPlay={item.url === visibleItem && !isModalVisible}
                         isLooping
                         useNativeControls
-                        style={{ width: screenWidth, height: mediaHeight, alignSelf:"center", justifyContent:"center"}}
+                        style={{ width: mediaWidth, height: mediaHeight }}
                     />
                 </TouchableOpacity>
             );
         } else {
             return (
-                <TouchableOpacity onPress={() => handleDoubleTap(item, index)} activeOpacity={0.8} style={{marginVertical:5}}>
+                <TouchableOpacity onPress={() => handleSingleTap(item, index)} activeOpacity={0.8} style={{ marginVertical: 5, paddingHorizontal: 10 }}>
                     <Image
                         source={{ uri: item.url }}
-                        style={{ width: screenWidth, height: mediaHeight }}
-                        resizeMode="contain"
+                        style={{ width: mediaWidth, height: mediaHeight }}
+                        resizeMode="cover" // Change to "contain" if you want to fit the whole image within the frame without cropping
                     />
                 </TouchableOpacity>
             );
         }
     };
+
 
 
 
@@ -308,9 +303,7 @@ const Article = ({ route }) => {
             keyExtractor={(item, index) => index.toString()}
             horizontal
             showsHorizontalScrollIndicator={false}
-            decelerationRate={"fast"} // Adjusts the deceleration rate of the scroll to make swiping feel more "deliberate"
-            snapToAlignment={"start"} // Ensures that the snapping aligns to the start of each item
-            snapToInterval={screenWidth} // Assuming each item fills the width of the screen
+            pagingEnabled={true} // Enable paging
             onViewableItemsChanged={onViewableItemsChanged}
             viewabilityConfig={viewabilityConfig}
         />
@@ -441,7 +434,9 @@ const Article = ({ route }) => {
 
 
     return (
-        <ScrollView ref={scrollRef}>
+
+        <View>
+
             <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A", zIndex:-1 }}>
                 <StatusBar
                     translucent
@@ -449,6 +444,9 @@ const Article = ({ route }) => {
                     barStyle="light-content"
                 />
             </View>
+            <ArticleHeader />
+        <ScrollView ref={scrollRef} >
+
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -479,6 +477,7 @@ const Article = ({ route }) => {
                                 keyExtractor={(item, index) => index.toString()}
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
+                                pagingEnabled={true} // Enable paging
                                 initialScrollIndex={currentIndex}
                                 getItemLayout={(data, index) => ({
                                     length: screenWidth,
@@ -486,6 +485,7 @@ const Article = ({ route }) => {
                                     index,
                                 })}
                             />
+
                         </View>
                     </BlurView>
                 </Modal>
@@ -494,12 +494,12 @@ const Article = ({ route }) => {
 
 
 
-            <ArticleHeader />
+
 
             {article && (
                 <>
                     <View style={{}}>
-                        <View style={{margin:10}}>
+                        <View style={{ display:"flex", justifyContent:"center", width:"100%", alignItems:"center"}}>
                             {contentToDisplay}
                         </View>
                     </View>
@@ -745,6 +745,7 @@ const Article = ({ route }) => {
 
 
         </ScrollView>
+        </View>
     );
 };
 
@@ -767,11 +768,17 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200, // You can adjust this value as needed
     },
+    regularText:{
+        textAlign:"justify"
+    },
     boldText:{
-        fontWeight:"bold"
+        fontWeight:"bold",
+        textAlign:"justify"
     },
     italicText:{
-        fontStyle:"italic"
+        fontStyle:"italic",
+        textAlign:"justify"
+
     },
 
     title:{
@@ -809,6 +816,7 @@ const styles = StyleSheet.create({
         fontSize:14,
         fontWeight:'500',
         marginBottom:30,
+        textAlign:"justify"
     },
     text:{
         marginBottom:14

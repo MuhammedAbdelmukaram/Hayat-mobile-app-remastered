@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     },
     heading:{
         fontWeight:'600',
-        textAlign:"justify",
+        textAlign:"left",
         width:254,
         marginBottom:4,
     },
@@ -126,7 +126,8 @@ const styles = StyleSheet.create({
     subtitle:{
         color:"#2d2d2d",
         fontSize:11,
-        width:260
+        width:260,
+        textAlign:"justify"
     }
 
 

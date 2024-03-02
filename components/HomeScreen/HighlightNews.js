@@ -14,6 +14,7 @@ import image5 from "../../assets/news/newsBack-5.png"
 import image6 from "../../assets/news/newsBack-6.png"
 import image7 from "../../assets/news/newsBack-7.png"
 import article from "../../screens/Article";
+import Priority6 from "../Priority6";
 
 const HighlightNews = () => {
     const highlightData = useSelector((state) => state.selectedContent.highlightData);
@@ -25,8 +26,8 @@ const HighlightNews = () => {
             case 2: return <Priority2 {...articleProps(article)} />;
             case 3: return <Priority3 {...articleProps(article)} />;
             case 4: return <Priority4 {...articleProps(article)} />;
-            case 5: return <Priority5 {...articleProps(article)} />;
-            case 6: return <Priority5 {...articleProps(article)} />;
+            case 5: return <Priority6 {...articleProps(article)} />;
+            case 6: return <Priority6 {...articleProps(article)} />;
             default: return null;
         }
     };

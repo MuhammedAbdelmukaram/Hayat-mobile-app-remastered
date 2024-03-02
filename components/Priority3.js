@@ -102,14 +102,15 @@ const styles = StyleSheet.create({
 
     heading:{
         fontWeight:'600',
-        textAlign:"justify",
+        textAlign:"left",
         marginBottom:4,
         width:240
     },
     subtitle:{
         color:"#2d2d2d",
         fontSize:11,
-        width:240
+        width:240,
+        textAlign:"justify",
     },
     shareIcon:{
         height:10,

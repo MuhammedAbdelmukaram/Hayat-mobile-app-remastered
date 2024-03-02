@@ -56,7 +56,6 @@ const CategoryHighlightNews = () => {
                 PriorityComponent = [Priority2, Priority3, Priority3, Priority5, Priority5, Priority5, Priority3][index];
             } else if (algoNumber === 2) {
                 // Insert an ad for the second algorithm at the second position
-                if (index === 1) return <PriorityAd key="ad" />;
                 PriorityComponent = [Priority2, Priority4, Priority4, Priority3, Priority3, Priority5, Priority5][index];
             } else {
                 // Use a different mix for the third algorithm
