@@ -20,6 +20,8 @@ import TVShow from "./screens/TVShow";
 import SubTvShow from "./screens/SubTvShow";
 import LiveTv from "./screens/LiveTV";
 import Uskoro from "./screens/uskoro";
+import About from "./screens/About";
+import Settings from "./screens/Settings";
 
 export default function App() {
 
@@ -97,6 +99,11 @@ export default function App() {
                     component={Account}
                     options={{ headerShown: false }}
                 />
+              <Stack.Screen
+                  name="About"
+                  component={About}
+                  options={{ headerShown: false }}
+              />
 
                 <Stack.Screen
                     name="Login"
@@ -110,7 +117,15 @@ export default function App() {
                     options={{ headerShown: false ,animationEnabled:false }}
                 />
 
-                <Stack.Screen
+              <Stack.Screen
+                  name="Settings"
+                  component={Settings}
+                  options={{ headerShown: false ,animationEnabled:false }}
+              />
+
+
+
+              <Stack.Screen
                     name="TermsOfService"
                     component={TermsOfService}
                     options={{ headerShown: false ,}}

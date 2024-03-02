@@ -28,7 +28,7 @@ import {
 import axios from "axios";
 import {API_URL} from '@env';
 
-const Menu = ({ visible, onClose }) => {
+const Menu = ({visible, onClose}) => {
     const [slideAnim] = useState(new Animated.Value(-300)); // Initialize to a value off-screen
     const selectedCategory = useSelector((state) => state.selectedContent.selectedCategory);
     const categoriesData = useSelector((state) => state.selectedContent.categoriesData);
@@ -41,8 +41,7 @@ const Menu = ({ visible, onClose }) => {
     });
 
 
-
-    const handleCategoryPress = async ({ categoryUrl, index, page = 1 }) => {
+    const handleCategoryPress = async ({categoryUrl, index, page = 1}) => {
         dispatch(setSelectedCategory(categoryUrl));
 
         if (selectedCategory !== categoryUrl) {
@@ -58,10 +57,9 @@ const Menu = ({ visible, onClose }) => {
             } else {
                 dispatch(appendContentData(response.data)); // Append data for subsequent pages
             }
-        }  catch (error) {
+        } catch (error) {
             console.error('Error fetching categories specific:', error);
-        }
-        finally {
+        } finally {
             // Close the modal after performing the necessary actions
             onClose();
         }
@@ -70,18 +68,17 @@ const Menu = ({ visible, onClose }) => {
         const viewportWidth = Dimensions.get('window').width; // Width of the viewport
 
         // Calculate the center position of the button to be centered in the viewport
-        const buttonCenter = (index * buttonWidth +96) ;
-        const scrollToPosition = buttonCenter ;
+        const buttonCenter = (index * buttonWidth + 96);
+        const scrollToPosition = buttonCenter;
 
         // Calculate the maximum scrollable position to ensure we don't scroll beyond content
         const maxScrollPosition = (categoriesData.length * buttonWidth) - viewportWidth;
         // Ensure the scrollToPosition is within the bounds [0, maxScrollPosition]
         const boundedScrollToPosition = Math.max(0, Math.min(scrollToPosition, maxScrollPosition));
 
-        scrollViewRef.current?.scrollTo({ x: boundedScrollToPosition, animated: true });
+        scrollViewRef.current?.scrollTo({x: boundedScrollToPosition, animated: true});
         dispatch(setScrollPosition(boundedScrollToPosition));
     };
-
 
 
     useEffect(() => {
@@ -102,10 +99,8 @@ const Menu = ({ visible, onClose }) => {
 
     useEffect(() => {
         // Scroll to the saved position when component mounts or scrollPosition changes
-        scrollViewRef.current?.scrollTo({ x: scrollPosition, animated: false });
+        scrollViewRef.current?.scrollTo({x: scrollPosition, animated: false});
     }, [scrollPosition]);
-
-
 
 
     useEffect(() => {
@@ -142,7 +137,6 @@ const Menu = ({ visible, onClose }) => {
     };
 
 
-
     const [fontsLoaded] = useFonts({
         Blinker: require('@expo-google-fonts/blinker'),
     });
@@ -163,7 +157,7 @@ const Menu = ({ visible, onClose }) => {
                 <Animated.View
                     style={[
                         styles.modalContainer,
-                        { transform: [{ translateX: slideAnim }] },
+                        {transform: [{translateX: slideAnim}]},
                     ]}
                 >
                     <ScrollView contentContainerStyle={styles.menuContent}>
@@ -172,10 +166,10 @@ const Menu = ({ visible, onClose }) => {
                                 source={require('../../assets/hayatLogo.png')}
                                 style={styles.menuHeaderLogo}
                             />
-                            <SocialMediaIcons />
+                            <SocialMediaIcons/>
                         </View>
 
-                        <HorizontalLine />
+                        <HorizontalLine/>
 
                         {/*<View style={styles.menuHayatButtons}>
                             <TouchableOpacity
@@ -208,7 +202,7 @@ const Menu = ({ visible, onClose }) => {
                         <HorizontalLine/>
 
 
-                        <View style={{marginLeft:10, paddingVertical:10}}>
+                        <View style={{marginLeft: 10, paddingVertical: 10}}>
                             <TouchableOpacity
                                 style={styles.menuItem}
                                 onPress={() => {
@@ -230,21 +224,21 @@ const Menu = ({ visible, onClose }) => {
 
                             {isLoggedIn && (
                                 <>
-                                <TouchableOpacity
-                                style={styles.menuItem}
-                                onPress={() => {
-                                    navigation.navigate('Account'); // Use your HomeScreen's route name
-                                    onClose(); // Optionally close the menu
-                                }}
-                            >
-                                <Image
-                                    source={require('../../assets/account.png')} // Your home icon
-                                    style={getIconStyle(24)}
-                                />
-                                <Text style={styles.menuItemText}>
-                                    Račun
-                                </Text>
-                            </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.menuItem}
+                                        onPress={() => {
+                                            navigation.navigate('Account'); // Use your HomeScreen's route name
+                                            onClose(); // Optionally close the menu
+                                        }}
+                                    >
+                                        <Image
+                                            source={require('../../assets/account.png')} // Your home icon
+                                            style={getIconStyle(24)}
+                                        />
+                                        <Text style={styles.menuItemText}>
+                                            Račun
+                                        </Text>
+                                    </TouchableOpacity>
                                 </>)}
 
 
@@ -312,8 +306,6 @@ const Menu = ({ visible, onClose }) => {
                         </View>
 
 
-
-
                         <HorizontalLine/>
 
                         <View style={styles.menuCategories}>
@@ -322,7 +314,7 @@ const Menu = ({ visible, onClose }) => {
                                 <TouchableOpacity
                                     key={index}
                                     style={styles.menuItem}
-                                    onPress={() => handleCategoryPress({ categoryUrl: category.category_url, index })}
+                                    onPress={() => handleCategoryPress({categoryUrl: category.category_url, index})}
                                 >
                                     <Text style={styles.menuItemText}>
                                         {category.name}
@@ -332,6 +324,46 @@ const Menu = ({ visible, onClose }) => {
 
                         </View>
 
+                        <View style={styles.linePadding}>
+                           <HorizontalLine/>
+                        </View>
+
+                        <View style={styles.menuBottomSection}>
+
+                            <View style={styles.menuCategories}>
+                                <TouchableOpacity
+                                    style={styles.menuItemBottom}
+                                    onPress={() => {
+                                        navigation.navigate('About');
+                                        // Use your HomeScreen's route name
+                                        onClose(); // Optionally close the menu
+                                    }}
+                                >
+                                    <Image
+                                        source={require('../../assets/about.png')} // Your home icon
+                                        style={getIconStyle(28)}
+                                    />
+
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={styles.menuCategories}>
+                                <TouchableOpacity
+                                    style={styles.menuItemBottom}
+                                    onPress={() => {
+                                        navigation.navigate('Settings');
+                                        // Use your HomeScreen's route name
+                                        onClose(); // Optionally close the menu
+                                    }}
+                                >
+                                    <Image
+                                        source={require('../../assets/settings.png')} // Your home icon
+                                        style={getIconStyle(28)}
+                                    />
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
 
 
                         {/* Add more menu items */}
@@ -352,70 +384,95 @@ const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
         backgroundColor: '#1A2F5A',
-        justifyContent:'',
-        width:"80%",
+        justifyContent: '',
+        width: "80%",
     },
     menuContent: {
-        alignSelf:"flex-start",
-        justifyContent:"flex-start",
+        alignSelf: "flex-start",
+        justifyContent: "flex-start",
         backgroundColor: '#1A2F5A',
         paddingLeft: 16,
-        width:"100%",
+        width: "100%",
         paddingTop: Platform.OS === 'ios' ? 40 : 0, // Apply paddingTop only for iOS
     },
-    menuHeader:{
-        backgroundColor:"#1A2F5A",
-        height:66,
-        display:"flex",
-        flexDirection:"row",
-        alignItems:"baseline",
+    menuHeader: {
+        backgroundColor: "#1A2F5A",
+        height: 66,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "baseline",
     },
 
-    menuHayatButtons:{
-        paddingTop:20,
-        display:"flex",
-        flexDirection:"column"
+    menuHayatButtons: {
+        paddingTop: 20,
+        display: "flex",
+        flexDirection: "column"
     },
 
-    menuItem:{
-        display:"flex",
+    menuItem: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        backgroundColor: "#1A2F5A",
+        paddingLeft: 12,
+        paddingVertical: 12,
+        marginLeft: -16,
+    },
+
+    menuItemBottom: {
+        display: "inline",
+        flexDirection: "row",
+        alignItems: "center",
+        width:50,
+        height: 50,
+        justifyContent: "center",
+        backgroundColor: "#1A2F5A",
+
+        paddingVertical: 12,
+
+    },
+
+    gledajHayatIcon: {
+        height: 35,
+        width: 35,
+    },
+    hayatPlayIcon: {
+        height: 35,
+        width: 35,
+    },
+
+
+    menuItemText: {
+        color: "#fff",
+        fontSize: 17,
+        marginLeft: "8%",
+        fontWeight: '600',
+    },
+
+    iconStyle: {
+        height: 20
+    },
+
+    menuHeaderLogo: {
+        width: 120,
+        height: 23,
+    },
+
+    linePadding:{
+        marginTop:12
+    },
+
+    menuBottomSection:{
+      display:"flex",
         flexDirection:"row",
-        alignItems:"center",
+        gap:8,
         justifyContent:"flex-start",
-        backgroundColor:"#1A2F5A",
-        paddingLeft:12,
-        paddingVertical:12,
-        marginLeft:-16,
+        marginRight:30
     },
 
-    gledajHayatIcon:{
-       height:35,
-       width:35,
-    },
-    hayatPlayIcon:{
-        height:35,
-        width:35,
-    },
-
-
-    menuItemText:{
-      color:"#fff",
-        fontSize:17,
-        marginLeft:"8%",
-        fontWeight:'600',
-    },
-
-    iconStyle:{
-        height:20
-    },
-
-    menuHeaderLogo:{
-        width:120,
-        height:23,
-    },
-
-    menuCategories:{
-      marginTop:10
+    menuCategories: {
+        marginTop: 10
     }
 });
 

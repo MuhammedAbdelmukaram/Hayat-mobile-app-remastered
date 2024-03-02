@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
     ActivityIndicator,
     Dimensions,
@@ -14,7 +14,7 @@ import {
     View
 } from "react-native";
 import image from "../assets/news/newsBack-2.png";
-import {useNavigation} from "@react-navigation/native";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
 import Header from "../components/Common/Header";
 import ShareButtons from "../components/Articles/ShareButtons";
 import SuggestedNews from "../components/Articles/SuggestedNews";
@@ -44,7 +44,7 @@ const Article = ({ route }) => {
     const [currentImageUrl, setCurrentImageUrl] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [visibleVideoUrl, setVisibleVideoUrl] = useState(null);
-
+    const scrollRef = useRef(null);
     const isVideo = (url) => {
         return /\.(mp4|mov)$/i.test(url);
     };
@@ -114,6 +114,16 @@ const Article = ({ route }) => {
             setCurrentIndex(visibleIndex);
         }
     }, [article]); // Change the dependency to article instead of article.image_list
+
+
+    useFocusEffect(
+        useCallback(() => {
+            if (scrollRef.current) {
+                scrollRef.current.scrollTo({ y: 0, animated:true , behavior:"smooth" });
+            }
+        }, [articleID]) // Add articleID as a dependency
+    );
+
 
 
 
@@ -428,8 +438,9 @@ const Article = ({ route }) => {
   `;
 
 
+
     return (
-        <ScrollView >
+        <ScrollView ref={scrollRef}>
             <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A", zIndex:-1 }}>
                 <StatusBar
                     translucent
