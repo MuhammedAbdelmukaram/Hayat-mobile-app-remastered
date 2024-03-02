@@ -28,6 +28,7 @@ import {API_URL} from '@env';
 import Survey from "./Survey";
 import {BlurView} from "expo-blur";
 import ArticleHeader from "../components/Articles/ArticleHeader";
+import AdPlacement2 from "../Ads/AdPlacement2";
 
 
 const screenWidth = Dimensions.get('window').width;
@@ -525,6 +526,8 @@ const Article = ({ route }) => {
                 </View>
 
                 <Text style={styles.subTitle}>{article.subtitle}</Text>
+
+
 
 
 

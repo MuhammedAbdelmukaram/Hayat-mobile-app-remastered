@@ -329,6 +329,22 @@ const Menu = ({visible, onClose}) => {
                         </View>
 
                         <View style={styles.menuBottomSection}>
+                            <View style={styles.menuCategories}>
+                                <TouchableOpacity
+                                    style={styles.menuItemBottom}
+                                    onPress={() => {
+                                        navigation.navigate('Settings');
+                                        // Use your HomeScreen's route name
+                                        onClose(); // Optionally close the menu
+                                    }}
+                                >
+                                    <Image
+                                        source={require('../../assets/settings.png')} // Your home icon
+                                        style={getIconStyle(28)}
+                                    />
+
+                                </TouchableOpacity>
+                            </View>
 
                             <View style={styles.menuCategories}>
                                 <TouchableOpacity
@@ -347,22 +363,7 @@ const Menu = ({visible, onClose}) => {
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={styles.menuCategories}>
-                                <TouchableOpacity
-                                    style={styles.menuItemBottom}
-                                    onPress={() => {
-                                        navigation.navigate('Settings');
-                                        // Use your HomeScreen's route name
-                                        onClose(); // Optionally close the menu
-                                    }}
-                                >
-                                    <Image
-                                        source={require('../../assets/settings.png')} // Your home icon
-                                        style={getIconStyle(28)}
-                                    />
 
-                                </TouchableOpacity>
-                            </View>
                         </View>
 
 
@@ -466,8 +467,8 @@ const styles = StyleSheet.create({
     menuBottomSection:{
       display:"flex",
         flexDirection:"row",
-        gap:8,
-        justifyContent:"flex-start",
+        gap:2,
+        justifyContent:"flex-end",
         marginRight:30
     },
 
