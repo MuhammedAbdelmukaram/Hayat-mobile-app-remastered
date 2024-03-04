@@ -48,6 +48,10 @@ const HomeScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     // Function to update loading state
+
+    const expoPushToken = useSelector((state) => state.notification.expoPushToken);
+
+    console.log('Expo Push Token from Redux:', expoPushToken);
     const handleLoading = (loading) => {
         setIsLoading(loading);
     };

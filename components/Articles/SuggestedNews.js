@@ -21,7 +21,8 @@ const SuggestedNews = ({ imageSource, headline,articleID,navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: "34.7%"
+        width: "34.7%",
+        height:"100%"
     },
     image: {
         width: 120,

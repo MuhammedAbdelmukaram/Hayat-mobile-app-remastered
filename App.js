@@ -25,125 +25,127 @@ import Settings from "./screens/Settings";
 
 export default function App() {
 
-    const Stack = createStackNavigator();
+
+
+  const Stack = createStackNavigator();
 
   return (
       <Provider store={store}>
-          <NavigationContainer>
+        <NavigationContainer>
 
-            <Stack.Navigator initialRouteName="HomeScreen"
-                             screenOptions={{
-                               ...TransitionPresets.SlideFromRightIOS, // Use the sliding animation
-                             }}
-                             >
+          <Stack.Navigator initialRouteName="HomeScreen"
+                           screenOptions={{
+                             ...TransitionPresets.SlideFromRightIOS, // Use the sliding animation
+                           }}
+          >
 
-              <Stack.Screen
-                  name="HomeScreen"
-                  component={HomeScreen}
-                  options={{ headerShown: false }}
-              />
+            <Stack.Screen
+                name="HomeScreen"
+                component={HomeScreen}
+                options={{ headerShown: false }}
+            />
 
-                <Stack.Screen
-                    name="Article"
-                    component={Article}
-                    options={{ headerShown: false }}
-                />
+            <Stack.Screen
+                name="Article"
+                component={Article}
+                options={{ headerShown: false }}
+            />
 
-                <Stack.Screen
-                    name="VideoArticle"
-                    component={VideoArticle}
-                    options={{ headerShown: false }}
-                />
+            <Stack.Screen
+                name="VideoArticle"
+                component={VideoArticle}
+                options={{ headerShown: false }}
+            />
 
-                <Stack.Screen
-                    name="HayatPlay"
-                    component={HayatPlay}
-                    options={{ headerShown: false }}
-                />
+            <Stack.Screen
+                name="HayatPlay"
+                component={HayatPlay}
+                options={{ headerShown: false }}
+            />
 
-              <Stack.Screen
-                  name="Uskoro"
-                  component={Uskoro}
-                  options={{ headerShown: false }}
-              />
+            <Stack.Screen
+                name="Uskoro"
+                component={Uskoro}
+                options={{ headerShown: false }}
+            />
 
-                <Stack.Screen
-                    name="SubCategory"
-                    component={SubCategory}
-                    options={{ headerShown: false }}
-                />
+            <Stack.Screen
+                name="SubCategory"
+                component={SubCategory}
+                options={{ headerShown: false }}
+            />
 
-              <Stack.Screen
-                  name="TvShow"
-                  component={TVShow}
-                  options={{ headerShown: false }}
-              />
+            <Stack.Screen
+                name="TvShow"
+                component={TVShow}
+                options={{ headerShown: false }}
+            />
 
-              <Stack.Screen
-                  name="SubTvShow"
-                  component={SubTvShow}
-                  options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                  name="LiveTV"
-                  component={LiveTv}
-                  options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                  name="VODcategories"
-                  component={VODcategories}
-                  options={{ headerShown: false }}
-              />
-                <Stack.Screen
-                    name="Account"
-                    component={Account}
-                    options={{ headerShown: false }}
-                />
-              <Stack.Screen
-                  name="About"
-                  component={About}
-                  options={{ headerShown: false }}
-              />
+            <Stack.Screen
+                name="SubTvShow"
+                component={SubTvShow}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="LiveTV"
+                component={LiveTv}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="VODcategories"
+                component={VODcategories}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="Account"
+                component={Account}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="About"
+                component={About}
+                options={{ headerShown: false }}
+            />
 
-                <Stack.Screen
-                    name="Login"
-                    component={Login}
-                    options={{ headerShown: false ,animationEnabled:false }}
-                />
+            <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ headerShown: false ,animationEnabled:false }}
+            />
 
-                <Stack.Screen
-                    name="Survey"
-                    component={Survey}
-                    options={{ headerShown: false ,animationEnabled:false }}
-                />
+            <Stack.Screen
+                name="Survey"
+                component={Survey}
+                options={{ headerShown: false ,animationEnabled:false }}
+            />
 
-              <Stack.Screen
-                  name="Settings"
-                  component={Settings}
-                  options={{ headerShown: false ,animationEnabled:false }}
-              />
-
-
-
-              <Stack.Screen
-                    name="TermsOfService"
-                    component={TermsOfService}
-                    options={{ headerShown: false ,}}
-                />
-
-                <Stack.Screen
-                    name="Signup"
-                    component={Signup}
-                    options={{ headerShown: false ,animationEnabled:false }}
-                />
-
-            </Stack.Navigator>
+            <Stack.Screen
+                name="Settings"
+                component={Settings}
+                options={{ headerShown: false ,animationEnabled:false }}
+            />
 
 
 
+            <Stack.Screen
+                name="TermsOfService"
+                component={TermsOfService}
+                options={{ headerShown: false ,}}
+            />
+
+            <Stack.Screen
+                name="Signup"
+                component={Signup}
+                options={{ headerShown: false ,animationEnabled:false }}
+            />
+
+          </Stack.Navigator>
 
 
-          </NavigationContainer>
+
+
+
+        </NavigationContainer>
       </Provider>
   );
 }
@@ -151,6 +153,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',

@@ -435,7 +435,7 @@ const Article = ({ route }) => {
 
     return (
 
-        <View>
+        <View style={{height:"100%"}}>
 
             <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A", zIndex:-1 }}>
                 <StatusBar
@@ -445,7 +445,7 @@ const Article = ({ route }) => {
                 />
             </View>
             <ArticleHeader />
-        <ScrollView ref={scrollRef} >
+        <ScrollView ref={scrollRef} style={{height:"100%"}}>
 
                 <Modal
                     animationType="slide"
@@ -753,6 +753,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         backgroundColor:'#fff',
+
     },
     wrapper:{
         paddingHorizontal:8,

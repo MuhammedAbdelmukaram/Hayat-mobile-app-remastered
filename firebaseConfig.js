@@ -9,11 +9,11 @@ import initializeApp from '@react-native-firebase/app';
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: 'api-key',
-  authDomain: 'project-id.firebaseapp.com',
-  databaseURL: 'https://project-id.firebaseio.com',
-  projectId: 'project-id',
-  storageBucket: 'project-id.appspot.com',
+  apiKey: 'AIzaSyDSBx_Rm2LdSfFY3Y6s-VUGp7fexN_mBCA',
+  authDomain: 'hayat-b0036.firebaseapp.com',
+  databaseURL: 'https://hayat-b0036.firebaseio.com',
+  projectId: 'hayat-b0036',
+  storageBucket: 'hayat-b0036.appspot.com',
   messagingSenderId: 'sender-id',
   appId: 'app-id',
   measurementId: 'G-measurement-id',
