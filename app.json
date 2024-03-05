@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.segvic.hayat"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -23,10 +24,19 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.hayatremastered.hayatremastered"
+      "package": "com.segvic.hayat"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9fea08b9-ea53-48e1-9528-6c8ec7da64e8"
+      }
     }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-5199188092588893~4036901016",
+    "ios_app_id": "ca-app-pub-5199188092588893~3068268422"
   }
 }

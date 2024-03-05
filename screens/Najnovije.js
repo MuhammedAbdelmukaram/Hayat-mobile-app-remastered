@@ -14,7 +14,7 @@ import Priority3 from '../components/Priority3';
 import Priority5 from '../components/Priority5';
 import { API_URL } from '@env';
 import Priority6 from "../components/Priority6";
-
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 const Najnovije = ({isPageLoading}) => {
     const dispatch = useDispatch();
     const { najnovijeData, currentPage, hasMore } = useSelector((state) => state.selectedContent);
@@ -39,6 +39,13 @@ const Najnovije = ({isPageLoading}) => {
 
     return (
         <View>
+            <BannerAd
+            unitId={TestIds.BANNER}
+            size={'300x250'}
+            requestOptions={{
+                requestNonPersonalizedAdsOnly: true,
+            }}
+            />
             {najnovijeData.map((article, index) => {
                 if (article.video_post) {
                     return (

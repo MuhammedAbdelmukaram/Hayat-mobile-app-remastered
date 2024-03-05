@@ -24,7 +24,7 @@ import {Video} from "expo-av";
 import {useDispatch, useSelector} from "react-redux";
 import {API_URL} from '@env';
 
-
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import Survey from "./Survey";
 import {BlurView} from "expo-blur";
 import ArticleHeader from "../components/Articles/ArticleHeader";
@@ -445,6 +445,13 @@ const Article = ({ route }) => {
                 />
             </View>
             <ArticleHeader />
+            <BannerAd
+            unitId={TestIds.BANNER}
+            size={"320x100"}
+            requestOptions={{
+                requestNonPersonalizedAdsOnly: true,
+            }}
+            />
         <ScrollView ref={scrollRef} style={{height:"100%"}}>
 
                 <Modal

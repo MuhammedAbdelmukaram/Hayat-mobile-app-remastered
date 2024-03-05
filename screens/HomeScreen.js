@@ -109,7 +109,6 @@ const HomeScreen = () => {
             // Render HighlightNews component
             return <>
                 <HighlightNews/>
-
                 <CategoryHighlightNews/>
                 {/* Additional components related to HighlightNews and CategoryHighlightNews */}
             </>

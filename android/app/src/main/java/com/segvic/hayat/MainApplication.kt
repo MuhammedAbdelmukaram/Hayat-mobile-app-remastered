@@ -1,4 +1,4 @@
-package com.hayatremastered.hayatremastered
+package com.segvic.hayat
 
 import android.app.Application
 import android.content.res.Configuration
