@@ -436,7 +436,7 @@ const Article = ({ route }) => {
     return (
 
         <View style={{height:"100%"}}>
-
+            <AdPlacement2 />
             <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A", zIndex:-1 }}>
                 <StatusBar
                     translucent

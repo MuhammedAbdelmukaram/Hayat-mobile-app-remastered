@@ -6,6 +6,7 @@ import Priority3 from '../Priority3';
 import Priority5 from '../Priority5';
 import Priority6 from "../Priority6";
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import AdPlacement5 from '../../Ads/AdPlacement5';
 const NewsFeed = ({onEndReached, isPageLoading}) => {
     const contentData = useSelector((state) => state.selectedContent.contentData);
     const [articles, setArticles] = useState([]);
@@ -55,13 +56,7 @@ const NewsFeed = ({onEndReached, isPageLoading}) => {
     return (
         <View>
             {/* Display first video, photo, and text post with respective priorities */}
-            <BannerAd
-            unitId={TestIds.BANNER}
-            size={'300x250'}
-            requestOptions={{
-                requestNonPersonalizedAdsOnly: true,
-            }}
-            />
+          <AdPlacement5 />
             {firstVideo && (
                 <Priority2
                     key={firstVideo._id}

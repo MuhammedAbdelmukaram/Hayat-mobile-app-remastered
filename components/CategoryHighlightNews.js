@@ -8,6 +8,7 @@ import axios from 'axios';
 import {useSelector} from 'react-redux';
 import {API_URL} from '@env';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import AdPlacement3 from '../Ads/AdPlacement3';
 // Hypothetical Advertisement component
 const PriorityAd = ({}) => (
     <View style={{ alignItems: 'center', marginVertical: 20 }}>
@@ -85,13 +86,7 @@ const CategoryHighlightNews = () => {
 
     return (
         <View style={styles.container}>
-             <BannerAd
-            unitId={TestIds.BANNER}
-            size={'300x250'}
-            requestOptions={{
-                requestNonPersonalizedAdsOnly: true,
-            }}
-            />
+             <AdPlacement3 />
             {mainArticles && mainArticles.map((categoryArticles, categoryIndex) => {
                 if (categoryArticles.length > 0 && categoryArticles[0].category) {
                     const categoryName = getCategoryName(categoryArticles[0].category);
