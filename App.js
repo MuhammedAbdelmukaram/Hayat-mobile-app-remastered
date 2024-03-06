@@ -1,11 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  PermissionsAndroid,
-} from "react-native";
+import { StyleSheet, PermissionsAndroid } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -37,13 +31,17 @@ PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 export default function App() {
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
+    // Get the device token
+    messaging()
+      .getToken()
+      .then((token) => {
+        console.log("token", token);
+      });
+
+    return messaging().onTokenRefresh((token) => {
+      console.log("token", token);
     });
-
-    return unsubscribe;
   }, []);
-
   const Stack = createStackNavigator();
 
   return (
