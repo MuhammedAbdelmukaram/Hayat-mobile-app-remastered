@@ -634,7 +634,7 @@ const Article = ({ route }) => {
                         const originalHtmlContent = textItem.tiktok.changingThisBreaksApplicationSecurity;
                         const modifiedIframeHtml = modifyIframeHtml(originalHtmlContent);
 
-                        const tiktokHTML = `
+                            const tiktokHTML = `
     <html>
       <head>
         <style>
@@ -658,19 +658,19 @@ const Article = ({ route }) => {
     </html>
   `;
 
-                        return (
-                            <WebView
-                                key={index}
-                                originWhitelist={['*']}
-                                style={{ height: 720,  backgroundColor:"transparent", width: "100%", opacity: 0.99 }}
-                                source={{ html: tiktokHTML }}
-                            />
-                        );
-                    }
-                    else if (textItem.x) {
-                        // Instagram posts can be embedded using WebView as well
-                        const htmlContent = textItem.x;
-                        const xHTML = `
+                            return (
+                                <WebView
+                                    key={index}
+                                    originWhitelist={['*']}
+                                    style={{ height: 720,  backgroundColor:"transparent", width: "100%", opacity: 0.99 }}
+                                    source={{ html: tiktokHTML }}
+                                />
+                            );
+                        }
+                        else if (textItem.x) {
+                            // Instagram posts can be embedded using WebView as well
+                            const htmlContent = textItem.x;
+                            const xHTML = `
     <html >
       <head>
         <style>
@@ -687,92 +687,74 @@ const Article = ({ route }) => {
       </body>
     </html>
   `;
-                        return (
-                            <WebView
-                                key={index}
-                                originWhitelist={['*']}
-                                style={{ height: 436, opacity: 0.99, overflow: 'hidden' ,backgroundColor:"transparent", }}
-                                source={{ html: xHTML }}
+                            return (
+                                <WebView
+                                    key={index}
+                                    originWhitelist={['*']}
+                                    style={{ height: 436, opacity: 0.99, overflow: 'hidden' ,backgroundColor:"transparent", }}
+                                    source={{ html: xHTML }}
 
-                            />
-                        );
-                    }
-                    else if (textItem.instagram) {
-                        // Instagram posts can be embedded using WebView as well
-                        const htmlContent = textItem.instagram;
+                                />
+                            );
+                        }
+                        else if (textItem.instagram) {
+                            // Instagram posts can be embedded using WebView as well
+                            const htmlContent = textItem.instagram;
+                            return (
+                                <WebView
+                                    key={index}
+                                    originWhitelist={['*']}
+                                    style={{ height: 680, opacity: 0.99, overflow: 'hidden', width:"100%"  }}
+                                    source={{ html: instagramHTML }}
 
-                        // Construct the iframe directly within the HTML string
-                        const instagramHTML = `
-        <html>
-            <head>
-                <style>
-                    iframe {
-                        width: 100% !important;
-                        height: 100% !important;
-                    }
-                </style>
-            </head>
-            <body>
-                <iframe src="${htmlContent}"
-                         frameBorder="0" allowFullScreen></iframe>
-            </body>
-        </html>
-    `;
-                        return (
-                            <WebView
-                                key={index}
-                                originWhitelist={['*']}
-                                style={{ height: 680, opacity: 0.99, overflow: 'hidden', width: "100%" }}
-                                source={{ html: instagramHTML }}
-                            />
-                        );
-                    }
+                                />
+                            );
+                        }
 
-
-                    // Add more conditionals as needed for additional types
-                })}
+                        // Add more conditionals as needed for additional types
+                    })}
 
 
 
 
-                <View style={styles.tagsShareWrapper}>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.tagsScrollView}>
-                        <View style={styles.tags}>
-                            {article.tags.map((tagItem, index) => (
-                                <TouchableOpacity key={index} style={styles.tag} activeOpacity={0.82}>
-                                    <Text style={styles.tagText}>#{tagItem.tag}</Text>
-                                </TouchableOpacity>
-                            ))}
+                    <View style={styles.tagsShareWrapper}>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.tagsScrollView}>
+                            <View style={styles.tags}>
+                                {article.tags.map((tagItem, index) => (
+                                    <TouchableOpacity key={index} style={styles.tag} activeOpacity={0.82}>
+                                        <Text style={styles.tagText}>#{tagItem.tag}</Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                        </ScrollView>
+
+                        <View style={styles.shareIcons}>
+                            <ShareButtons />
                         </View>
-                    </ScrollView>
+                    </View>
 
-                    <View style={styles.shareIcons}>
-                        <ShareButtons  articleID={articleID} articleTitle={article.title}/>
+                </View>
+
+                <View style={styles.categoryNews}>
+                    <Text style={styles.categoryTypeText}>Vise iz {article.category.name}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        {recentArticles.map((article, index) => {
+                            const imageSource = article.image_list && article.image_list.length > 0 ? { uri: article.image_list[0].url } : null;
+                            return (
+                                <SuggestedNews
+                                    key={index}
+                                    imageSource={imageSource}
+                                    headline={article.title}
+                                    articleID={article._id} // Assuming each article has a unique _id field
+                                    navigation={navigation} // Pass the navigation prop down to the SuggestedNews component
+                                />
+                            );
+                        })}
                     </View>
                 </View>
 
-            </View>
 
-            <View style={styles.categoryNews}>
-                <Text style={styles.categoryTypeText}>Vise iz {article.category.name}</Text>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    {recentArticles.map((article, index) => {
-                        const imageSource = article.image_list && article.image_list.length > 0 ? { uri: article.image_list[0].url } : null;
-                        return (
-                            <SuggestedNews
-                                key={index}
-                                imageSource={imageSource}
-                                headline={article.title}
-                                articleID={article._id} // Assuming each article has a unique _id field
-                                navigation={navigation} // Pass the navigation prop down to the SuggestedNews component
-                            />
-                        );
-                    })}
-                </View>
-            </View>
-
-
-            {/*The idea was to have 3x2, suggested + other, but we did it right now as 6 suggested from same category
+                {/*The idea was to have 3x2, suggested + other, but we did it right now as 6 suggested from same category
             <View style={styles.otherNews}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     {recentArticles.slice(3, 6).map((article, index) => {
@@ -794,7 +776,7 @@ const Article = ({ route }) => {
 
 
 
-        </ScrollView>
+            </ScrollView>
         </View>
     );
 };
@@ -803,6 +785,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         backgroundColor:'#fff',
+
     },
     wrapper:{
         paddingHorizontal:8,
