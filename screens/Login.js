@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {View, TextInput, Text, TouchableOpacity, StyleSheet, Image, StatusBar, Alert, Platform} from "react-native";
 import logo from "../assets/hayatLogo.png";
 import axios from "axios";
@@ -7,15 +6,14 @@ import * as SecureStore from "expo-secure-store";
 import {setUser} from "../redux/slices/userSlice";
 import {useDispatch} from "react-redux";
 import {setLoginState} from "../redux/slices/authSlice";
-import { API_URL } from '@env';
+import {API_URL} from '@env';
 
-const Login = ({ navigation }) => {
+const Login = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const dispatch = useDispatch();
-
 
 
     const handleLogin = async () => {
@@ -43,10 +41,8 @@ const Login = ({ navigation }) => {
             // After storing the token and fetching user info successfully
 
 
-
-
             const config = {
-                headers: { Authorization: `Bearer ${tokenString}` }
+                headers: {Authorization: `Bearer ${tokenString}`}
             };
 
 
@@ -73,42 +69,56 @@ const Login = ({ navigation }) => {
 
 
     return (
-        <View style={styles.container}>
-            <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#ffffff" }}>
-                <StatusBar
-                    translucent
-                    backgroundColor="#ffffff"
-                    barStyle="light-content"
-                />
+        <View style={styles.containerInner}>
+            <View style={{width: "100%",
+                backgroundColor: "#1A2F5A",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingBottom: 20}}>
+                <Image source={logo} style={styles.image}/>
             </View>
-            <Image source={logo} style={styles.image} />
+            <View style={{display: "flex", alignSelf: "flex-start", marginBottom: 0, marginTop: 30}}>
+                <Text style={{fontSize: 22, fontWeight: "bold", marginLeft:23, marginTop:20}}>Prijavi se</Text>
+            </View>
+            <View style={styles.container}>
+                <View style={{height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A"}}>
+                    <StatusBar
+                        translucent
+                        backgroundColor="#1A2F5A"
+                        barStyle="light-content"
+                    />
+                </View>
 
-            <View style={styles.inputs}>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={setEmail}
-                    value={email}
-                    placeholder="Email"
-                    placeholderTextColor={'#a8a8a8'}
-                    keyboardType="email-address"
-                />
-                <TextInput
-                    style={styles.input}
-                    onChangeText={setPassword}
-                    value={password}
-                    placeholder="Šifra"
-                    secureTextEntry
-                    placeholderTextColor={'#a8a8a8'}
-                />
+
+
+                <View style={styles.inputs}>
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setEmail}
+                        value={email}
+                        placeholder="Email"
+                        placeholderTextColor={'#a8a8a8'}
+                        keyboardType="email-address"
+                    />
+                    <TextInput
+                        style={styles.input}
+                        onChangeText={setPassword}
+                        value={password}
+                        placeholder="Šifra"
+                        secureTextEntry
+                        placeholderTextColor={'#a8a8a8'}
+                    />
+                </View>
+                <TouchableOpacity
+                    onPress={handleLogin}
+                    style={styles.button}
+                    disabled={isSubmitting} // Button is disabled when isSubmitting is true
+                >
+                    <Text style={styles.buttonText}>Prijavi se</Text>
+                </TouchableOpacity>
+                {isSubmitting && <Text style={styles.errorText}>Učitavanje...</Text>}
             </View>
-            <TouchableOpacity
-                onPress={handleLogin}
-                style={styles.button}
-                disabled={isSubmitting} // Button is disabled when isSubmitting is true
-            >
-                <Text style={styles.buttonText}>Prijavi se</Text>
-            </TouchableOpacity>
-            {isSubmitting && <Text style={styles.errorText}>Učitavanje...</Text>}
         </View>
     );
 };
@@ -118,10 +128,18 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#fff',
+        width:"100%",
         padding: 26,
     },
+    containerInner: {
+        flex: 1,
+        width:"100%",
+        alignItems: 'center',
+        backgroundColor: '#fff',
+
+    },
     image: {
-        marginTop:"20%",
+        marginTop: "20%",
         width: '50%', // or some other percentage or fixed width
         resizeMode: 'contain', // This will make sure the image is scaled properly
         marginBottom: 20, // Add some margin if needed
@@ -130,17 +148,17 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
-        color:'#1A2F5A'
+        color: '#1A2F5A'
     },
-    inputs:{
-        marginTop:"30%",
-        width:"100%"
+    inputs: {
+        marginTop: "14%",
+        width: "100%"
     },
     input: {
         height: 40,
         marginVertical: 10,
         borderBottomWidth: 1, // Only have a border on the bottom
-        borderColor:'#dadada',
+        borderColor: '#dadada',
         padding: 10,
         width: '100%',
     },
@@ -154,7 +172,7 @@ const styles = StyleSheet.create({
     },
 
     errorText: {
-        color: 'red',
+        color: 'grey',
         marginTop: 10,
     },
     buttonText: {

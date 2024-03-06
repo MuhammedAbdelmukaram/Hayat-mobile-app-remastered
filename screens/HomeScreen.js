@@ -83,6 +83,13 @@ const HomeScreen = () => {
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setDataLoaded(true); // Ensure the dataLoaded state is set even in case of an error
+                if (!error.response) { // Check if error is network error (no response received)
+                    // Display a custom message if there is no internet connection
+                    Alert.alert(
+                        "Došlo je do problema s povezivanjem s Hayat aplikacijom",
+                        "Provjerite vašu konekciju i pokušajte opet"
+                    );
+                }
             }
         };
 
