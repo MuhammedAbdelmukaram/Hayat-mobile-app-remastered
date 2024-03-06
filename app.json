@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#1A2F5A"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.segvic.hayat"
