@@ -44,9 +44,16 @@ export default function App() {
         console.log("token", token);
       });
 
-    return messaging().onTokenRefresh((token) => {
-      console.log("token", token);
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
     });
+
+    return () => {
+      unsubscribe;
+      messaging().onTokenRefresh((token) => {
+        console.log("token", token);
+      });
+    };
   }, []);
   // useEffect(()=>{
   //     anaylyte()
