@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import axios from 'axios';
 import {useDispatch, useSelector} from "react-redux";
@@ -20,6 +20,8 @@ const NavList = () => {
     const categoriesData = useSelector((state) => state.selectedContent.categoriesData); // Get categoriesData from Redux
     const scrollViewRef = useRef(null);
     const scrollPosition = useSelector((state) => state.selectedContent.scrollPosition);
+    const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+
 
     useEffect(() => {
         scrollViewRef.current?.scrollTo({ x: scrollPosition, animated: true });
@@ -64,15 +66,7 @@ const NavList = () => {
         dispatch(setScrollPosition(scrollToPosition));
     };
 
-
-    const fetchArticles = async (page) => {
-        try {
-
-        } catch (error) {
-            console.error('Error fetching articles:', error);
-            dispatch(setLoading(false)); // Ensure loading is hidden even if there's an error
-        }
-    };
+    
 
 
     const handlepocetnaPress = async ({ categoryUrl }) => {
@@ -130,6 +124,7 @@ const NavList = () => {
             try {
                 const response = await axios.get(`${API_URL}/categories`);
                 dispatch(setAllCategories(response.data)); // Dispatch setAllCategories with fetched data
+                setCategoriesLoaded(true);
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
@@ -183,23 +178,27 @@ const NavList = () => {
             overScrollMode="never"
         >
 
-        <TouchableOpacity
-                style={styles.button}
-                onPress={() => handlepocetnaPress({ categoryUrl: "pocetna" })}
-            >
-                <Text style={[styles.buttonText, selectedCategory === "pocetna" ? styles.selectedText : null]}>
-                Početna
-                </Text>
-            </TouchableOpacity>
+            {categoriesLoaded && (
+                <>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => handlepocetnaPress({ categoryUrl: "pocetna" })}
+                    >
+                        <Text style={[styles.buttonText, selectedCategory === "pocetna" ? styles.selectedText : null]}>
+                            Početna
+                        </Text>
+                    </TouchableOpacity>
 
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleNajnovijePress({ categoryUrl: "najnovije" })}
-            >
-                <Text style={[styles.buttonText, selectedCategory === "najnovije" ? styles.selectedText : null]}>
-                    Najnovije
-                </Text>
-            </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => handleNajnovijePress({ categoryUrl: "najnovije" })}
+                    >
+                        <Text style={[styles.buttonText, selectedCategory === "najnovije" ? styles.selectedText : null]}>
+                            Najnovije
+                        </Text>
+                    </TouchableOpacity>
+                </>
+            )}
 
             {categoriesData && categoriesData.map((category, index) => (
                 <TouchableOpacity
