@@ -6,6 +6,12 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import messaging from "@react-native-firebase/messaging";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
+
 import HomeScreen from "./screens/HomeScreen";
 import React, { useEffect } from "react";
 import { Provider } from "react-redux";
@@ -42,6 +48,20 @@ export default function App() {
       console.log("token", token);
     });
   }, []);
+  // useEffect(()=>{
+  //     anaylyte()
+  // },[])
+
+  //     async function anaylyte(){
+  //         alert('bro analytics')
+  //         await analytics().logEvent('basket', {
+  //             id: 3745092,
+  //             item: 'mens grey t-shirt',
+  //             description: ['round neck', 'long sleeved'],
+  //             size: 'L',
+  //             })
+  //     }
+
   const Stack = createStackNavigator();
 
   return (
@@ -152,6 +172,15 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
+
+      <BannerAd
+        unitId={TestIds.BANNER}
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        requestOptions={{
+          networkExtras: { collapsible: "bottom" },
+          requestNonPersonalizedAdsOnly: true,
+        }}
+      />
     </Provider>
   );
 }

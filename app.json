@@ -13,7 +13,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.segvic.hayat"
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -28,8 +29,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "83aa4f2c-6465-4228-a287-70f128ee4f35"
+        "projectId": "9fea08b9-ea53-48e1-9528-6c8ec7da64e8"
       }
     }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-7451157250131553~9651152226",
+    "ios_app_id": "ca-app-pub-7451157250131553~2127885426"
   }
 }
