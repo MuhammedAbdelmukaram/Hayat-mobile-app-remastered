@@ -22,10 +22,23 @@ import LiveTv from "./screens/LiveTV";
 import Uskoro from "./screens/uskoro";
 import About from "./screens/About";
 import Settings from "./screens/Settings";
-
+// import analytics from '@react-native-firebase/analytics';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 export default function App() {
 
+    // useEffect(()=>{
+    //     anaylyte()
+    // },[])
 
+    //     async function anaylyte(){
+    //         alert('bro analytics')
+    //         await analytics().logEvent('basket', {
+    //             id: 3745092,
+    //             item: 'mens grey t-shirt',
+    //             description: ['round neck', 'long sleeved'],
+    //             size: 'L',
+    //             })
+    //     }
 
   const Stack = createStackNavigator();
 
@@ -146,6 +159,14 @@ export default function App() {
 
 
         </NavigationContainer>
+        <BannerAd
+                    unitId={TestIds.BANNER}
+                    size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                    requestOptions={{
+                        networkExtras: { collapsible: 'bottom' },
+                        requestNonPersonalizedAdsOnly: true,
+                    }}
+                    />
       </Provider>
   );
 }

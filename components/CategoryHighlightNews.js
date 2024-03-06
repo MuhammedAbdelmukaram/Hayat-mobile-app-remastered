@@ -7,6 +7,8 @@ import Priority5 from './Priority5';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
 import {API_URL} from '@env';
+import AdPlacement5 from "../Ads/AdPlacement5";
+import AdPlacement6 from "../Ads/AdPlacement6";
 
 // Hypothetical Advertisement component
 const PriorityAd = ({}) => (
@@ -86,23 +88,45 @@ const CategoryHighlightNews = () => {
     return (
         <View style={styles.container}>
             {mainArticles && mainArticles.map((categoryArticles, categoryIndex) => {
-                if (categoryArticles.length > 0 && categoryArticles[0].category) {
-                    const categoryName = getCategoryName(categoryArticles[0].category);
-                    return (
-                        <View key={categoryIndex} style={styles.categoryContainer}>
-                            <View style={{ backgroundColor: '#fff', paddingBottom: 10 }}>
-                                <View style={styles.categoryName}>
-                                    <Text style={styles.category}>{categoryName}</Text>
+                const categoryContent = (
+                    <>
+                        {categoryArticles.length > 0 && categoryArticles[0].category && (
+                            <View key={categoryIndex} style={styles.categoryContainer}>
+                                <View style={{ backgroundColor: '#fff', paddingBottom: 10 }}>
+                                    <View style={styles.categoryName}>
+                                        <Text style={styles.category}>{getCategoryName(categoryArticles[0].category)}</Text>
+                                    </View>
                                 </View>
+                                {applyRenderingLogic(categoryArticles, categoryIndex)}
                             </View>
-                            {applyRenderingLogic(categoryArticles, categoryIndex)}
-                        </View>
+                        )}
+                    </>
+                );
+
+                // If you want the ad to appear only once after the first category (or whatever category)
+                if (categoryIndex === 0) {
+                    return (
+                        <React.Fragment key={categoryIndex}>
+                            {categoryContent}
+                            <AdPlacement5/>
+                        </React.Fragment>
                     );
                 }
-                return null;
+
+                if (categoryIndex === 1) {
+                    return (
+                        <React.Fragment key={categoryIndex}>
+                            {categoryContent}
+                            <AdPlacement6/>
+                        </React.Fragment>
+                    );
+                }
+
+                return categoryContent;
             })}
         </View>
     );
+
 };
 
 const styles = StyleSheet.create({
