@@ -30,6 +30,7 @@ import Najnovije from "./Najnovije";
 import {API_URL} from '@env';
 import LoadingScreen from "./LoadingScreen";
 import {setUser} from "../redux/slices/userSlice";
+import AdPlacement2 from "../Ads/AdPlacement2";
 
 const theme = {
     ...DefaultTheme,
@@ -109,6 +110,7 @@ const HomeScreen = () => {
             // Render HighlightNews component
             return <>
                 <HighlightNews/>
+                <AdPlacement2/>
                 <CategoryHighlightNews/>
                 {/* Additional components related to HighlightNews and CategoryHighlightNews */}
             </>
