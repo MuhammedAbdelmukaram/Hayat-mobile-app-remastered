@@ -4,12 +4,12 @@
     "slug": "Hayat-remastered",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logopng.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/hayatLogo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#1A2F5A"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,17 +21,17 @@
     "android": {
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logopng.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.segvic.hayat"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logopng.png"
     },
     "extra": {
       "eas": {
-        "projectId": "9fea08b9-ea53-48e1-9528-6c8ec7da64e8"
+        "projectId": "6d075a14-0bea-4dd6-96cb-748b6a1520b7"
       }
     }
   },

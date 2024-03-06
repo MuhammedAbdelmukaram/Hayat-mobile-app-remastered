@@ -294,6 +294,21 @@ const Article = ({ route }) => {
     };
 
 
+    const modifyInstagramIframeHtml = (htmlContent) => {
+        // Extract the src attribute value from the original iframe
+        const srcMatch = htmlContent.match(/src="([^"]+)"/);
+        const src = srcMatch ? srcMatch[1] : '';
+
+        // Construct a new iframe HTML string with the desired style
+        // Note: You can modify 'scale', 'margin-top', or any other style properties as per your requirement
+        const newIframeHtml = `
+<iframe src="${src}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; overflow: hidden;" frameborder="0" allowfullscreen></iframe>
+`;
+
+        return newIframeHtml;
+    };
+
+
 
 
     // Determine the content to display based on the first item in image_list
@@ -329,44 +344,33 @@ const Article = ({ route }) => {
 
     const youtubeEmbedHtml = `<iframe  src="https://www.youtube.com/embed/hWIiTi4-Y7o?si=hDJNFJVXaDVvpOcM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
 
-    const youtubeHTML = `
-    <html >
-      <head>
-        <style>
-          iframe{
-          width: 100% !important;
-          height: 100% !important;
-          }
-        </style>
-      </head>
-      <body>
-        ${youtubeEmbedHtml}
-      </body>
-    </html>
-  `;
 
-    const instagramHTML = `
-    <html >
-      <head>
-        <style>
-          iframe{
-          width: 100% !important;
-          height: 100% !important;
-          }
-        </style>
-      </head>
-      <body>
-        ${instagramEmbedHtml}
-      </body>
-    </html>
-  `;
+
+
 
     const tiktokEmbedHtml = `
     <iframe src="https://www.tiktok.com/embed/v2/7321673333001555242?_r=1&_t=8iwYBWXgLwb" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; scale: 200%;margin-top: 100%" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" scrolling="no"></iframe>
 >
 `;
 
-    const modifyIframeHtml = (htmlContent) => {
+
+    const xHTML = `
+    <html >
+      <head>
+        <style>
+          blockquote{
+          width: 100% !important;
+          height: 100% !important;
+          }
+        </style>
+      </head>
+      <body>
+        ${twitterEmbedHtml}
+      </body>
+    </html>
+  `;
+
+    const modifyTikTokIframeHtml = (htmlContent) => {
         // Extract the src attribute value from the original iframe
         const srcMatch = htmlContent.match(/src="([^"]+)"/);
         const src = srcMatch ? srcMatch[1] : '';
@@ -409,28 +413,6 @@ const Article = ({ route }) => {
         return htmlContent;
     };
 
-
-
-
-
-
-
-
-    const xHTML = `
-    <html >
-      <head>
-        <style>
-          blockquote{
-          width: 100% !important;
-          height: 100% !important;
-          }
-        </style>
-      </head>
-      <body>
-        ${twitterEmbedHtml}
-      </body>
-    </html>
-  `;
 
 
 
@@ -545,6 +527,8 @@ const Article = ({ route }) => {
                             return <Image key={index} source={{ uri: textItem.image }} style={styles.image} />;
                         } else if (textItem.youtube) {
                             const htmlContent = textItem.youtube.changingThisBreaksApplicationSecurity;
+
+
                             return (
                                 <WebView
                                     key={index}
@@ -598,10 +582,13 @@ const Article = ({ route }) => {
                             );
                         }
 
+
+
+
                         else if (textItem.tiktok) {
                             // Extract the modified HTML content using the function
                             const originalHtmlContent = textItem.tiktok.changingThisBreaksApplicationSecurity;
-                            const modifiedIframeHtml = modifyIframeHtml(originalHtmlContent);
+                            const modifiedIframeHtml = modifyTikTokIframeHtml(originalHtmlContent);
 
                             const tiktokHTML = `
     <html>
@@ -636,8 +623,11 @@ const Article = ({ route }) => {
                                 />
                             );
                         }
+
+
+
                         else if (textItem.x) {
-                            // Instagram posts can be embedded using WebView as well
+
                             const htmlContent = textItem.x;
                             const xHTML = `
     <html >
@@ -666,19 +656,30 @@ const Article = ({ route }) => {
                                 />
                             );
                         }
+
+
+
+
+
                         else if (textItem.instagram) {
                             // Instagram posts can be embedded using WebView as well
-                            const htmlContent = textItem.instagram;
+                            const originalHtmlContent = textItem.instagram;
+
+                            // Modify your Instagram embed HTML using a function similar to what you might have based on the earlier example
+                            // Assuming you have a function like modifyInstagramIframeHtml to change the HTML
+                            // But if you're directly using this in React Native, you might not manipulate it the same way as a browser
+                            const modifiedHtmlContent = modifyInstagramIframeHtml(originalHtmlContent); // Modify this as needed
+
                             return (
                                 <WebView
                                     key={index}
                                     originWhitelist={['*']}
-                                    style={{ height: 680, opacity: 0.99, overflow: 'hidden', width:"100%"  }}
-                                    source={{ html: instagramHTML }}
-
+                                    style={{ height: 680, opacity: 0.99, overflow: 'hidden', width: "100%" }}
+                                    source={{ html: modifiedHtmlContent }}
                                 />
                             );
                         }
+
 
                         // Add more conditionals as needed for additional types
                     })}
