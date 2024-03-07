@@ -1,17 +1,7 @@
 // components/HomeScreen.js
 import React, {useEffect, useRef, useState} from 'react';
-import {
-    ActivityIndicator,
-    Alert,
-    PanResponder,
-    Platform,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View
-} from "react-native";
-import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
+import {ActivityIndicator, Alert, Platform, ScrollView, StatusBar, StyleSheet, View} from "react-native";
+import {DefaultTheme} from 'react-native-paper';
 import Header from "../components/Common/Header";
 import NavList from "../components/Common/NavList";
 import HighlightNews from "../components/HomeScreen/HighlightNews";
@@ -19,17 +9,16 @@ import CategoryContent from "../components/CategoryContent";
 import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
 import {
-    appendNajnovijeData,
-    fetchArticlesByCategory, fetchNajnovijeArticles, setCurrentPage, setHasMore,
+    fetchArticlesByCategory,
+    fetchNajnovijeArticles,
+    setCurrentPage,
     setHighlightData,
-    setMainArticles,
-    setSelectedCategory
+    setMainArticles
 } from "../redux/slices/selectedContentSlice";
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
 import Najnovije from "./Najnovije";
 import {API_URL} from '@env';
 import LoadingScreen from "./LoadingScreen";
-import {setUser} from "../redux/slices/userSlice";
 import AdPlacement2 from "../Ads/AdPlacement2";
 
 const theme = {
@@ -135,7 +124,6 @@ const HomeScreen = () => {
             return <HighlightNews/>;
         }
     };
-
 
     const categoriesData = useSelector((state) => state.selectedContent.categoriesData); // Assuming this holds the full categories array
     const scrollViewRef = useRef(null);
