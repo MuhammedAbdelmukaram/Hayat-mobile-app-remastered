@@ -66,7 +66,7 @@ const NavList = () => {
         dispatch(setScrollPosition(scrollToPosition));
     };
 
-    
+
 
 
     const handlepocetnaPress = async ({ categoryUrl }) => {
