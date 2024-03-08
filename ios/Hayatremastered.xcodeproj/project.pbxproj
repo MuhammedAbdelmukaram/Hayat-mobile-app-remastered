@@ -14,7 +14,7 @@
 		96905EF65AED1B983A6B3ABC /* libPods-Hayatremastered.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Hayatremastered.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		4879096956FC456BB967F4B7 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC7B1BF4BA544C7AD270499 /* noop-file.swift */; };
+		93923EB8F7704FF6A8641216 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = D426B6B19CC3434C90529CBE /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,8 +31,8 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Hayatremastered/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		3CC7B1BF4BA544C7AD270499 /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "Hayatremastered/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
-		D7E04B99EFBC4D5F88FC297A /* Hayatremastered-Bridging-Header.h */ = {isa = PBXFileReference; name = "Hayatremastered-Bridging-Header.h"; path = "Hayatremastered/Hayatremastered-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		D426B6B19CC3434C90529CBE /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "Hayatremastered/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
+		B350A3BFE481469A81860A35 /* Hayatremastered-Bridging-Header.h */ = {isa = PBXFileReference; name = "Hayatremastered-Bridging-Header.h"; path = "Hayatremastered/Hayatremastered-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +57,8 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				3CC7B1BF4BA544C7AD270499 /* noop-file.swift */,
-				D7E04B99EFBC4D5F88FC297A /* Hayatremastered-Bridging-Header.h */,
+				D426B6B19CC3434C90529CBE /* noop-file.swift */,
+				B350A3BFE481469A81860A35 /* Hayatremastered-Bridging-Header.h */,
 			);
 			name = Hayatremastered;
 			sourceTree = "<group>";
@@ -198,7 +198,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				DF18EBAE8195484C867AFEC6 /* Hayatremastered-Bridging-Header.h in Resources */,
+				889647D41ED74700837017DB /* Hayatremastered-Bridging-Header.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +274,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				4879096956FC456BB967F4B7 /* noop-file.swift in Sources */,
+				93923EB8F7704FF6A8641216 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

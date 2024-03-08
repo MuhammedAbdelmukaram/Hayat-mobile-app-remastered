@@ -14,9 +14,11 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.segvic.hayat"
+      "bundleIdentifier": "com.segvic.hayat",
+      "icon": "./assets/icon.png"
     },
     "android": {
+      "icon": "./assets/icon.png",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
