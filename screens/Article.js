@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   Dimensions,
   FlatList,
-  Image,
   Modal,
   Platform,
   ScrollView,
@@ -13,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Image } from "expo-image";
 import image from "../assets/news/newsBack-2.png";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Header from "../components/Common/Header";
@@ -31,6 +31,8 @@ import AdPlacement2 from "../Ads/AdPlacement2";
 import AdPlacement3 from "../Ads/AdPlacement3";
 
 const screenWidth = Dimensions.get("window").width;
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 const Article = ({ route }) => {
   const navigation = useNavigation();
@@ -293,7 +295,9 @@ const Article = ({ route }) => {
           <Image
             source={{ uri: item.url }}
             style={{ width: mediaWidth, height: mediaHeight }}
-            resizeMode="cover" // Change to "contain" if you want to fit the whole image within the frame without cropping
+            placeholder={blurhash}
+            contentFit="cover"
+            transition={1000}
           />
         </TouchableOpacity>
       );
