@@ -17,7 +17,7 @@ const ShareButtons = ({ articleID, articleTitle }) => {
 
   console.log(formattedArticleTitle);
   // Concatenate the API URL with 'app' and the articleID
-  const URL = `https://www.hayat.ba//article/${formattedArticleTitle}/${articleID}`;
+  const URL = `https://www.hayat.ba/article/${formattedArticleTitle}/${articleID}`;
   console.log(URL);
 
   return (
