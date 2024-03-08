@@ -765,7 +765,10 @@ const Article = ({ route }) => {
             </ScrollView>
 
             <View style={styles.shareIcons}>
-              <ShareButtons />
+              <ShareButtons
+                articleID={articleID}
+                articleTitle={article.title}
+              />
             </View>
           </View>
         </View>
