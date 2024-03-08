@@ -764,7 +764,9 @@ const Article = ({ route }) => {
               </View>
             </ScrollView>
 
-            <View style={styles.shareIcons}>{/* <ShareButtons /> */}</View>
+            <View style={styles.shareIcons}>
+              <ShareButtons />
+            </View>
           </View>
         </View>
 
