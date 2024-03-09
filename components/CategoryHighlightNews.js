@@ -127,7 +127,7 @@ const CategoryHighlightNews = () => {
       {mainArticles?.map((categoryArticles, categoryIndex) => {
         return (
           <React.Fragment key={categoryIndex}>
-            {categoryArticles.length > 0 && categoryArticles[0].category && (
+            {categoryArticles?.[0]?.category && (
               <View key={categoryIndex} style={styles.categoryContainer}>
                 <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
                   <View style={styles.categoryName}>
