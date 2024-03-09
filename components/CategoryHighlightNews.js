@@ -124,64 +124,63 @@ const CategoryHighlightNews = () => {
 
   return (
     <View style={styles.container}>
-      {mainArticles &&
-        mainArticles.map((categoryArticles, categoryIndex) => {
-          return (
-            <React.Fragment key={categoryIndex}>
-              {categoryArticles.length > 0 && categoryArticles[0].category && (
-                <View key={categoryIndex} style={styles.categoryContainer}>
-                  <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
-                    <View style={styles.categoryName}>
-                      <Text style={styles.category}>
-                        {getCategoryName(categoryArticles[0].category)}
-                      </Text>
-                    </View>
+      {mainArticles?.map((categoryArticles, categoryIndex) => {
+        return (
+          <React.Fragment key={categoryIndex}>
+            {categoryArticles.length > 0 && categoryArticles[0].category && (
+              <View key={categoryIndex} style={styles.categoryContainer}>
+                <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
+                  <View style={styles.categoryName}>
+                    <Text style={styles.category}>
+                      {getCategoryName(categoryArticles[0].category)}
+                    </Text>
                   </View>
-                  {applyRenderingLogic(categoryArticles, categoryIndex)}
                 </View>
-              )}
-              {categoryIndex === 0 && <AdPlacement5 />}
-              {categoryIndex === 1 && <AdPlacement6 />}
-            </React.Fragment>
-          );
-          //   const categoryContent = (
-          //     <>
-          //       {categoryArticles.length > 0 && categoryArticles[0].category && (
-          //         <View key={categoryIndex} style={styles.categoryContainer}>
-          //           <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
-          //             <View style={styles.categoryName}>
-          //               <Text style={styles.category}>
-          //                 {getCategoryName(categoryArticles[0].category)}
-          //               </Text>
-          //             </View>
-          //           </View>
-          //           {applyRenderingLogic(categoryArticles, categoryIndex)}
-          //         </View>
-          //       )}
-          //     </>
-          //   );
+                {applyRenderingLogic(categoryArticles, categoryIndex)}
+              </View>
+            )}
+            {categoryIndex === 0 && <AdPlacement5 />}
+            {categoryIndex === 1 && <AdPlacement6 />}
+          </React.Fragment>
+        );
+        //   const categoryContent = (
+        //     <>
+        //       {categoryArticles.length > 0 && categoryArticles[0].category && (
+        //         <View key={categoryIndex} style={styles.categoryContainer}>
+        //           <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
+        //             <View style={styles.categoryName}>
+        //               <Text style={styles.category}>
+        //                 {getCategoryName(categoryArticles[0].category)}
+        //               </Text>
+        //             </View>
+        //           </View>
+        //           {applyRenderingLogic(categoryArticles, categoryIndex)}
+        //         </View>
+        //       )}
+        //     </>
+        //   );
 
-          //   // If you want the ad to appear only once after the first category (or whatever category)
-          //   if (categoryIndex === 0) {
-          //     return (
-          //       <React.Fragment key={categoryIndex}>
-          //         {categoryContent}
-          //         <AdPlacement5 />
-          //       </React.Fragment>
-          //     );
-          //   }
+        //   // If you want the ad to appear only once after the first category (or whatever category)
+        //   if (categoryIndex === 0) {
+        //     return (
+        //       <React.Fragment key={categoryIndex}>
+        //         {categoryContent}
+        //         <AdPlacement5 />
+        //       </React.Fragment>
+        //     );
+        //   }
 
-          //   if (categoryIndex === 1) {
-          //     return (
-          //       <React.Fragment key={categoryIndex}>
-          //         {categoryContent}
-          //         <AdPlacement6 />
-          //       </React.Fragment>
-          //     );
-          //   }
+        //   if (categoryIndex === 1) {
+        //     return (
+        //       <React.Fragment key={categoryIndex}>
+        //         {categoryContent}
+        //         <AdPlacement6 />
+        //       </React.Fragment>
+        //     );
+        //   }
 
-          //   return categoryContent;
-        })}
+        //   return categoryContent;
+      })}
     </View>
   );
 };
