@@ -5,12 +5,6 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-import messaging from "@react-native-firebase/messaging";
-import {
-  BannerAd,
-  BannerAdSize,
-  TestIds,
-} from "react-native-google-mobile-ads";
 
 import HomeScreen from "./screens/HomeScreen";
 import React, { useEffect } from "react";
@@ -33,51 +27,7 @@ import Uskoro from "./screens/uskoro";
 import About from "./screens/About";
 import Settings from "./screens/Settings";
 
-PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-
 export default function App() {
-
-  useEffect(() => {
-    // Define the function to send the token to your server
-    const sendTokenToServer = async (token) => {
-      try {
-        await fetch('YOUR_BACKEND_ENDPOINT', {  // Replace YOUR_BACKEND_ENDPOINT with your actual endpoint
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ token }),
-        });
-      } catch (error) {
-        console.error('Error sending token to server:', error);
-      }
-    };
-
-    // Get the device token and send it to the server
-    messaging()
-        .getToken()
-        .then((token) => {
-          console.log("Device token:", token);
-          sendTokenToServer(token); // Send the token to your server
-        });
-
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
-    });
-
-    // Subscribe to token refresh events
-    const unsubscribeTokenRefresh = messaging().onTokenRefresh((token) => {
-      console.log("Refreshed token:", token);
-      sendTokenToServer(token); // Send the refreshed token to your server
-    });
-
-    return () => {
-      unsubscribe();
-      unsubscribeTokenRefresh();
-    };
-  }, []);
-
-
   // useEffect(()=>{
   //     anaylyte()
   // },[])
@@ -203,14 +153,14 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
 
-      <BannerAd
+      {/* <BannerAd
         unitId={TestIds.BANNER}
         size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
         requestOptions={{
           networkExtras: { collapsible: "bottom" },
           requestNonPersonalizedAdsOnly: true,
         }}
-      />
+      /> */}
     </Provider>
   );
 }
