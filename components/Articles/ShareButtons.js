@@ -15,10 +15,10 @@ const ShareButtons = ({ articleID, articleTitle }) => {
   // Replace spaces with dashes in the articleTitle
   const formattedArticleTitle = articleTitle?.replace(/ /g, "-");
 
-  console.log(formattedArticleTitle);
+  //console.log(formattedArticleTitle);
   // Concatenate the API URL with 'app' and the articleID
   const URL = `https://www.hayat.ba/article/${formattedArticleTitle}/${articleID}`;
-  console.log(URL);
+  //console.log(URL);
 
   return (
     <View style={styles.container}>

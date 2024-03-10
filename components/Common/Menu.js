@@ -27,6 +27,7 @@ import {
 } from "../../redux/slices/selectedContentSlice";
 import axios from "axios";
 import {API_URL} from '@env';
+import {clearUser} from "../../redux/slices/userSlice";
 
 const Menu = ({visible, onClose}) => {
     const [slideAnim] = useState(new Animated.Value(-300)); // Initialize to a value off-screen
@@ -50,7 +51,7 @@ const Menu = ({visible, onClose}) => {
 
         try {
             const url = `${API_URL}/articles/mob/${categoryUrl}/${page}`;
-            console.log(url);
+            //console.log(url);
             const response = await axios.get(url);
             if (page === 1) {
                 dispatch(setContentData(response.data)); // Replace data for the first page
@@ -134,6 +135,7 @@ const Menu = ({visible, onClose}) => {
         try {
             await SecureStore.deleteItemAsync('userToken');
             dispatch(setLoginState(false)); // Reflect the logout in the Redux state
+            dispatch(clearUser()); // Reset user data in Redux
             Alert.alert('Odjava', 'Uspješno ste se odjavili!');
             navigation.navigate('HomeScreen');
         } catch (error) {
@@ -141,6 +143,7 @@ const Menu = ({visible, onClose}) => {
             Alert.alert('Error', 'Akcija nije uspjela, molimo kontaktirajte podršku');
         }
     };
+
 
 
     const [fontsLoaded] = useFonts({
@@ -316,17 +319,27 @@ const Menu = ({visible, onClose}) => {
 
                         <View style={styles.menuCategories}>
 
-                            {categoriesData && categoriesData.map((category, index) => (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={styles.menuItem}
-                                    onPress={() => handleCategoryPress({categoryUrl: category.category_url, index})}
-                                >
-                                    <Text style={styles.menuItemText}>
-                                        {category.name}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
+                            {categoriesData ? (
+                                categoriesData.length > 0 ? (
+                                    categoriesData.map((category, index) => (
+                                        <TouchableOpacity
+                                            key={index}
+                                            style={styles.menuItem}
+                                            onPress={() => handleCategoryPress({categoryUrl: category.category_url, index})}
+                                        >
+                                            <Text style={styles.menuItemText}>
+                                                {category.name}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    ))
+                                ) : (
+                                    <Text style={styles.menuItemMessage}>Provjerite vašu konekciju</Text>
+                                )
+                            ) : (
+                                <Text style={styles.menuItemText}>Učitavanje...</Text>
+                            )}
+
+
 
                         </View>
 
@@ -361,10 +374,10 @@ const Menu = ({visible, onClose}) => {
                                         onClose(); // Optionally close the menu
                                     }}
                                 >
-                                    <Image
-                                        source={require('../../assets/about.png')} // Your home icon
-                                        style={getIconStyle(28)}
-                                    />
+                                    {/*<Image*/}
+                                    {/*    source={require('../../assets/about.png')} // Your home icon*/}
+                                    {/*    style={getIconStyle(28)}*/}
+                                    {/*/>*/}
 
                                 </TouchableOpacity>
                             </View>
@@ -457,6 +470,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
 
+    menuItemMessage:{
+        color: "#dc0a0a",
+        fontSize: 17,
+        marginLeft: "8%",
+        fontWeight: '600',
+    },
+
     iconStyle: {
         height: 20
     },
@@ -470,12 +490,13 @@ const styles = StyleSheet.create({
         marginTop:12
     },
 
+
+
     menuBottomSection:{
       display:"flex",
         flexDirection:"row",
         gap:2,
-        justifyContent:"flex-end",
-        marginRight:30
+        justifyContent:"flex-start",
     },
 
     menuCategories: {

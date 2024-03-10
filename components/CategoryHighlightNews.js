@@ -30,7 +30,7 @@ const CategoryHighlightNews = () => {
     axios
       .get(`${API_URL}/articles/main`)
       .then((response) => {
-        console.log("hihi" + response.data);
+       // console.log("hihi" + response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

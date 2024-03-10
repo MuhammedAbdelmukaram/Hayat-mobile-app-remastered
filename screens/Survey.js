@@ -1,98 +1,147 @@
-import React, {useState} from 'react';
-import {Image, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import Header from "../components/Common/Header";
+import React, { useEffect, useState } from 'react';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Ensure this is imported
 import Countdown from "../components/Survey/Countdown";
-import shareButton from "../assets/icons/shareIconBlack.png"
+import {useSelector} from "react-redux";
+
 const Survey = ({ surveyId }) => {
+    const [surveyData, setSurveyData] = useState(null);
     const [selectedOption, setSelectedOption] = useState(null);
+    const [hasResponded, setHasResponded] = useState(false);
+    const user = useSelector(state => state.user.userInfo);
 
-    const options = ['1990', '1991', '1992', '1993'];
-
-    const handleSelectOption = (option) => {
-        setSelectedOption(option);
-    };
-
-
-
-
-    // Your JSON object
-    const surveyData = {
-        "_id": {
-            "$oid": "6580226dd6f5d61365282f34"
-        },
-        "question": "Jesu li u Srbiji nakon izbora moguće promjene?",
-        "answerOptions": [
-            {
-                "answer": "Da",
-                "count": 19
-            },
-            {
-                "answer": "Ne",
-                "count": 123
+    useEffect(() => {
+        const checkResponseStatus = async () => {
+            const response = await AsyncStorage.getItem(`survey_${surveyId}`);
+            if (response) {
+                setHasResponded(true);
             }
-        ],
-        "surveyType": "survey",
-        "correctAnswer": -1,
-        "totalCount": 142,
-        "deadline": {
-            "$date": "2023-12-24T16:15:00.000Z"
+        };
+
+        if (surveyData && surveyData.surveyType === "survey") {
+            checkResponseStatus();
+        }
+    }, [surveyId]); // Depend on surveyData as well
+
+    useEffect(() => {
+        const fetchSurveyData = async () => {
+            try {
+                const response = await fetch(`https://backproba.hayat.ba/surveys/${surveyId}`);
+                const data = await response.json();
+                setSurveyData(data);
+            } catch (error) {
+                console.error('Error fetching survey data:', error);
+            }
+        };
+
+        fetchSurveyData();
+    }, [surveyId]);
+
+    const handleSelectOption = async (option, index) => {
+        setSelectedOption(option);
+
+        const responseKey = `survey_response_${surveyId}`;
+        const existingResponse = await AsyncStorage.getItem(responseKey);
+
+        if (existingResponse) {
+            Alert.alert('Anketa', 'Vaš odgovor je već poslan');
+            return;
+        }
+
+        // Check if the survey type is "survey"
+        if (surveyData && surveyData.surveyType === "survey") {
+            if (hasResponded) {
+                Alert.alert('Anketa', 'Vaš odgovor je već poslan');
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://backproba.hayat.ba/surveys/response/${surveyId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ response: index }),
+                });
+
+                const result = await response.json();
+                if (result.modifiedCount > 0) {
+                    await AsyncStorage.setItem(responseKey, JSON.stringify({ submitted: true }));
+                    setHasResponded(true);
+                    Alert.alert('Anketa', 'Vaš odgovor je zabilježen');
+                } else {
+                    Alert.alert('Anketa', 'Vaš odgovor je već poslan');
+                }
+            } catch (error) {
+                console.error('Error submitting survey response:', error);
+                Alert.alert('Anketa', 'Došlo je do greške pri slanju odgovora');
+            }
+        }
+        // Check if the survey type is "trivia" and the user is logged in
+        else if (surveyData && surveyData.surveyType === "trivia") {
+            // This combines the conditions for logged-in users and users who are not logged in
+            try {
+                const surveyResponse = { surveyId: surveyId, response: index, timestamp: new Date().toISOString() };
+                // If user is logged in, send response immediately
+                if (user) {
+                    const response = await fetch(`https://backproba.hayat.ba/surveys/${surveyId}/response`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ answer: index, userId: user.id }),
+                    });
+
+                    if (response.ok) {
+                        Alert.alert('Trivia', 'Odgovor je zabilježen');
+                        await AsyncStorage.setItem(responseKey, JSON.stringify({ submitted: true }));
+                    } else {
+                        Alert.alert('Trivia', 'Došlo je do greške');
+                    }
+                } else { // User is not logged in, store response to send later
+                    await AsyncStorage.setItem('pendingSurveyResponses', JSON.stringify([surveyResponse]));
+                    Alert.alert('Trivia', 'Vaš odgovor će biti poslan kada se prijavite.');
+                }
+            } catch (error) {
+                console.error('Error handling trivia response:', error);
+                Alert.alert('Trivia', 'Došlo je do greške pri slanju odgovora');
+            }
         }
     };
 
-    const deadlineISO = surveyData.deadline.$date;
 
-    const STATUS_BAR_HEIGHT = Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
-    const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
+
 
     return (
         <View style={styles.container}>
-            {/*
-            <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A" }}>
-                <StatusBar
-                    translucent
-                    backgroundColor="#1A2F5A"
-                    barStyle="light-content"
-                />
-            </View>
-
             <View style={styles.surveyOuterContainer}>
-
                 <View style={styles.surveyContainer}>
-
-
                     <View style={styles.blueSectionWrapper}>
                         <View style={styles.blueSection}>
-
                             <Text style={styles.surveyHeading}>Poklon moze biti tvoj</Text>
-                            <Countdown deadline={deadlineISO} />
-                            {console.log(deadlineISO)}
-
+                            <Countdown deadline={surveyData ? surveyData.deadline : null} />
                         </View>
-
-                        <Image
-                            source={shareButton }
-                            style={styles.image}
-                            resizeMode="contain"
-                        />
                     </View>
 
-                <Text style={styles.questionText}>{surveyData.question}</Text>
-                {surveyData.answerOptions.map((option, index) => (
-                    <TouchableOpacity
-                        key={index}
-                        style={[
-                            styles.optionContainer,
-                            selectedOption === option.answer && styles.selectedOption,
-                        ]}
-                        onPress={() => handleSelectOption(option.answer)}
-                    >
-                        <Text style={styles.optionText}>{option.answer}</Text>
-                    </TouchableOpacity>
-                ))}
-
+                    {surveyData && (
+                        <>
+                            <Text style={styles.questionText}>{surveyData.question}</Text>
+                            {surveyData.answerOptions.map((option, index) => (
+                                <TouchableOpacity
+                                    key={index}
+                                    style={[
+                                        styles.optionContainer,
+                                        selectedOption === option.answer && styles.selectedOption,
+                                    ]}
+                                    onPress={() => handleSelectOption(option.answer, index)}
+                                >
+                                    <Text style={styles.optionText}>{option.answer}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </>
+                    )}
                 </View>
             </View>
-*/}
         </View>
     );
 };
@@ -100,7 +149,7 @@ const Survey = ({ surveyId }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height:20,
+        height:400,
         backgroundColor: 'transparent', // Replace with your background color
     },
     blueSection:{

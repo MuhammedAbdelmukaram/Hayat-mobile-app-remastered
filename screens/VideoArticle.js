@@ -13,9 +13,7 @@ const VideoArticle = () => {
     const route = useRoute();
     const article = route.params?.article; // Access the passed article object
 
-    useEffect(() => {
-        console.log("Article received in VideoArticle:", article);
-    }, [article]);
+
 
 
     const video = React.useRef(null);

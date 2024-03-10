@@ -57,7 +57,7 @@ const HomeScreen = () => {
     (state) => state.notification.expoPushToken
   );
 
-  console.log("Expo Push Token from Redux:", expoPushToken);
+  //console.log("Expo Push Token from Redux:", expoPushToken);
 
 
   const { loading } = useSelector(
@@ -66,7 +66,7 @@ const HomeScreen = () => {
 
 
 
-  console.log(userInfo);
+  //console.log(userInfo);
   useEffect(() => {
     const fetchData = async () => {
       setDataLoaded(false); // THE LOADER WHICH WORKS NOW

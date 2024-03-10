@@ -15,7 +15,7 @@ const Priority3 = ({ image, articleTitle, articleSubtitle, articleID, article })
     const formattedArticleTitle = articleTitle.replace(/\n/g, ' ');
     const formattedArticleSubtitle = articleTitle.replace(/\n/g, ' ');
 
-    console.log(image.toString());
+    //console.log(image.toString());
 
     return (
         <TouchableOpacity activeOpacity={0.7} style={styles.container} onPress={handlePress}>

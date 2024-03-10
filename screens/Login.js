@@ -7,6 +7,7 @@ import {setUser} from "../redux/slices/userSlice";
 import {useDispatch} from "react-redux";
 import {setLoginState} from "../redux/slices/authSlice";
 import {API_URL} from '@env';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = ({navigation}) => {
     const [email, setEmail] = useState('');
@@ -24,46 +25,55 @@ const Login = ({navigation}) => {
                 password: password,
                 // Add role if needed here
             });
-            // Convert token to a string if it's not already one
             const tokenString = String(response.data.token);
-            console.log(JSON.stringify(response.data.token, null, 2));
+            //console.log(JSON.stringify(response.data.token, null, 2));
 
-
-            console.log(tokenString);
-            // Save token to secure storage
             await SecureStore.setItemAsync('userToken', tokenString);
-
-            // Immediately retrieve and log the token from secure storage for verification
             const token = await SecureStore.getItemAsync('userToken');
-            //console.log('Token stored in secure storage:', token);
-
-            // Assuming you have a login action that sets isLoggedIn to true
-            // After storing the token and fetching user info successfully
-
 
             const config = {
                 headers: {Authorization: `Bearer ${tokenString}`}
             };
 
-
-            console.log('Sending request with config:', config);
-
-
             const userResponse = await axios.get(`${API_URL}/user/whoami`, config);
+            if (userResponse.data) {
+                dispatch(setUser(userResponse.data));
+                dispatch(setLoginState(true));
 
-            dispatch(setUser(userResponse.data));
-            dispatch(setLoginState(true));
+                // After successfully fetching user info, process any pending survey responses
+                const pendingResponses = await AsyncStorage.getItem('pendingSurveyResponses');
+                if (pendingResponses) {
+                    const responses = JSON.parse(pendingResponses);
+                    const userId = userResponse.data.id; // Adjust based on actual user data structure
 
-            console.log(userResponse.data);
-            // Navigate to HomeScreen
-            navigation.navigate('HomeScreen');
+                    for (const response of responses) {
+                        try {
+                            await axios.post(`${API_URL}/surveys/local-response`, {
+                                newSurveyData: [{ surveyId: response.surveyId, response: response.response }],
+                                userId: userId
+                            }, config);
+
+                            // Optionally update some local state or context if needed
+                        } catch (error) {
+                            console.error('Error submitting cached survey response:', error);
+                            // Optionally decide how to handle partial failure
+                        }
+                    }
+
+                    // Clear the pending survey responses after all have been processed
+                    await AsyncStorage.removeItem('pendingSurveyResponses');
+                }
+
+                navigation.navigate('HomeScreen');
+            }
         } catch (error) {
-            // Handle error - show error message
             console.error('Login failed', error);
             Alert.alert('Greška', 'Pogriješili ste');
         }
         setIsSubmitting(false); // Re-enable the login button
     };
+
+
     const STATUS_BAR_HEIGHT = Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
     const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 

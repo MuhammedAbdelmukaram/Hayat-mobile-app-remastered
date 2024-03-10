@@ -52,8 +52,9 @@ const Article = ({ route }) => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        console.log({ articleID });
-        const response = await axios.get(`${API_URL}/article/${articleID}`);
+       // console.log({ articleID });
+       /* const response = await axios.get(`${API_URL}/article/${articleID}`);*/
+        const response = await axios.get(`https://backproba.hayat.ba/article/65c78faca3d893aa2feaf882`);
         const sortedMedia = response.data.image_list.sort((a, b) => {
           // Prioritize videos based on the file extension
           const aIsVideo = isVideo(a.url);
@@ -608,7 +609,7 @@ const Article = ({ route }) => {
       </body>
     </html>
   `;
-                console.log(modifiedytContent);
+               // console.log(modifiedytContent);
                 return (
                   <WebView
                     key={index}
