@@ -63,7 +63,7 @@ const HomeScreen = () => {
 
   console.log("Expo Push Token from Redux:", expoPushToken);
 
-  const { loading } = useSelector((state) => state.selectedContent);
+  const { loading: isLoading } = useSelector((state) => state.selectedContent);
 
   console.log(userInfo);
   useEffect(() => {
