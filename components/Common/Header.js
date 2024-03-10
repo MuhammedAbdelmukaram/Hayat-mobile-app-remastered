@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingHorizontal: 12,
+    zIndex: 1,
   },
   icon: {
     height: 22,
