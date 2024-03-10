@@ -17,7 +17,8 @@ import {
   setCurrentPage,
   setHasMore,
   setHighlightData,
-  setLoading, setMainArticles,
+  setLoading,
+  setMainArticles,
   setNajnovijeData,
   setScrollPosition,
   setSelectedCategory,
@@ -43,7 +44,6 @@ const NavList = () => {
 
   // In both NavList and Menu components
   const handleCategoryPress = async ({ categoryUrl, index, page = 1 }) => {
-
     dispatch(setLoading(true));
     dispatch(setSelectedCategory(categoryUrl));
 
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#1A2F5A",
     borderBottomWidth: 1,
-    borderBottomColor: "#000",
+    minHeight: 60,
   },
   button: {
     width: 120,
@@ -260,8 +260,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: "500",
-    color: "#fff",
+    color: "#ffffff",
     fontSize: 13,
+    paddingBottom: 5,
   },
   selectedText: {
     fontWeight: "700", // Increased weight for better emphasis
@@ -269,8 +270,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "none", // Removing the underline for a cleaner look
     borderBottomWidth: 0.8, // Adding a bottom border for a subtle indicator
     borderBottomColor: "#ffffff", // Gold color for the border to add a sophisticated touch without being too loud
-    paddingBottom: 30, // Adjust padding to accommodate the border without increasing the overall height
-    paddingTop: 20,
+    paddingBottom: 5, // Adjust padding to accommodate the border without increasing the overall height
   },
 });
 
