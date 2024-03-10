@@ -5,9 +5,11 @@ import {
   Alert,
   Platform,
   ScrollView,
+  FlatList,
   StatusBar,
   StyleSheet,
   View,
+  Text,
 } from "react-native";
 import { DefaultTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,13 +18,15 @@ import { API_URL } from "@env";
 
 import Header from "../components/Common/Header";
 import NavList from "../components/Common/NavList";
+import StatusBarView from "../components/Common/StatusBarView";
 import HighlightNews from "../components/HomeScreen/HighlightNews";
 import CategoryContent from "../components/CategoryContent";
 import {
   fetchArticlesByCategory,
   fetchNajnovijeArticles,
   setCurrentPage,
-  setHighlightData, setLoading,
+  setHighlightData,
+  setLoading,
   setMainArticles,
 } from "../redux/slices/selectedContentSlice";
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
@@ -59,12 +63,7 @@ const HomeScreen = () => {
 
   //console.log("Expo Push Token from Redux:", expoPushToken);
 
-
-  const { loading } = useSelector(
-      (state) => state.selectedContent
-  );
-
-
+  const { loading: isLoading } = useSelector((state) => state.selectedContent);
 
   //console.log(userInfo);
   useEffect(() => {
@@ -136,12 +135,11 @@ const HomeScreen = () => {
     Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
   const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 
-  const { currentPage, hasMore, } = useSelector(
+  const { currentPage, hasMore } = useSelector(
     (state) => state.selectedContent
   );
 
   const [isPageLoading, setIsPageLoading] = useState(false);
-
 
   const loadMoreContent = async () => {
     if (!isPageLoading && hasMore) {
@@ -167,61 +165,76 @@ const HomeScreen = () => {
     }
   };
 
+  const DATA = [
+    {
+      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+      title: "First Item",
+    },
+    {
+      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+      title: "Second Item",
+    },
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d72",
+      title: "Third Item",
+    },
+  ];
+
+  const Item = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
+
   return (
     <View
       style={{
         height: "100%",
       }}
     >
-      <View
-        style={{
-          height: STATUS_BAR_HEIGHT,
-          backgroundColor: "#1A2F5A",
-          zIndex: -1,
-        }}
-      >
-        <StatusBar
-          translucent
-          backgroundColor="#1A2F5A"
-          barStyle="light-content"
-        />
-      </View>
+      <StatusBarView />
       <Header />
       <NavList />
       {isConnectionError && <NoConnection />}
-      {loading && <LoadingScreen />}
+      {/* <FlatList
+        data={DATA}
+        renderItem={({ item }) => <Item title={item.title} />}
+        keyExtractor={(item) => item.id}
+      /> */}
+      {isLoading && <LoadingScreen />}
+      {!isLoading && !isConnectionError && (
+        <ScrollView
+          bounces={false}
+          overScrollMode="never"
+          ref={scrollViewRef}
+          style={{ height: "100%" }}
+          onMomentumScrollEnd={({ nativeEvent }) => {
+            const isEnd =
+              nativeEvent.layoutMeasurement.height +
+                nativeEvent.contentOffset.y >=
+              nativeEvent.contentSize.height - 20;
 
-      <ScrollView
-        bounces={false}
-        overScrollMode="never"
-        ref={scrollViewRef}
-        style={{ height: "100%" }}
-        onMomentumScrollEnd={({ nativeEvent }) => {
-          const isEnd =
-            nativeEvent.layoutMeasurement.height +
-              nativeEvent.contentOffset.y >=
-            nativeEvent.contentSize.height - 20;
-
-          if (isEnd && hasMore) {
-            loadMoreContent();
-          }
-        }}
-      >
-        {/* So here, I also need a loader */}
-        {selectedCategory === "pocetna" && (
-          <>
-            <HighlightNews />
-            <AdPlacement2 />
-            <CategoryHighlightNews />
-          </>
-        )}
-        {selectedCategory === "najnovije" && (
-          <Najnovije isPageLoading={isPageLoading} />
-        )}
-        {selectedCategory !== "pocetna" && (
-          <CategoryContent isPageLoading={isPageLoading} />
-        )}
-      </ScrollView>
+            if (isEnd && hasMore) {
+              loadMoreContent();
+            }
+          }}
+        >
+          {/* So here, I also need a loader */}
+          {selectedCategory === "pocetna" && (
+            <>
+              <HighlightNews />
+              <AdPlacement2 />
+              <CategoryHighlightNews />
+            </>
+          )}
+          {selectedCategory === "najnovije" && (
+            <Najnovije isPageLoading={isPageLoading} />
+          )}
+          {selectedCategory !== "pocetna" && (
+            <CategoryContent isPageLoading={isPageLoading} />
+          )}
+        </ScrollView>
+      )}
     </View>
   );
 };

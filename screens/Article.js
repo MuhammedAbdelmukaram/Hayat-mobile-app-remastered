@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -12,23 +12,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Image } from "expo-image";
-import image from "../assets/news/newsBack-2.png";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import Header from "../components/Common/Header";
-import ShareButtons from "../components/Articles/ShareButtons";
-import SuggestedNews from "../components/Articles/SuggestedNews";
+import {Image} from "expo-image";
 import axios from "axios";
 import WebView from "react-native-webview";
-import { Video } from "expo-av";
-import { useDispatch, useSelector } from "react-redux";
-import { API_URL } from "@env";
+import {Video} from "expo-av";
+import {useDispatch, useSelector} from "react-redux";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
+import {BlurView} from "expo-blur";
+import {API_URL} from "@env";
 
+import image from "../assets/news/newsBack-2.png";
+import ShareButtons from "../components/Articles/ShareButtons";
+import SuggestedNews from "../components/Articles/SuggestedNews";
 import Survey from "./Survey";
-import { BlurView } from "expo-blur";
 import ArticleHeader from "../components/Articles/ArticleHeader";
 import AdPlacement2 from "../Ads/AdPlacement2";
 import AdPlacement3 from "../Ads/AdPlacement3";
+import StatusBarView from "../components/Common/StatusBarView";
+import Header from "../components/Common/Header";
 
 const screenWidth = Dimensions.get("window").width;
 const blurhash =
@@ -52,9 +53,8 @@ const Article = ({ route }) => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-       // console.log({ articleID });
-       /* const response = await axios.get(`${API_URL}/article/${articleID}`);*/
-        const response = await axios.get(`https://backproba.hayat.ba/article/65c78faca3d893aa2feaf882`);
+        console.log({ articleID });
+        const response = await axios.get(`${API_URL}/article/${articleID}`);
         const sortedMedia = response.data.image_list.sort((a, b) => {
           // Prioritize videos based on the file extension
           const aIsVideo = isVideo(a.url);
@@ -244,37 +244,44 @@ const Article = ({ route }) => {
   }
 
   const STATUS_BAR_HEIGHT =
-      Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
+    Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
   if (isLoading) {
     return (
-        <View style={{  }}>
-          <View
-              style={{
-                height: STATUS_BAR_HEIGHT,
-                backgroundColor: "#1A2F5A",
-                zIndex: -1,
-              }}
-          >
-            <StatusBar
-                translucent
-                backgroundColor="#1A2F5A"
-                barStyle="light-content"
-            />
-          </View>
-          <ArticleHeader />
-          <View style={{height:"90%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-             <ActivityIndicator size="large" color="#1A2F5A" />
-          </View>
+      <View style={{}}>
+        <View
+          style={{
+            height: STATUS_BAR_HEIGHT,
+            backgroundColor: "#1A2F5A",
+            zIndex: -1,
+          }}
+        >
+          <StatusBar
+            translucent
+            backgroundColor="#1A2F5A"
+            barStyle="light-content"
+          />
         </View>
+        <Header isHome={false} />
+        <View
+          style={{
+            height: "90%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="#1A2F5A" />
+        </View>
+      </View>
     );
   }
 
   if (!article) {
     return (
-        <View style={{ }}>
-          <ArticleHeader />
-          <Text>Article not found.</Text>
-        </View>
+      <View style={{}}>
+        <Header isHome={false} />
+        <Text>Article not found.</Text>
+      </View>
     );
   }
 
@@ -470,20 +477,8 @@ const Article = ({ route }) => {
 
   return (
     <View style={{ height: "100%" }}>
-      <View
-        style={{
-          height: STATUS_BAR_HEIGHT,
-          backgroundColor: "#1A2F5A",
-          zIndex: -1,
-        }}
-      >
-        <StatusBar
-          translucent
-          backgroundColor="#1A2F5A"
-          barStyle="light-content"
-        />
-      </View>
-      <ArticleHeader />
+      <StatusBarView />
+      <Header isHome={false} />
       <ScrollView ref={scrollRef} style={{ height: "100%" }}>
         <Modal
           animationType="slide"
@@ -560,39 +555,37 @@ const Article = ({ route }) => {
           <Text style={styles.subTitle}>{article.subtitle}</Text>
 
           <AdPlacement2 />
-
-          {article &&
-            article.text.map((textItem, index) => {
-              if (textItem.regular) {
-                return (
-                  <Text key={index} style={styles.regularText}>
-                    {textItem.regular}
-                  </Text>
-                );
-              } else if (textItem.bold) {
-                return (
-                  <Text key={index} style={styles.boldText}>
-                    {textItem.bold}
-                  </Text>
-                );
-              } else if (textItem.italic) {
-                return (
-                  <Text key={index} style={styles.italicText}>
-                    {textItem.italic}
-                  </Text>
-                );
-              } else if (textItem.image) {
-                return (
-                  <Image
-                    key={index}
-                    source={{ uri: textItem.image }}
-                    style={styles.image}
-                  />
-                );
-              } else if (textItem.youtube) {
-                const htmlContent =
-                  textItem.youtube.changingThisBreaksApplicationSecurity;
-                const modifiedytContent = modifyYTframeHtml(htmlContent);
+          {article?.text?.map((textItem, index) => {
+            if (textItem.regular) {
+              return (
+                <Text key={index} style={styles.regularText}>
+                  {textItem.regular}
+                </Text>
+              );
+            } else if (textItem.bold) {
+              return (
+                <Text key={index} style={styles.boldText}>
+                  {textItem.bold}
+                </Text>
+              );
+            } else if (textItem.italic) {
+              return (
+                <Text key={index} style={styles.italicText}>
+                  {textItem.italic}
+                </Text>
+              );
+            } else if (textItem.image) {
+              return (
+                <Image
+                  key={index}
+                  source={{ uri: textItem.image }}
+                  style={styles.image}
+                />
+              );
+            } else if (textItem.youtube) {
+              const htmlContent =
+                textItem.youtube.changingThisBreaksApplicationSecurity;
+              const modifiedytContent = modifyYTframeHtml(htmlContent);
 
                 const youtubeHTML = `
     <html >
@@ -638,7 +631,7 @@ const Article = ({ route }) => {
                 const modifiedIframeHtml =
                   modifyFacebookIframeHtml(originalHtmlContent);
 
-                const facebookHTML = `
+              const facebookHTML = `
     <html>
       <head>
         <style>
@@ -662,30 +655,29 @@ const Article = ({ route }) => {
     </html>
   `;
 
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      flex: 1,
-                      height: 260,
-                      width: "100%",
-                      backgroundColor: "transparent",
-                      opacity: 0.99,
-                      overflow: "hidden",
-                    }}
-                    source={{ html: facebookHTML }}
-                    allowsFullscreenVideo={true}
-                  />
-                );
-              } else if (textItem.tiktok) {
-                // Extract the modified HTML content using the function
-                const originalHtmlContent =
-                  textItem.tiktok.changingThisBreaksApplicationSecurity;
-                const modifiedIframeHtml =
-                  modifyIframeHtml(originalHtmlContent);
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    flex: 1,
+                    height: 260,
+                    width: "100%",
+                    backgroundColor: "transparent",
+                    opacity: 0.99,
+                    overflow: "hidden",
+                  }}
+                  source={{ html: facebookHTML }}
+                  allowsFullscreenVideo={true}
+                />
+              );
+            } else if (textItem.tiktok) {
+              // Extract the modified HTML content using the function
+              const originalHtmlContent =
+                textItem.tiktok.changingThisBreaksApplicationSecurity;
+              const modifiedIframeHtml = modifyIframeHtml(originalHtmlContent);
 
-                const tiktokHTML = `
+              const tiktokHTML = `
     <html>
       <head>
         <style>
@@ -709,23 +701,23 @@ const Article = ({ route }) => {
     </html>
   `;
 
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      height: 720,
-                      backgroundColor: "transparent",
-                      width: "100%",
-                      opacity: 0.99,
-                    }}
-                    source={{ html: tiktokHTML }}
-                  />
-                );
-              } else if (textItem.x) {
-                // Instagram posts can be embedded using WebView as well
-                const htmlContent = textItem.x;
-                const xHTML = `
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    height: 720,
+                    backgroundColor: "transparent",
+                    width: "100%",
+                    opacity: 0.99,
+                  }}
+                  source={{ html: tiktokHTML }}
+                />
+              );
+            } else if (textItem.x) {
+              // Instagram posts can be embedded using WebView as well
+              const htmlContent = textItem.x;
+              const xHTML = `
     <html >
       <head>
         <style>
@@ -742,36 +734,36 @@ const Article = ({ route }) => {
       </body>
     </html>
   `;
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      height: 436,
-                      opacity: 0.99,
-                      overflow: "hidden",
-                      backgroundColor: "transparent",
-                    }}
-                    source={{ html: xHTML }}
-                  />
-                );
-              } else if (textItem.instagram) {
-                // Instagram posts can be embedded using WebView as well
-                const htmlContent = textItem.instagram;
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      height: 680,
-                      opacity: 0.99,
-                      overflow: "hidden",
-                      width: "100%",
-                    }}
-                    source={{ html: instagramHTML }}
-                  />
-                );
-              }
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    height: 436,
+                    opacity: 0.99,
+                    overflow: "hidden",
+                    backgroundColor: "transparent",
+                  }}
+                  source={{ html: xHTML }}
+                />
+              );
+            } else if (textItem.instagram) {
+              // Instagram posts can be embedded using WebView as well
+              const htmlContent = textItem.instagram;
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    height: 680,
+                    opacity: 0.99,
+                    overflow: "hidden",
+                    width: "100%",
+                  }}
+                  source={{ html: instagramHTML }}
+                />
+              );
+            }
 
               // Add more conditionals as needed for additional types
             })}
@@ -783,7 +775,7 @@ const Article = ({ route }) => {
               style={styles.tagsScrollView}
             >
               <View style={styles.tags}>
-                {article.tags.map((tagItem, index) => (
+                {article?.tags?.map((tagItem, index) => (
                   <TouchableOpacity
                     key={index}
                     style={styles.tag}
