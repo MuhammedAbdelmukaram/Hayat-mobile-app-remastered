@@ -22,7 +22,7 @@ import {
   fetchArticlesByCategory,
   fetchNajnovijeArticles,
   setCurrentPage,
-  setHighlightData,
+  setHighlightData, setLoading,
   setMainArticles,
 } from "../redux/slices/selectedContentSlice";
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
@@ -49,7 +49,6 @@ const HomeScreen = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const userInfo = useSelector((state) => state.user.userInfo);
   const [userInfoLoaded, setUserInfoLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [isConnectionError, setIsConnectionError] = useState(false);
 
   // Function to update loading state
@@ -59,21 +58,19 @@ const HomeScreen = () => {
   );
 
   console.log("Expo Push Token from Redux:", expoPushToken);
-  const handleLoading = (loading) => {
-    setIsLoading(loading);
-  };
 
-  // Your existing useEffect hooks and logic...
 
-  //   if (isLoading) {
-  //     return <LoadingScreen />; // Display the loading screen if any part of the app is loading
-  //   }
+  const { loading } = useSelector(
+      (state) => state.selectedContent
+  );
+
+
 
   console.log(userInfo);
   useEffect(() => {
     const fetchData = async () => {
-      setDataLoaded(false); // Reset the dataLoaded state before fetching new data
-      setIsLoading(true);
+      setDataLoaded(false); // THE LOADER WHICH WORKS NOW
+      dispatch(setLoading(true));
 
       try {
         // Fetching highlight data
@@ -90,7 +87,7 @@ const HomeScreen = () => {
         dispatch(setMainArticles(mainArticlesResponse.data)); // Dispatch the action for main articles
 
         setDataLoaded(true); // Indicate that data has been loaded
-        setIsLoading(false);
+        dispatch(setLoading(false));
         setIsConnectionError(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -124,36 +121,6 @@ const HomeScreen = () => {
     */
   }
 
-  const renderContent = () => {
-    // if (!dataLoaded) {
-    //   // Render loading state or indicator
-    //   return <LoadingScreen />;
-    //   //   return <ActivityIndicator color="#1A2F5A" />;
-    // } else
-    if (selectedCategory === "pocetna") {
-      // Render HighlightNews component
-      return (
-        <>
-          <HighlightNews />
-          <AdPlacement2 />
-          <CategoryHighlightNews />
-          {/* Additional components related to HighlightNews and CategoryHighlightNews */}
-        </>
-      );
-    } else if (selectedCategory === "najnovije") {
-      // Render Najnovije component
-      console.log("Selected Category:", selectedCategory);
-      return <Najnovije isPageLoading={isPageLoading} />;
-    } else if (selectedCategory !== "pocetna") {
-      // Render CategoryContent component with appropriate props
-      console.log("Selected Category:", selectedCategory);
-      return <CategoryContent isPageLoading={isPageLoading} />;
-    } else {
-      // Render the default component (HighlightNews)
-      return <HighlightNews />;
-    }
-  };
-
   const categoriesData = useSelector(
     (state) => state.selectedContent.categoriesData
   ); // Assuming this holds the full categories array
@@ -169,11 +136,12 @@ const HomeScreen = () => {
     Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
   const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 
-  const { currentPage, hasMore } = useSelector(
+  const { currentPage, hasMore, } = useSelector(
     (state) => state.selectedContent
   );
 
   const [isPageLoading, setIsPageLoading] = useState(false);
+
 
   const loadMoreContent = async () => {
     if (!isPageLoading && hasMore) {
@@ -221,7 +189,8 @@ const HomeScreen = () => {
       <Header />
       <NavList />
       {isConnectionError && <NoConnection />}
-      {isLoading && <LoadingScreen />}
+      {loading && <LoadingScreen />}
+
       <ScrollView
         bounces={false}
         overScrollMode="never"
@@ -238,7 +207,7 @@ const HomeScreen = () => {
           }
         }}
       >
-        {/* <View>{renderContent()}</View> */}
+        {/* So here, I also need a loader */}
         {selectedCategory === "pocetna" && (
           <>
             <HighlightNews />

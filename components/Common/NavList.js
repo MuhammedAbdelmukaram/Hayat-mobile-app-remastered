@@ -17,7 +17,7 @@ import {
   setCurrentPage,
   setHasMore,
   setHighlightData,
-  setLoading,
+  setLoading, setMainArticles,
   setNajnovijeData,
   setScrollPosition,
   setSelectedCategory,
@@ -43,6 +43,8 @@ const NavList = () => {
 
   // In both NavList and Menu components
   const handleCategoryPress = async ({ categoryUrl, index, page = 1 }) => {
+
+    dispatch(setLoading(true));
     dispatch(setSelectedCategory(categoryUrl));
 
     if (selectedCategory !== categoryUrl) {
@@ -62,6 +64,8 @@ const NavList = () => {
     } catch (error) {
       console.error("Error fetching category specific:", error);
     }
+
+    dispatch(setLoading(false));
 
     const buttonWidth = 120; // Width of each button including padding
     const viewportWidth = Dimensions.get("window").width; // Width of the viewport
@@ -88,6 +92,8 @@ const NavList = () => {
   const handlepocetnaPress = async ({ categoryUrl }) => {
     dispatch(setSelectedCategory(categoryUrl));
 
+    dispatch(setLoading(true));
+
     dispatch(setCurrentPage(1));
     try {
       const response = await axios.get(`${API_URL}/articles/highlight`);
@@ -95,16 +101,22 @@ const NavList = () => {
       // Assuming the categories are under the key 'categories' within the response object
       const newHighlightData = response.data;
 
+      const mainArticlesResponse = await axios.get(`${API_URL}/articles/main`);
+
+      dispatch(setMainArticles(mainArticlesResponse.data));
+
       // Dispatch an action to update contentData in Redux
       dispatch(setHighlightData(newHighlightData));
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
+    dispatch(setLoading(false));
   };
 
   const handleNajnovijePress = async ({ categoryUrl, index, page = 1 }) => {
     dispatch(setSelectedCategory(categoryUrl));
     dispatch(setCurrentPage(1));
+    dispatch(setLoading(true));
     try {
       const response = await axios.get(
         `${API_URL}/articles/mob/najnovije/${page}`
@@ -128,6 +140,7 @@ const NavList = () => {
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
+    dispatch(setLoading(false));
   };
 
   useEffect(() => {
