@@ -7,6 +7,11 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
 
 import HomeScreen from "./screens/HomeScreen";
 import store from "./redux/store";
@@ -26,6 +31,8 @@ import LiveTv from "./screens/LiveTV";
 import Uskoro from "./screens/uskoro";
 import About from "./screens/About";
 import Settings from "./screens/Settings";
+
+PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 export default function App() {
   // useEffect(()=>{
@@ -141,14 +148,14 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
 
-      {/* <BannerAd
+      <BannerAd
         unitId={TestIds.BANNER}
         size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
         requestOptions={{
           networkExtras: { collapsible: "bottom" },
           requestNonPersonalizedAdsOnly: true,
         }}
-      /> */}
+      />
     </Provider>
   );
 }
