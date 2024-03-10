@@ -196,43 +196,45 @@ const HomeScreen = () => {
       <Header />
       <NavList />
       {isConnectionError && <NoConnection />}
-      {isLoading && <LoadingScreen />}
-      <FlatList
+      {/* <FlatList
         data={DATA}
         renderItem={({ item }) => <Item title={item.title} />}
         keyExtractor={(item) => item.id}
-      />
-      <ScrollView
-        bounces={false}
-        overScrollMode="never"
-        ref={scrollViewRef}
-        style={{ height: "100%" }}
-        onMomentumScrollEnd={({ nativeEvent }) => {
-          const isEnd =
-            nativeEvent.layoutMeasurement.height +
-              nativeEvent.contentOffset.y >=
-            nativeEvent.contentSize.height - 20;
+      /> */}
+      {isLoading && <LoadingScreen />}
+      {!isLoading && !isConnectionError && (
+        <ScrollView
+          bounces={false}
+          overScrollMode="never"
+          ref={scrollViewRef}
+          style={{ height: "100%" }}
+          onMomentumScrollEnd={({ nativeEvent }) => {
+            const isEnd =
+              nativeEvent.layoutMeasurement.height +
+                nativeEvent.contentOffset.y >=
+              nativeEvent.contentSize.height - 20;
 
-          if (isEnd && hasMore) {
-            loadMoreContent();
-          }
-        }}
-      >
-        {/* So here, I also need a loader */}
-        {selectedCategory === "pocetna" && (
-          <>
-            <HighlightNews />
-            <AdPlacement2 />
-            <CategoryHighlightNews />
-          </>
-        )}
-        {selectedCategory === "najnovije" && (
-          <Najnovije isPageLoading={isPageLoading} />
-        )}
-        {selectedCategory !== "pocetna" && (
-          <CategoryContent isPageLoading={isPageLoading} />
-        )}
-      </ScrollView>
+            if (isEnd && hasMore) {
+              loadMoreContent();
+            }
+          }}
+        >
+          {/* So here, I also need a loader */}
+          {selectedCategory === "pocetna" && (
+            <>
+              <HighlightNews />
+              <AdPlacement2 />
+              <CategoryHighlightNews />
+            </>
+          )}
+          {selectedCategory === "najnovije" && (
+            <Najnovije isPageLoading={isPageLoading} />
+          )}
+          {selectedCategory !== "pocetna" && (
+            <CategoryContent isPageLoading={isPageLoading} />
+          )}
+        </ScrollView>
+      )}
     </View>
   );
 };
