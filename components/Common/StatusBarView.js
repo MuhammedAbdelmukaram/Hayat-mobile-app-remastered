@@ -11,7 +11,11 @@ const StatusBarView = ({ backgroundColor = "#1A2F5A" }) => {
         zIndex: -1,
       }}
     >
-      <StatusBar translucent backgroundColor barStyle="light-content" />
+      <StatusBar
+        translucent
+        backgroundColor={backgroundColor}
+        barStyle="light-content"
+      />
     </View>
   );
 };
