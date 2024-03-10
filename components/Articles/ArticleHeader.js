@@ -49,6 +49,7 @@ const ArticleHeader = () => {
             Alert.alert("Error", "Failed to authenticate.");
         }
     };
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()} >

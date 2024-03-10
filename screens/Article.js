@@ -244,16 +244,42 @@ const Article = ({ route }) => {
     */
   }
 
+  const STATUS_BAR_HEIGHT =
+      Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#1A2F5A" />;
+    return (
+        <View style={{  }}>
+          <View
+              style={{
+                height: STATUS_BAR_HEIGHT,
+                backgroundColor: "#1A2F5A",
+                zIndex: -1,
+              }}
+          >
+            <StatusBar
+                translucent
+                backgroundColor="#1A2F5A"
+                barStyle="light-content"
+            />
+          </View>
+          <ArticleHeader />
+          <View style={{height:"90%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+             <ActivityIndicator size="large" color="#1A2F5A" />
+          </View>
+        </View>
+    );
   }
 
   if (!article) {
-    return <Text>Article not found.</Text>;
+    return (
+        <View style={{ }}>
+          <ArticleHeader />
+          <Text>Article not found.</Text>
+        </View>
+    );
   }
 
-  const STATUS_BAR_HEIGHT =
-    Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
+
   const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 
   const handleSingleTap = (item, index) => {

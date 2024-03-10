@@ -65,19 +65,25 @@ const Menu = ({visible, onClose}) => {
         }
 
         const buttonWidth = 120; // Width of each button including padding
-        const viewportWidth = Dimensions.get('window').width; // Width of the viewport
+        const viewportWidth = Dimensions.get("window").width; // Width of the viewport
 
         // Calculate the center position of the button to be centered in the viewport
-        const buttonCenter = (index * buttonWidth + 96);
-        const scrollToPosition = buttonCenter;
+        const buttonCenter = index * buttonWidth + buttonWidth / 2 + 240; // Adjust center position for the offset of the first two unaccounted buttons
+        const halfViewportWidth = viewportWidth / 2;
+        let scrollToPosition = buttonCenter - halfViewportWidth; // Adjust so button is in the middle of the viewport
 
-        // Calculate the maximum scrollable position to ensure we don't scroll beyond content
-        const maxScrollPosition = (categoriesData.length * buttonWidth) - viewportWidth;
+        // Adjust the maximum scrollable position to ensure we don't scroll beyond content
+        // No need to change the calculation for maxScrollPosition here since it accommodates for all categories
+        const maxScrollPosition =
+            categoriesData.length * buttonWidth + 240 - viewportWidth; // Adjusted for additional offset
         // Ensure the scrollToPosition is within the bounds [0, maxScrollPosition]
-        const boundedScrollToPosition = Math.max(0, Math.min(scrollToPosition, maxScrollPosition));
+        scrollToPosition = Math.max(
+            0,
+            Math.min(scrollToPosition, maxScrollPosition)
+        );
 
-        scrollViewRef.current?.scrollTo({x: boundedScrollToPosition, animated: true});
-        dispatch(setScrollPosition(boundedScrollToPosition));
+        scrollViewRef.current?.scrollTo({ x: scrollToPosition, animated: true });
+        dispatch(setScrollPosition(scrollToPosition));
     };
 
 
