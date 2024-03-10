@@ -13,16 +13,18 @@ import {
   View,
 } from "react-native";
 import { Image } from "expo-image";
-import image from "../assets/news/newsBack-2.png";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import Header from "../components/Common/Header";
-import ShareButtons from "../components/Articles/ShareButtons";
-import SuggestedNews from "../components/Articles/SuggestedNews";
 import axios from "axios";
 import WebView from "react-native-webview";
 import { Video } from "expo-av";
 import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { API_URL } from "@env";
+
+import image from "../assets/news/newsBack-2.png";
+import Header from "../components/Common/Header";
+import StatusBarView from "../components/Common/StatusBarView";
+import ShareButtons from "../components/Articles/ShareButtons";
+import SuggestedNews from "../components/Articles/SuggestedNews";
 
 import Survey from "./Survey";
 import { BlurView } from "expo-blur";
@@ -443,19 +445,7 @@ const Article = ({ route }) => {
 
   return (
     <View style={{ height: "100%" }}>
-      <View
-        style={{
-          height: STATUS_BAR_HEIGHT,
-          backgroundColor: "#1A2F5A",
-          zIndex: -1,
-        }}
-      >
-        <StatusBar
-          translucent
-          backgroundColor="#1A2F5A"
-          barStyle="light-content"
-        />
-      </View>
+      <StatusBarView />
       <ArticleHeader />
       <ScrollView ref={scrollRef} style={{ height: "100%" }}>
         <Modal

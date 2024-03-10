@@ -5,9 +5,11 @@ import {
   Alert,
   Platform,
   ScrollView,
+  FlatList,
   StatusBar,
   StyleSheet,
   View,
+  Text,
 } from "react-native";
 import { DefaultTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +18,7 @@ import { API_URL } from "@env";
 
 import Header from "../components/Common/Header";
 import NavList from "../components/Common/NavList";
+import StatusBarView from "../components/Common/StatusBarView";
 import HighlightNews from "../components/HomeScreen/HighlightNews";
 import CategoryContent from "../components/CategoryContent";
 import {
@@ -199,29 +202,43 @@ const HomeScreen = () => {
     }
   };
 
+  const DATA = [
+    {
+      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+      title: "First Item",
+    },
+    {
+      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+      title: "Second Item",
+    },
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d72",
+      title: "Third Item",
+    },
+  ];
+
+  const Item = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
+
   return (
     <View
       style={{
         height: "100%",
       }}
     >
-      <View
-        style={{
-          height: STATUS_BAR_HEIGHT,
-          backgroundColor: "#1A2F5A",
-          zIndex: -1,
-        }}
-      >
-        <StatusBar
-          translucent
-          backgroundColor="#1A2F5A"
-          barStyle="light-content"
-        />
-      </View>
+      <StatusBarView />
       <Header />
       <NavList />
       {isConnectionError && <NoConnection />}
       {isLoading && <LoadingScreen />}
+      <FlatList
+        data={DATA}
+        renderItem={({ item }) => <Item title={item.title} />}
+        keyExtractor={(item) => item.id}
+      />
       <ScrollView
         bounces={false}
         overScrollMode="never"

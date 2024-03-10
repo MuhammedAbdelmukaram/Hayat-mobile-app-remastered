@@ -16,6 +16,8 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { VOD_URL, HAYAT_URL } from "@env";
 
+import StatusBarView from "../components/Common/StatusBarView";
+
 const HayatPlay = () => {
   const navigation = useNavigation();
   const [liveTvData, setLiveTvData] = useState([]); // State for live TV data
@@ -67,13 +69,14 @@ const HayatPlay = () => {
 
   return (
     <ScrollView style={styles.wrapper}>
-      <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#cd1717" }}>
+      {/* <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#cd1717" }}>
         <StatusBar
           translucent
           backgroundColor="#cd1717"
           barStyle="light-content"
         />
-      </View>
+      </View> */}
+      <StatusBarView backgroundColor="#cd1717" />
 
       <View style={styles.container}>
         <TouchableOpacity
