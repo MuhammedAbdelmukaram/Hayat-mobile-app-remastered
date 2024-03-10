@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// import messaging from "@react-native-firebase/messaging";
+import messaging from "@react-native-firebase/messaging";
 import { API_URL } from "@env";
 
 import Header from "../components/Common/Header";
@@ -20,22 +20,29 @@ const Settings = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
 
-  const handleNotificationChange = async (value) => {
-    console.log("toggle value", value);
-    setNotificationsEnabled((previousState) => !previousState);
-
+  const sendTokenToServer = async (token, value) => {
     try {
-      const token = await messaging().getToken();
       await fetch(`${API_URL}/fcm-tokens`, {
         method: value ? "POST" : "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ fcmToken: token }),
       });
     } catch (error) {
       console.error("Error sending token to server:", error);
     }
+  };
+
+  const handleNotificationChange = async (value) => {
+    setNotificationsEnabled((previousState) => !previousState);
+
+    messaging()
+      .getToken()
+      .then((token) => {
+        console.log("Device token:", token);
+        sendTokenToServer(token, value); // Send the token to your server
+      });
   };
 
   return (
