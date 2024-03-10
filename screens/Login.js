@@ -1,191 +1,212 @@
-import React, {useState} from 'react';
-import {View, TextInput, Text, TouchableOpacity, StyleSheet, Image, StatusBar, Alert, Platform} from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  StatusBar,
+  Alert,
+  Platform,
+} from "react-native";
 import logo from "../assets/hayatLogo.png";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
-import {setUser} from "../redux/slices/userSlice";
-import {useDispatch} from "react-redux";
-import {setLoginState} from "../redux/slices/authSlice";
-import {API_URL} from '@env';
+import { setUser } from "../redux/slices/userSlice";
+import { useDispatch } from "react-redux";
+import { setLoginState } from "../redux/slices/authSlice";
+import { API_URL } from "@env";
 
-const Login = ({navigation}) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+const Login = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
+  const handleLogin = async () => {
+    setIsSubmitting(true); // Disable the login button
+    try {
+      const response = await axios.post(`${API_URL}/user/authenticate`, {
+        email: email,
+        password: password,
+        // Add role if needed here
+      });
+      // Convert token to a string if it's not already one
+      const tokenString = String(response.data.token);
+      console.log(JSON.stringify(response.data.token, null, 2));
 
-    const handleLogin = async () => {
-        setIsSubmitting(true); // Disable the login button
-        try {
-            const response = await axios.post(`${API_URL}/user/authenticate`, {
-                email: email,
-                password: password,
-                // Add role if needed here
-            });
-            // Convert token to a string if it's not already one
-            const tokenString = String(response.data.token);
-            console.log(JSON.stringify(response.data.token, null, 2));
+      console.log(tokenString);
+      // Save token to secure storage
+      await SecureStore.setItemAsync("userToken", tokenString);
 
+      // Immediately retrieve and log the token from secure storage for verification
+      const token = await SecureStore.getItemAsync("userToken");
+      //console.log('Token stored in secure storage:', token);
 
-            console.log(tokenString);
-            // Save token to secure storage
-            await SecureStore.setItemAsync('userToken', tokenString);
+      // Assuming you have a login action that sets isLoggedIn to true
+      // After storing the token and fetching user info successfully
 
-            // Immediately retrieve and log the token from secure storage for verification
-            const token = await SecureStore.getItemAsync('userToken');
-            //console.log('Token stored in secure storage:', token);
+      const config = {
+        headers: { Authorization: `Bearer ${tokenString}` },
+      };
 
-            // Assuming you have a login action that sets isLoggedIn to true
-            // After storing the token and fetching user info successfully
+      console.log("Sending request with config:", config);
 
+      const userResponse = await axios.get(`${API_URL}/user/whoami`, config);
 
-            const config = {
-                headers: {Authorization: `Bearer ${tokenString}`}
-            };
+      dispatch(setUser(userResponse.data));
+      dispatch(setLoginState(true));
 
+      console.log(userResponse.data);
+      // Navigate to HomeScreen
+      navigation.navigate("HomeScreen");
+    } catch (error) {
+      // Handle error - show error message
+      console.error("Login failed", error);
+      Alert.alert("Greška", "Pogriješili ste");
+    }
+    setIsSubmitting(false); // Re-enable the login button
+  };
+  const STATUS_BAR_HEIGHT =
+    Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
+  const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 
-            console.log('Sending request with config:', config);
-
-
-            const userResponse = await axios.get(`${API_URL}/user/whoami`, config);
-
-            dispatch(setUser(userResponse.data));
-            dispatch(setLoginState(true));
-
-            console.log(userResponse.data);
-            // Navigate to HomeScreen
-            navigation.navigate('HomeScreen');
-        } catch (error) {
-            // Handle error - show error message
-            console.error('Login failed', error);
-            Alert.alert('Greška', 'Pogriješili ste');
-        }
-        setIsSubmitting(false); // Re-enable the login button
-    };
-    const STATUS_BAR_HEIGHT = Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
-    const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
-
-
-    return (
-        <View style={styles.containerInner}>
-            <View style={{width: "100%",
-                backgroundColor: "#1A2F5A",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                paddingBottom: 20}}>
-                <Image source={logo} style={styles.image}/>
-            </View>
-            <View style={{display: "flex", alignSelf: "flex-start", marginBottom: 0, marginTop: 30}}>
-                <Text style={{fontSize: 22, fontWeight: "bold", marginLeft:23, marginTop:20}}>Prijavi se</Text>
-            </View>
-            <View style={styles.container}>
-                <View style={{height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A"}}>
-                    <StatusBar
-                        translucent
-                        backgroundColor="#1A2F5A"
-                        barStyle="light-content"
-                    />
-                </View>
-
-
-
-                <View style={styles.inputs}>
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={setEmail}
-                        value={email}
-                        placeholder="Email"
-                        placeholderTextColor={'#a8a8a8'}
-                        keyboardType="email-address"
-                    />
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={setPassword}
-                        value={password}
-                        placeholder="Šifra"
-                        secureTextEntry
-                        placeholderTextColor={'#a8a8a8'}
-                    />
-                </View>
-                <TouchableOpacity
-                    onPress={handleLogin}
-                    style={styles.button}
-                    disabled={isSubmitting} // Button is disabled when isSubmitting is true
-                >
-                    <Text style={styles.buttonText}>Prijavi se</Text>
-                </TouchableOpacity>
-                {isSubmitting && <Text style={styles.errorText}>Učitavanje...</Text>}
-            </View>
+  return (
+    <View style={styles.containerInner}>
+      <View
+        style={{
+          width: "100%",
+          backgroundColor: "#1A2F5A",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          paddingBottom: 20,
+        }}
+      >
+        <Image source={logo} style={styles.image} />
+      </View>
+      <View
+        style={{
+          display: "flex",
+          alignSelf: "flex-start",
+          marginBottom: 0,
+          marginTop: 30,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 22,
+            fontWeight: "bold",
+            marginLeft: 23,
+            marginTop: 20,
+          }}
+        >
+          Prijavi se
+        </Text>
+      </View>
+      <View style={styles.container}>
+        <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A" }}>
+          <StatusBar
+            translucent
+            backgroundColor="#1A2F5A"
+            barStyle="light-content"
+          />
         </View>
-    );
+
+        <View style={styles.inputs}>
+          <TextInput
+            style={styles.input}
+            onChangeText={setEmail}
+            value={email}
+            placeholder="Email"
+            placeholderTextColor={"#a8a8a8"}
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={setPassword}
+            value={password}
+            placeholder="Šifra"
+            secureTextEntry
+            placeholderTextColor={"#a8a8a8"}
+          />
+        </View>
+        <TouchableOpacity
+          onPress={handleLogin}
+          style={styles.button}
+          disabled={isSubmitting} // Button is disabled when isSubmitting is true
+        >
+          <Text style={styles.buttonText}>Prijavi se</Text>
+        </TouchableOpacity>
+        {isSubmitting && <Text style={styles.errorText}>Učitavanje...</Text>}
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        width:"100%",
-        padding: 26,
-    },
-    containerInner: {
-        flex: 1,
-        width:"100%",
-        alignItems: 'center',
-        backgroundColor: '#fff',
+  container: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    width: "100%",
+    padding: 26,
+  },
+  containerInner: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+  image: {
+    marginTop: "20%",
+    width: "50%", // or some other percentage or fixed width
+    resizeMode: "contain", // This will make sure the image is scaled properly
+    marginBottom: 20, // Add some margin if needed
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "#1A2F5A",
+  },
+  inputs: {
+    marginTop: "14%",
+    width: "100%",
+  },
+  input: {
+    height: 40,
+    marginVertical: 10,
+    borderBottomWidth: 1, // Only have a border on the bottom
+    borderColor: "#dadada",
+    padding: 10,
+    width: "100%",
+  },
+  button: {
+    backgroundColor: "#1A2F5A",
+    padding: 10,
+    borderRadius: 5,
+    width: "100%",
+    marginTop: 50,
+  },
 
-    },
-    image: {
-        marginTop: "20%",
-        width: '50%', // or some other percentage or fixed width
-        resizeMode: 'contain', // This will make sure the image is scaled properly
-        marginBottom: 20, // Add some margin if needed
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        color: '#1A2F5A'
-    },
-    inputs: {
-        marginTop: "14%",
-        width: "100%"
-    },
-    input: {
-        height: 40,
-        marginVertical: 10,
-        borderBottomWidth: 1, // Only have a border on the bottom
-        borderColor: '#dadada',
-        padding: 10,
-        width: '100%',
-    },
-    button: {
-        backgroundColor: '#1A2F5A',
-        padding: 10,
-        borderRadius: 5,
-        width: '100%',
-        marginTop: 50,
-
-    },
-
-    errorText: {
-        color: 'grey',
-        marginTop: 10,
-    },
-    buttonText: {
-        color: '#fff',
-        textAlign: 'center',
-    },
-    registerText: {
-        marginTop: 20,
-    },
-    linkText: {
-        color: 'blue',
-        textDecorationLine: 'underline',
-    }
+  errorText: {
+    color: "grey",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    textAlign: "center",
+  },
+  registerText: {
+    marginTop: 20,
+  },
+  linkText: {
+    color: "blue",
+    textDecorationLine: "underline",
+  },
 });
 
 export default Login;
