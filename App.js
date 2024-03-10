@@ -1,4 +1,6 @@
 import { StatusBar } from "expo-status-bar";
+import React, { useEffect } from "react";
+import { Provider } from "react-redux";
 import { StyleSheet, PermissionsAndroid } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
@@ -7,8 +9,6 @@ import {
 } from "@react-navigation/stack";
 
 import HomeScreen from "./screens/HomeScreen";
-import React, { useEffect } from "react";
-import { Provider } from "react-redux";
 import store from "./redux/store";
 import Article from "./screens/Article";
 import VideoArticle from "./screens/VideoArticle";
@@ -58,43 +58,36 @@ export default function App() {
             component={HomeScreen}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Article"
             component={Article}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="VideoArticle"
             component={VideoArticle}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="HayatPlay"
             component={HayatPlay}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Uskoro"
             component={Uskoro}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="SubCategory"
             component={SubCategory}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="TvShow"
             component={TVShow}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="SubTvShow"
             component={SubTvShow}
@@ -120,31 +113,26 @@ export default function App() {
             component={About}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Login"
             component={Login}
             options={{ headerShown: false, animationEnabled: false }}
           />
-
           <Stack.Screen
             name="Survey"
             component={Survey}
             options={{ headerShown: false, animationEnabled: false }}
           />
-
           <Stack.Screen
             name="Settings"
             component={Settings}
             options={{ headerShown: false, animationEnabled: false }}
           />
-
           <Stack.Screen
             name="TermsOfService"
             component={TermsOfService}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Signup"
             component={Signup}
