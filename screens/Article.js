@@ -13,20 +13,20 @@ import {
   View,
 } from "react-native";
 import { Image } from "expo-image";
-import image from "../assets/news/newsBack-2.png";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import Header from "../components/Common/Header";
-import ShareButtons from "../components/Articles/ShareButtons";
-import SuggestedNews from "../components/Articles/SuggestedNews";
 import axios from "axios";
 import WebView from "react-native-webview";
 import { Video } from "expo-av";
 import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { BlurView } from "expo-blur";
 import { API_URL } from "@env";
 
+import image from "../assets/news/newsBack-2.png";
+import Header from "../components/Common/Header";
+import StatusBarView from "../components/Common/StatusBarView";
+import ShareButtons from "../components/Articles/ShareButtons";
+import SuggestedNews from "../components/Articles/SuggestedNews";
 import Survey from "./Survey";
-import { BlurView } from "expo-blur";
-import ArticleHeader from "../components/Articles/ArticleHeader";
 import AdPlacement2 from "../Ads/AdPlacement2";
 import AdPlacement3 from "../Ads/AdPlacement3";
 
@@ -242,16 +242,48 @@ const Article = ({ route }) => {
     */
   }
 
+  const STATUS_BAR_HEIGHT =
+    Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#1A2F5A" />;
+    return (
+      <View style={{}}>
+        <View
+          style={{
+            height: STATUS_BAR_HEIGHT,
+            backgroundColor: "#1A2F5A",
+            zIndex: -1,
+          }}
+        >
+          <StatusBar
+            translucent
+            backgroundColor="#1A2F5A"
+            barStyle="light-content"
+          />
+        </View>
+        <Header isHome={false} />
+        <View
+          style={{
+            height: "90%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="#1A2F5A" />
+        </View>
+      </View>
+    );
   }
 
   if (!article) {
-    return <Text>Article not found.</Text>;
+    return (
+      <View style={{}}>
+        <Header isHome={false} />
+        <Text>Article not found.</Text>
+      </View>
+    );
   }
 
-  const STATUS_BAR_HEIGHT =
-    Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
   const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 
   const handleSingleTap = (item, index) => {
@@ -443,20 +475,8 @@ const Article = ({ route }) => {
 
   return (
     <View style={{ height: "100%" }}>
-      <View
-        style={{
-          height: STATUS_BAR_HEIGHT,
-          backgroundColor: "#1A2F5A",
-          zIndex: -1,
-        }}
-      >
-        <StatusBar
-          translucent
-          backgroundColor="#1A2F5A"
-          barStyle="light-content"
-        />
-      </View>
-      <ArticleHeader />
+      <StatusBarView />
+      <Header isHome={false} />
       <ScrollView ref={scrollRef} style={{ height: "100%" }}>
         <Modal
           animationType="slide"
@@ -529,45 +549,41 @@ const Article = ({ route }) => {
               {/*<Text style={styles.date}>{formatDate(article.create_date)}</Text>*/}
             </View>
           </View>
-
           <Text style={styles.subTitle}>{article.subtitle}</Text>
-
           <AdPlacement2 />
+          {article?.text?.map((textItem, index) => {
+            if (textItem.regular) {
+              return (
+                <Text key={index} style={styles.regularText}>
+                  {textItem.regular}
+                </Text>
+              );
+            } else if (textItem.bold) {
+              return (
+                <Text key={index} style={styles.boldText}>
+                  {textItem.bold}
+                </Text>
+              );
+            } else if (textItem.italic) {
+              return (
+                <Text key={index} style={styles.italicText}>
+                  {textItem.italic}
+                </Text>
+              );
+            } else if (textItem.image) {
+              return (
+                <Image
+                  key={index}
+                  source={{ uri: textItem.image }}
+                  style={styles.image}
+                />
+              );
+            } else if (textItem.youtube) {
+              const htmlContent =
+                textItem.youtube.changingThisBreaksApplicationSecurity;
+              const modifiedytContent = modifyYTframeHtml(htmlContent);
 
-          {article &&
-            article.text.map((textItem, index) => {
-              if (textItem.regular) {
-                return (
-                  <Text key={index} style={styles.regularText}>
-                    {textItem.regular}
-                  </Text>
-                );
-              } else if (textItem.bold) {
-                return (
-                  <Text key={index} style={styles.boldText}>
-                    {textItem.bold}
-                  </Text>
-                );
-              } else if (textItem.italic) {
-                return (
-                  <Text key={index} style={styles.italicText}>
-                    {textItem.italic}
-                  </Text>
-                );
-              } else if (textItem.image) {
-                return (
-                  <Image
-                    key={index}
-                    source={{ uri: textItem.image }}
-                    style={styles.image}
-                  />
-                );
-              } else if (textItem.youtube) {
-                const htmlContent =
-                  textItem.youtube.changingThisBreaksApplicationSecurity;
-                const modifiedytContent = modifyYTframeHtml(htmlContent);
-
-                const youtubeHTML = `
+              const youtubeHTML = `
     <html >
       <head>
         <style>
@@ -582,36 +598,36 @@ const Article = ({ route }) => {
       </body>
     </html>
   `;
-                console.log(modifiedytContent);
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      height: 300,
-                      minWidth: "100%",
-                      opacity: 0.99,
-                      overflow: "hidden",
-                      display: "flex",
-                      alignItems: "center",
-                      marginVertical: 30,
-                    }}
-                    source={{ html: youtubeHTML }}
-                    allowsFullscreenVideo={true}
-                    javaScriptEnabled={true}
-                  />
-                );
-              } else if (textItem.survey) {
-                // Assuming you have a component to handle survey embedding
-                return <Survey surveyId={textItem.survey} key={index} />;
-              } else if (textItem.facebook) {
-                // Modify the original HTML content using the function
-                const originalHtmlContent =
-                  textItem.facebook.changingThisBreaksApplicationSecurity;
-                const modifiedIframeHtml =
-                  modifyFacebookIframeHtml(originalHtmlContent);
+              console.log(modifiedytContent);
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    height: 300,
+                    minWidth: "100%",
+                    opacity: 0.99,
+                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "center",
+                    marginVertical: 30,
+                  }}
+                  source={{ html: youtubeHTML }}
+                  allowsFullscreenVideo={true}
+                  javaScriptEnabled={true}
+                />
+              );
+            } else if (textItem.survey) {
+              // Assuming you have a component to handle survey embedding
+              return <Survey surveyId={textItem.survey} key={index} />;
+            } else if (textItem.facebook) {
+              // Modify the original HTML content using the function
+              const originalHtmlContent =
+                textItem.facebook.changingThisBreaksApplicationSecurity;
+              const modifiedIframeHtml =
+                modifyFacebookIframeHtml(originalHtmlContent);
 
-                const facebookHTML = `
+              const facebookHTML = `
     <html>
       <head>
         <style>
@@ -635,30 +651,29 @@ const Article = ({ route }) => {
     </html>
   `;
 
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      flex: 1,
-                      height: 260,
-                      width: "100%",
-                      backgroundColor: "transparent",
-                      opacity: 0.99,
-                      overflow: "hidden",
-                    }}
-                    source={{ html: facebookHTML }}
-                    allowsFullscreenVideo={true}
-                  />
-                );
-              } else if (textItem.tiktok) {
-                // Extract the modified HTML content using the function
-                const originalHtmlContent =
-                  textItem.tiktok.changingThisBreaksApplicationSecurity;
-                const modifiedIframeHtml =
-                  modifyIframeHtml(originalHtmlContent);
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    flex: 1,
+                    height: 260,
+                    width: "100%",
+                    backgroundColor: "transparent",
+                    opacity: 0.99,
+                    overflow: "hidden",
+                  }}
+                  source={{ html: facebookHTML }}
+                  allowsFullscreenVideo={true}
+                />
+              );
+            } else if (textItem.tiktok) {
+              // Extract the modified HTML content using the function
+              const originalHtmlContent =
+                textItem.tiktok.changingThisBreaksApplicationSecurity;
+              const modifiedIframeHtml = modifyIframeHtml(originalHtmlContent);
 
-                const tiktokHTML = `
+              const tiktokHTML = `
     <html>
       <head>
         <style>
@@ -682,23 +697,23 @@ const Article = ({ route }) => {
     </html>
   `;
 
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      height: 720,
-                      backgroundColor: "transparent",
-                      width: "100%",
-                      opacity: 0.99,
-                    }}
-                    source={{ html: tiktokHTML }}
-                  />
-                );
-              } else if (textItem.x) {
-                // Instagram posts can be embedded using WebView as well
-                const htmlContent = textItem.x;
-                const xHTML = `
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    height: 720,
+                    backgroundColor: "transparent",
+                    width: "100%",
+                    opacity: 0.99,
+                  }}
+                  source={{ html: tiktokHTML }}
+                />
+              );
+            } else if (textItem.x) {
+              // Instagram posts can be embedded using WebView as well
+              const htmlContent = textItem.x;
+              const xHTML = `
     <html >
       <head>
         <style>
@@ -715,39 +730,39 @@ const Article = ({ route }) => {
       </body>
     </html>
   `;
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      height: 436,
-                      opacity: 0.99,
-                      overflow: "hidden",
-                      backgroundColor: "transparent",
-                    }}
-                    source={{ html: xHTML }}
-                  />
-                );
-              } else if (textItem.instagram) {
-                // Instagram posts can be embedded using WebView as well
-                const htmlContent = textItem.instagram;
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      height: 680,
-                      opacity: 0.99,
-                      overflow: "hidden",
-                      width: "100%",
-                    }}
-                    source={{ html: instagramHTML }}
-                  />
-                );
-              }
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    height: 436,
+                    opacity: 0.99,
+                    overflow: "hidden",
+                    backgroundColor: "transparent",
+                  }}
+                  source={{ html: xHTML }}
+                />
+              );
+            } else if (textItem.instagram) {
+              // Instagram posts can be embedded using WebView as well
+              const htmlContent = textItem.instagram;
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    height: 680,
+                    opacity: 0.99,
+                    overflow: "hidden",
+                    width: "100%",
+                  }}
+                  source={{ html: instagramHTML }}
+                />
+              );
+            }
 
-              // Add more conditionals as needed for additional types
-            })}
+            // Add more conditionals as needed for additional types
+          })}
 
           <View style={styles.tagsShareWrapper}>
             <ScrollView
@@ -756,7 +771,7 @@ const Article = ({ route }) => {
               style={styles.tagsScrollView}
             >
               <View style={styles.tags}>
-                {article.tags.map((tagItem, index) => (
+                {article?.tags?.map((tagItem, index) => (
                   <TouchableOpacity
                     key={index}
                     style={styles.tag}

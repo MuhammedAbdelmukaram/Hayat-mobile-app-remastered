@@ -15,6 +15,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { VOD_URL } from "@env";
 
+import StatusBarView from "../components/Common/StatusBarView";
+
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
@@ -83,13 +85,14 @@ const SubCategory = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#252324" }}>
-      <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#cd1717" }}>
+      {/* <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#cd1717" }}>
         <StatusBar
           translucent
           backgroundColor="#cd1717"
           barStyle="light-content"
         />
-      </View>
+      </View> */}
+      <StatusBarView backgroundColor="#cd1717" />
       <ScrollView style={{ width: "100%" }}>
         <View style={styles.container}>
           <TouchableOpacity

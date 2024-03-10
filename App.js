@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
+import React, { useEffect } from "react";
+import { Provider } from "react-redux";
 import { StyleSheet, PermissionsAndroid } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-import messaging from "@react-native-firebase/messaging";
 import {
   BannerAd,
   BannerAdSize,
@@ -13,8 +14,6 @@ import {
 } from "react-native-google-mobile-ads";
 
 import HomeScreen from "./screens/HomeScreen";
-import React, { useEffect } from "react";
-import { Provider } from "react-redux";
 import store from "./redux/store";
 import Article from "./screens/Article";
 import VideoArticle from "./screens/VideoArticle";
@@ -36,48 +35,6 @@ import Settings from "./screens/Settings";
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 export default function App() {
-
-  useEffect(() => {
-    // Define the function to send the token to your server
-    const sendTokenToServer = async (token) => {
-      try {
-        await fetch('YOUR_BACKEND_ENDPOINT', {  // Replace YOUR_BACKEND_ENDPOINT with your actual endpoint
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ token }),
-        });
-      } catch (error) {
-        console.error('Error sending token to server:', error);
-      }
-    };
-
-    // Get the device token and send it to the server
-    messaging()
-        .getToken()
-        .then((token) => {
-          console.log("Device token:", token);
-          sendTokenToServer(token); // Send the token to your server
-        });
-
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
-    });
-
-    // Subscribe to token refresh events
-    const unsubscribeTokenRefresh = messaging().onTokenRefresh((token) => {
-      console.log("Refreshed token:", token);
-      sendTokenToServer(token); // Send the refreshed token to your server
-    });
-
-    return () => {
-      unsubscribe();
-      unsubscribeTokenRefresh();
-    };
-  }, []);
-
-
   // useEffect(()=>{
   //     anaylyte()
   // },[])
@@ -108,43 +65,36 @@ export default function App() {
             component={HomeScreen}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Article"
             component={Article}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="VideoArticle"
             component={VideoArticle}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="HayatPlay"
             component={HayatPlay}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Uskoro"
             component={Uskoro}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="SubCategory"
             component={SubCategory}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="TvShow"
             component={TVShow}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="SubTvShow"
             component={SubTvShow}
@@ -170,31 +120,26 @@ export default function App() {
             component={About}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Login"
             component={Login}
             options={{ headerShown: false, animationEnabled: false }}
           />
-
           <Stack.Screen
             name="Survey"
             component={Survey}
             options={{ headerShown: false, animationEnabled: false }}
           />
-
           <Stack.Screen
             name="Settings"
             component={Settings}
             options={{ headerShown: false, animationEnabled: false }}
           />
-
           <Stack.Screen
             name="TermsOfService"
             component={TermsOfService}
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="Signup"
             component={Signup}
@@ -218,7 +163,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
