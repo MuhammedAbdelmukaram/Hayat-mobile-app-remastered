@@ -14,7 +14,7 @@ import { API_URL } from "@env";
 
 import Menu from "./Menu";
 
-const Header = () => {
+const Header = ({ isHome = true, isSettings = false }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const navigation = useNavigation();
   const openMenu = () => {
@@ -70,36 +70,46 @@ const Header = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={openMenu}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => (isHome ? openMenu() : navigation.goBack())}
+      >
         <Image
-          source={require("../../assets/icons/menuIcon.png")}
-          style={styles.icon}
+          source={
+            isHome
+              ? require("../../assets/icons/menuIcon.png")
+              : require("../../assets/backIcon.png")
+          }
+          style={isHome ? styles.icon : styles.backIcon}
+          resizeMode={"contain"}
         />
       </TouchableOpacity>
+      {!isSettings && (
+        <>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require("../../assets/hayatLogo.png")}
+              style={styles.headerLogo}
+            />
+          </View>
 
-      {/* Absolute positioning for the logo to ensure it's always centered */}
-      <View style={styles.logoContainer}>
-        <Image
-          source={require("../../assets/hayatLogo.png")}
-          style={styles.headerLogo}
-        />
-      </View>
-
-      <View style={styles.rightContainer}>
-        <TouchableOpacity
-          style={styles.buttonLive}
-          onPress={handleHayatPlayPress}
-        >
-          <Animated.View
-            style={{
-              ...styles.blinkingDot,
-              opacity: blinkAnim, // Bind opacity to animated value
-            }}
-          />
-          <Text style={{ color: "#fff", marginLeft: 8 }}>Live TV</Text>
-        </TouchableOpacity>
-      </View>
-      <Menu visible={menuVisible} onClose={closeMenu} />
+          <View style={styles.rightContainer}>
+            <TouchableOpacity
+              style={styles.buttonLive}
+              onPress={handleHayatPlayPress}
+            >
+              <Animated.View
+                style={{
+                  ...styles.blinkingDot,
+                  opacity: blinkAnim, // Bind opacity to animated value
+                }}
+              />
+              <Text style={{ color: "#fff", marginLeft: 8 }}>Live TV</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+      {isHome && <Menu visible={menuVisible} onClose={closeMenu} />}
     </View>
   );
 };
@@ -148,6 +158,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  backIcon: {
+    width: 36,
+    height: 36,
   },
 });
 
