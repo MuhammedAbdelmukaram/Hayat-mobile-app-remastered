@@ -340,9 +340,16 @@ const Article = ({ route }) => {
 
 
   const renderMediaModal = ({ item, index }) => {
-    // Set the desired width and height based on screen width and 16:9 aspect ratio
+    // Set the desired width based on screen width
     const mediaWidth = screenWidth - 20; // Subtracting padding value (10 on each side)
-    const mediaHeight = mediaWidth * (9 / 16); // Maintain 16:9 aspect ratio
+    // Default height for 16:9 aspect ratio
+    let mediaHeight = mediaWidth * (9 / 16) + 120;
+
+    // Check if the aspect ratio is available and not 16:9
+    if (item.aspectRatio && item.aspectRatio !== (16 / 9)) {
+      // Set height based on actual aspect ratio
+      mediaHeight = mediaWidth / item.aspectRatio;
+    }
 
     if (item.isVideo) {
       return (
@@ -356,7 +363,7 @@ const Article = ({ route }) => {
                 rate={1.0}
                 volume={1.0}
                 isMuted={false}
-                resizeMode="cover" // Change to "contain" if you want to fit the whole video within the frame without cropping
+                resizeMode="contain" // Using "contain" to ensure full visibility
                 shouldPlay={item.url === visibleItem && !isModalVisible}
                 isLooping
                 useNativeControls
@@ -375,13 +382,14 @@ const Article = ({ route }) => {
                 source={{ uri: item.url }}
                 style={{ width: mediaWidth, height: mediaHeight }}
                 placeholder={blurhash}
-                contentFit="contain"
+                contentFit="contain" // Ensuring the full image is visible
                 transition={1000}
             />
           </TouchableOpacity>
       );
     }
   };
+
 
   // Determine the content to display based on the first item in image_list
   const contentToDisplay =
