@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image, Alert, StatusBar, Platform} from "react-native";
 import {useSelector} from "react-redux";
-import HeaderAccount from "../components/Account/headerAccount";
+import Header from "../components/common/Header";
 
 const Account = () => {
 
@@ -19,7 +19,7 @@ const Account = () => {
                     barStyle="light-content"
                 />
             </View>
-            <HeaderAccount/>
+            <Header/>
 
             {userInfo && (
                 <View style={styles.userInfoContainer}>
