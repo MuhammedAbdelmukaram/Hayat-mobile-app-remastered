@@ -7,7 +7,9 @@ import {
   Dimensions,
 } from "react-native";
 
-let ScreenHeight = Dimensions.get("window").height;
+import { STATUS_BAR_HEIGHT } from "./StatusBarView";
+
+let loadingHeight = Dimensions.get("window").height - STATUS_BAR_HEIGHT - 107;
 
 const LoadingScreen = () => {
   return (
@@ -23,6 +25,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    height: ScreenHeight,
+    height: loadingHeight,
   },
 });

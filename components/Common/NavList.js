@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#1A2F5A",
     borderBottomWidth: 1,
-    minHeight: 60,
+    height: 60,
   },
   button: {
     width: 120,

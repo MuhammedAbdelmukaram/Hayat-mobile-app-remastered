@@ -92,7 +92,7 @@ const HayatPlay = () => {
 
         <View style={styles.logoContainer}>
           <Image
-            source={require("../assets/hayatLogo.png")}
+            source={require("../assets/hayatLogoTransparent.png")}
             style={styles.headerLogo}
           />
         </View>

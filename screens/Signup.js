@@ -107,6 +107,7 @@ const Signup = ({ navigation }) => {
           justifyContent: "center",
           alignItems: "center",
           paddingBottom: 20,
+          height:150,
         }}
       >
         <Image source={logo} style={styles.image} />

@@ -338,6 +338,59 @@ const Article = ({ route }) => {
     }
   };
 
+
+  const renderMediaModal = ({ item, index }) => {
+    // Set the desired width based on screen width
+    const mediaWidth = screenWidth - 20; // Subtracting padding value (10 on each side)
+    // Default height for 16:9 aspect ratio
+    let mediaHeight = mediaWidth * (9 / 16) + 120;
+
+    // Check if the aspect ratio is available and not 16:9
+    if (item.aspectRatio && item.aspectRatio !== (16 / 9)) {
+      // Set height based on actual aspect ratio
+      mediaHeight = mediaWidth / item.aspectRatio;
+    }
+
+    if (item.isVideo) {
+      return (
+          <TouchableOpacity
+              onPress={() => handleSingleTap(item, index)}
+              activeOpacity={0.8}
+              style={{ marginVertical: 5, paddingHorizontal: 10 }}
+          >
+            <Video
+                source={{ uri: item.url }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="contain" // Using "contain" to ensure full visibility
+                shouldPlay={item.url === visibleItem && !isModalVisible}
+                isLooping
+                useNativeControls
+                style={{ width: mediaWidth, height: mediaHeight }}
+            />
+          </TouchableOpacity>
+      );
+    } else {
+      return (
+          <TouchableOpacity
+              onPress={() => handleSingleTap(item, index)}
+              activeOpacity={0.8}
+              style={{ marginVertical: 5, paddingHorizontal: 10 }}
+          >
+            <Image
+                source={{ uri: item.url }}
+                style={{ width: mediaWidth, height: mediaHeight }}
+                placeholder={blurhash}
+                contentFit="contain" // Ensuring the full image is visible
+                transition={1000}
+            />
+          </TouchableOpacity>
+      );
+    }
+  };
+
+
   // Determine the content to display based on the first item in image_list
   const contentToDisplay =
     article && article.image_list.length > 0 ? (
@@ -507,7 +560,7 @@ const Article = ({ route }) => {
             <View style={styles.centeredView}>
               <FlatList
                 data={article.image_list}
-                renderItem={renderMedia}
+                renderItem={renderMediaModal}
                 keyExtractor={(item, index) => index.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -548,7 +601,7 @@ const Article = ({ route }) => {
             <Text style={styles.author}>{article.display_name}</Text>
 
             <View style={styles.dateTimeWrapper}>
-              {/*<Text style={styles.date}>{formatDate(article.create_date)}</Text>*/}
+              {<Text style={styles.date}>{formatDate(article.create_date)}</Text>}
             </View>
           </View>
 
