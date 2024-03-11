@@ -16,9 +16,9 @@ import StatusBarView from "../components/Common/StatusBarView";
 const Account = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
 
-  //   const STATUS_BAR_HEIGHT =
-  //     Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
-  //   const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
+  const STATUS_BAR_HEIGHT =
+    Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
+  const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
   return (
     <View>
       <StatusBarView backgroundColor="#1A2F5A" />
