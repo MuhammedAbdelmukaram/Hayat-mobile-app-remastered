@@ -20,7 +20,7 @@ export const fetchNajnovijeArticles = createAsyncThunk(
     'selectedContent/fetchNajnovijeArticles',
     async ({ categoryUrl, page }, thunkAPI) => {
         try {
-            console.log(page);
+            //console.log(page);
             const response = await axios.get(`${API_URL}/articles/mob/najnovije/${page}`);
             const data = response.data;
             const hasMore = data.length === 15; // Adjust based on your pagination limit

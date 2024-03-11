@@ -57,7 +57,7 @@ const Header = ({ isHome = true, isSettings = false }) => {
       });
       if (response.data.auth === 100) {
         // Navigate to HayatPlay screen upon successful authentication
-        console.log(response.data.auth);
+        //console.log(response.data.auth);
         navigation.navigate("HayatPlay"); // Replace 'HayatPlay' with your actual screen name
       } else {
         Alert.alert("Authentication Failed", `Auth: ${response.data.auth}`);

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -12,23 +12,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Image } from "expo-image";
+import {Image} from "expo-image";
 import axios from "axios";
 import WebView from "react-native-webview";
-import { Video } from "expo-av";
-import { useDispatch, useSelector } from "react-redux";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { BlurView } from "expo-blur";
-import { API_URL } from "@env";
+import {Video} from "expo-av";
+import {useDispatch, useSelector} from "react-redux";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
+import {BlurView} from "expo-blur";
+import {API_URL} from "@env";
 
 import image from "../assets/news/newsBack-2.png";
-import Header from "../components/Common/Header";
-import StatusBarView from "../components/Common/StatusBarView";
 import ShareButtons from "../components/Articles/ShareButtons";
 import SuggestedNews from "../components/Articles/SuggestedNews";
 import Survey from "./Survey";
+import ArticleHeader from "../components/Articles/ArticleHeader";
 import AdPlacement2 from "../Ads/AdPlacement2";
 import AdPlacement3 from "../Ads/AdPlacement3";
+import StatusBarView from "../components/Common/StatusBarView";
+import Header from "../components/Common/Header";
 
 const screenWidth = Dimensions.get("window").width;
 const blurhash =
@@ -283,6 +284,7 @@ const Article = ({ route }) => {
       </View>
     );
   }
+
 
   const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 
@@ -549,7 +551,9 @@ const Article = ({ route }) => {
               {/*<Text style={styles.date}>{formatDate(article.create_date)}</Text>*/}
             </View>
           </View>
+
           <Text style={styles.subTitle}>{article.subtitle}</Text>
+
           <AdPlacement2 />
           {article?.text?.map((textItem, index) => {
             if (textItem.regular) {
@@ -583,7 +587,7 @@ const Article = ({ route }) => {
                 textItem.youtube.changingThisBreaksApplicationSecurity;
               const modifiedytContent = modifyYTframeHtml(htmlContent);
 
-              const youtubeHTML = `
+                const youtubeHTML = `
     <html >
       <head>
         <style>
@@ -598,34 +602,34 @@ const Article = ({ route }) => {
       </body>
     </html>
   `;
-              console.log(modifiedytContent);
-              return (
-                <WebView
-                  key={index}
-                  originWhitelist={["*"]}
-                  style={{
-                    height: 300,
-                    minWidth: "100%",
-                    opacity: 0.99,
-                    overflow: "hidden",
-                    display: "flex",
-                    alignItems: "center",
-                    marginVertical: 30,
-                  }}
-                  source={{ html: youtubeHTML }}
-                  allowsFullscreenVideo={true}
-                  javaScriptEnabled={true}
-                />
-              );
-            } else if (textItem.survey) {
-              // Assuming you have a component to handle survey embedding
-              return <Survey surveyId={textItem.survey} key={index} />;
-            } else if (textItem.facebook) {
-              // Modify the original HTML content using the function
-              const originalHtmlContent =
-                textItem.facebook.changingThisBreaksApplicationSecurity;
-              const modifiedIframeHtml =
-                modifyFacebookIframeHtml(originalHtmlContent);
+               // console.log(modifiedytContent);
+                return (
+                  <WebView
+                    key={index}
+                    originWhitelist={["*"]}
+                    style={{
+                      height: 300,
+                      minWidth: "100%",
+                      opacity: 0.99,
+                      overflow: "hidden",
+                      display: "flex",
+                      alignItems: "center",
+                      marginVertical: 30,
+                    }}
+                    source={{ html: youtubeHTML }}
+                    allowsFullscreenVideo={true}
+                    javaScriptEnabled={true}
+                  />
+                );
+              } else if (textItem.survey) {
+                // Assuming you have a component to handle survey embedding
+                return <Survey surveyId={textItem.survey} key={index} />;
+              } else if (textItem.facebook) {
+                // Modify the original HTML content using the function
+                const originalHtmlContent =
+                  textItem.facebook.changingThisBreaksApplicationSecurity;
+                const modifiedIframeHtml =
+                  modifyFacebookIframeHtml(originalHtmlContent);
 
               const facebookHTML = `
     <html>
@@ -761,8 +765,8 @@ const Article = ({ route }) => {
               );
             }
 
-            // Add more conditionals as needed for additional types
-          })}
+              // Add more conditionals as needed for additional types
+            })}
 
           <View style={styles.tagsShareWrapper}>
             <ScrollView
