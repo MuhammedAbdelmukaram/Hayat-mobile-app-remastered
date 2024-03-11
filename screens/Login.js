@@ -80,26 +80,34 @@ const Login = ({navigation}) => {
 
     return (
         <View style={styles.containerInner}>
+            <View style={{backgroundColor:"#1A2F5A", marginTop:30, paddingTop:16, height:50, width:"100%", }}>
+                <TouchableOpacity
+                    style={styles.buttonBack}
+                    onPress={() => navigation.goBack()}
+                >
+                    <Image
+                        source={require("../assets/backIcon.png")}
+                        style={styles.backIcon}
+                        resizeMode="contain"
+                    />
+                </TouchableOpacity>
+            </View>
+
             <View style={{width: "100%",
                 backgroundColor: "#1A2F5A",
                 display: "flex",
-                height:250,
+                height:150,
                 justifyContent: "center",
                 alignItems: "center",
-                paddingBottom: 20}}>
+                paddingBottom: 50}}>
+
                 <Image source={logo} style={styles.image}/>
             </View>
             <View style={{display: "flex", alignSelf: "flex-start", marginBottom: 0, marginTop: 30}}>
                 <Text style={{fontSize: 22, fontWeight: "bold", marginLeft:23, marginTop:20}}>Prijavi se</Text>
             </View>
             <View style={styles.container}>
-                <View style={{height: STATUS_BAR_HEIGHT, backgroundColor: "#1A2F5A"}}>
-                    <StatusBar
-                        translucent
-                        backgroundColor="#1A2F5A"
-                        barStyle="light-content"
-                    />
-                </View>
+
 
 
 
@@ -150,7 +158,7 @@ const styles = StyleSheet.create({
 
     },
     image: {
-        marginTop: "20%",
+        marginTop: "0%",
         width: '50%', // or some other percentage or fixed width
         resizeMode: 'contain', // This will make sure the image is scaled properly
         marginBottom: 20, // Add some margin if needed
@@ -181,7 +189,14 @@ const styles = StyleSheet.create({
         marginTop: 50,
 
     },
-
+    buttonBack: {
+        paddingHorizontal: 12,
+        zIndex: 1,
+    },
+    backIcon: {
+        width: 36,
+        height: 36,
+    },
     errorText: {
         color: 'grey',
         marginTop: 10,

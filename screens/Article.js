@@ -32,6 +32,7 @@ import StatusBarView from "../components/Common/StatusBarView";
 import Header from "../components/Common/Header";
 
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
@@ -299,6 +300,7 @@ const Article = ({ route }) => {
     const mediaWidth = screenWidth - 20; // Subtracting padding value (10 on each side)
     const mediaHeight = mediaWidth * (9 / 16); // Maintain 16:9 aspect ratio
 
+
     if (item.isVideo) {
       return (
         <TouchableOpacity
@@ -355,7 +357,7 @@ const Article = ({ route }) => {
       return (
           <TouchableOpacity
               onPress={() => handleSingleTap(item, index)}
-              activeOpacity={0.8}
+              activeOpacity={0.99}
               style={{ marginVertical: 5, paddingHorizontal: 10 }}
           >
             <Video
@@ -375,7 +377,7 @@ const Article = ({ route }) => {
       return (
           <TouchableOpacity
               onPress={() => handleSingleTap(item, index)}
-              activeOpacity={0.8}
+              activeOpacity={0.99}
               style={{ marginVertical: 5, paddingHorizontal: 10 }}
           >
             <Image
@@ -601,7 +603,9 @@ const Article = ({ route }) => {
             <Text style={styles.author}>{article.display_name}</Text>
 
             <View style={styles.dateTimeWrapper}>
-              {<Text style={styles.date}>{formatDate(article.create_date)}</Text>}
+              {article && article.create_date && (
+                  <Text style={styles.date}>{formatDate(article.create_date)}</Text>
+              )}
             </View>
           </View>
 
