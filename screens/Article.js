@@ -338,6 +338,51 @@ const Article = ({ route }) => {
     }
   };
 
+
+  const renderMediaModal = ({ item, index }) => {
+    // Set the desired width and height based on screen width and 16:9 aspect ratio
+    const mediaWidth = screenWidth - 20; // Subtracting padding value (10 on each side)
+    const mediaHeight = mediaWidth * (9 / 16); // Maintain 16:9 aspect ratio
+
+    if (item.isVideo) {
+      return (
+          <TouchableOpacity
+              onPress={() => handleSingleTap(item, index)}
+              activeOpacity={0.8}
+              style={{ marginVertical: 5, paddingHorizontal: 10 }}
+          >
+            <Video
+                source={{ uri: item.url }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="cover" // Change to "contain" if you want to fit the whole video within the frame without cropping
+                shouldPlay={item.url === visibleItem && !isModalVisible}
+                isLooping
+                useNativeControls
+                style={{ width: mediaWidth, height: mediaHeight }}
+            />
+          </TouchableOpacity>
+      );
+    } else {
+      return (
+          <TouchableOpacity
+              onPress={() => handleSingleTap(item, index)}
+              activeOpacity={0.8}
+              style={{ marginVertical: 5, paddingHorizontal: 10 }}
+          >
+            <Image
+                source={{ uri: item.url }}
+                style={{ width: mediaWidth, height: mediaHeight }}
+                placeholder={blurhash}
+                contentFit="contain"
+                transition={1000}
+            />
+          </TouchableOpacity>
+      );
+    }
+  };
+
   // Determine the content to display based on the first item in image_list
   const contentToDisplay =
     article && article.image_list.length > 0 ? (
@@ -507,7 +552,7 @@ const Article = ({ route }) => {
             <View style={styles.centeredView}>
               <FlatList
                 data={article.image_list}
-                renderItem={renderMedia}
+                renderItem={renderMediaModal}
                 keyExtractor={(item, index) => index.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}

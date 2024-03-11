@@ -83,6 +83,7 @@ const Login = ({navigation}) => {
             <View style={{width: "100%",
                 backgroundColor: "#1A2F5A",
                 display: "flex",
+                height:250,
                 justifyContent: "center",
                 alignItems: "center",
                 paddingBottom: 20}}>
