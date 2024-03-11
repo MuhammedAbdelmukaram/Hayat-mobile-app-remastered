@@ -601,7 +601,7 @@ const Article = ({ route }) => {
             <Text style={styles.author}>{article.display_name}</Text>
 
             <View style={styles.dateTimeWrapper}>
-              {/*<Text style={styles.date}>{formatDate(article.create_date)}</Text>*/}
+              {<Text style={styles.date}>{formatDate(article.create_date)}</Text>}
             </View>
           </View>
 
