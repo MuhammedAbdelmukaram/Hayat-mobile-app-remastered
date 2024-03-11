@@ -99,6 +99,18 @@ const Signup = ({ navigation }) => {
         />
       </View>
 
+      <View style={{backgroundColor:"#1A2F5A", paddingTop:10}}>
+        <TouchableOpacity
+            style={styles.buttonBack}
+            onPress={() => navigation.goBack()}
+        >
+          <Image
+              source={require("../assets/backIcon.png")}
+              style={styles.backIcon}
+              resizeMode="contain"
+          />
+      </TouchableOpacity>
+      </View>
       <View
         style={{
           width: "100%",
@@ -110,7 +122,12 @@ const Signup = ({ navigation }) => {
           height:150,
         }}
       >
+
+
+
+
         <Image source={logo} style={styles.image} />
+
       </View>
       <View style={styles.container}>
         <View
@@ -221,17 +238,11 @@ const Signup = ({ navigation }) => {
             setModalVisible(!modalVisible);
           }}
         >
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
+
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
                 <ScrollView style={styles.modalContent}>
+
                   <Text style={styles.heading}>Pravila Upotrebe</Text>
                   <Text style={styles.text}>
                     Potvrđujem da imam 18 godina ili više i da sam pročitao/la i
@@ -263,7 +274,7 @@ const Signup = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
-          </Modal>
+
         </Modal>
       </View>
     </ScrollView>
@@ -278,7 +289,7 @@ const styles = StyleSheet.create({
     padding: 26,
   },
   image: {
-    marginTop: "10%",
+    marginTop: "0%",
 
     width: "50%",
     resizeMode: "contain",
@@ -327,9 +338,15 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 30, // Adjusted the margin-top to be closer to the inputs
   },
+
   buttonText: {
     color: "#fff",
     textAlign: "center",
+  },
+
+  buttonBack: {
+    paddingHorizontal: 12,
+    zIndex: 1,
   },
   tosContainer: {
     flexDirection: "row",
@@ -348,7 +365,10 @@ const styles = StyleSheet.create({
     color: "#1A2F5A", // Adjust as needed
     textDecorationLine: "underline",
   },
-
+  backIcon: {
+    width: 36,
+    height: 36,
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -388,6 +408,9 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     marginBottom: 20, // Space for scrolling
+    paddingRight:12,
+    width:"100%",
+
   },
   acceptButton: {
     backgroundColor: "#1A2F5A",
@@ -452,6 +475,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+
 
   // Removed the registerText and linkText styles as they are not needed in the signup screen
 });

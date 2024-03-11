@@ -22,7 +22,7 @@ const Account = () => {
   return (
     <View>
       <StatusBarView backgroundColor="#1A2F5A" />
-      <Header />
+      <Header isHome={false} />
 
       {userInfo && (
         <View style={styles.userInfoContainer}>
