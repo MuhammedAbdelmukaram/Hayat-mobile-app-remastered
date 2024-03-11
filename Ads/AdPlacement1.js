@@ -1,5 +1,4 @@
 import React from "react";
-//import { AdMobBanner } from 'expo-ads-admob';
 import { View } from "react-native";
 import {
   BannerAd,

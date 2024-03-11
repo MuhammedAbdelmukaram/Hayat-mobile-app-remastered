@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// import messaging from "@react-native-firebase/messaging";
+import messaging from "@react-native-firebase/messaging";
 import { API_URL } from "@env";
 
 import Header from "../components/Common/Header";
@@ -37,12 +37,12 @@ const Settings = () => {
   const handleNotificationChange = async (value) => {
     setNotificationsEnabled((previousState) => !previousState);
 
-    // messaging()
-    //   .getToken()
-    //   .then((token) => {
-    //     console.log("Device token:", token);
-    //     sendTokenToServer(token, value); // Send the token to your server
-    //   });
+    messaging()
+      .getToken()
+      .then((token) => {
+        console.log("Device token:", token);
+        sendTokenToServer(token, value); // Send the token to your server
+      });
   };
 
   return (
