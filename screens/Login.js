@@ -80,7 +80,7 @@ const Login = ({navigation}) => {
 
     return (
         <View style={styles.containerInner}>
-            <View style={{backgroundColor:"#1A2F5A", marginTop:30, paddingTop:16, height:50, width:"100%", }}>
+            <View style={{backgroundColor:"#1A2F5A", height:50, width:"100%", zIndex:1 }}>
                 <TouchableOpacity
                     style={styles.buttonBack}
                     onPress={() => navigation.goBack()}
@@ -99,7 +99,7 @@ const Login = ({navigation}) => {
                 height:150,
                 justifyContent: "center",
                 alignItems: "center",
-                paddingBottom: 50}}>
+                paddingBottom: 38}}>
 
                 <Image source={logo} style={styles.image}/>
             </View>
@@ -190,10 +190,12 @@ const styles = StyleSheet.create({
 
     },
     buttonBack: {
+        marginTop:45,
         paddingHorizontal: 12,
         zIndex: 1,
     },
     backIcon: {
+        zIndex:2,
         width: 36,
         height: 36,
     },
