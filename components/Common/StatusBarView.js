@@ -1,6 +1,7 @@
 import { Platform, StatusBar, View } from "react-native";
 
-const STATUS_BAR_HEIGHT = Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
+export const STATUS_BAR_HEIGHT =
+  Platform.OS === "ios" ? 40 : StatusBar.currentHeight;
 
 const StatusBarView = ({ backgroundColor = "#1A2F5A" }) => {
   return (

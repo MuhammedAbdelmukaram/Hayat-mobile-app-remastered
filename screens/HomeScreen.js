@@ -31,7 +31,7 @@ import {
 } from "../redux/slices/selectedContentSlice";
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
 import Najnovije from "./Najnovije";
-import LoadingScreen from "./LoadingScreen";
+import LoadingScreen from "../components/Common/LoadingScreen";
 import AdPlacement2 from "../Ads/AdPlacement2";
 import NoConnection from "../components/NoConnection";
 
@@ -219,7 +219,6 @@ const HomeScreen = () => {
             }
           }}
         >
-          {/* So here, I also need a loader */}
           {selectedCategory === "pocetna" && (
             <>
               <HighlightNews />
