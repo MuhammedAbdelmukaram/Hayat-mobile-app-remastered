@@ -2,7 +2,7 @@
   "expo": {
     "name": "Hayat",
     "slug": "Hayat-remastered",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -24,7 +24,8 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.segvic.hayat"
+      "package": "com.segvic.hayat",
+      "versionCode": 73
     },
     "web": {
       "favicon": "./assets/icon.png"
