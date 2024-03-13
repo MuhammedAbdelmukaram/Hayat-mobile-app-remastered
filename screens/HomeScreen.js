@@ -32,7 +32,7 @@ import {
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
 import Najnovije from "./Najnovije";
 import LoadingScreen from "../components/Common/LoadingScreen";
-import AdPlacement from "../Ads/AdPlacement";
+import AdPlacement from "../components/Ads/AdPlacement";
 import NoConnection from "../components/NoConnection";
 
 const theme = {
