@@ -12,11 +12,15 @@ const adUnits = [
 ];
 
 const AdPlacement = ({ id }) => {
+  if (id - 1 > adUnits.length) {
+    console.log("Only " + adUnits.length + " ad units are given");
+    return;
+  }
   return (
     <View>
       <Banner
         adSize="fullBanner"
-        adUnitID={adUnits[id + 1]}
+        adUnitID={adUnits[id - 1]}
         onAdFailedToLoad={(error) => console.error(error)}
         onAppEvent={(event) => console.log(event.name, event.info)}
       />
