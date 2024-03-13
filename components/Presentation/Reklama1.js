@@ -5,7 +5,7 @@ const Reklama1 = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../assets/reklama/Reklama1.jpg")}
+        source={require("../../assets/reklama/Reklama1.jpg")}
         style={[styles.newsImage, { aspectRatio: 16 / 9 }]}
         resizeMode="cover"
       />
