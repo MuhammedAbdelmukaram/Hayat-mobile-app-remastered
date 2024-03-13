@@ -28,7 +28,6 @@ const Priority4 = ({
       <View style={styles.leftSide}>
         <Image source={image} style={styles.newsImage} />
       </View>
-
       <View style={styles.rightSide}>
         <View style={styles.upperWrapper}>
           <View style={styles.textsWrapper}>
@@ -37,17 +36,17 @@ const Priority4 = ({
           </View>
         </View>
 
-        {/*
-                <View style={styles.lowerWrapper}>
-                    <Text style={styles.text}>3 sata</Text>
+        {/* <View style={styles.lowerWrapper}>
+          <Text style={styles.text}>3 sata</Text>
 
-                    <View style={styles.shareWrapper}>
-                        <Text style={styles.text}>13</Text>
-                        <Image source={require('../assets/icons/shareIconBlack.png')} style={styles.shareIcon}/>
-                    </View>
-
-                </View>
-                */}
+          <View style={styles.shareWrapper}>
+            <Text style={styles.text}>13</Text>
+            <Image
+              source={require("../assets/icons/shareIconBlack.png")}
+              style={styles.shareIcon}
+            />
+          </View>
+        </View> */}
       </View>
 
       <HorizontalLine />

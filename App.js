@@ -18,14 +18,14 @@ import Login from "./screens/Login";
 import Signup from "./screens/Signup";
 import Survey from "./screens/Survey";
 import TermsOfService from "./screens/TermsOfService";
-import Account from "./screens/account";
+import Account from "./screens/Account";
 import HayatPlay from "./screens/HayatPlay";
 import VODcategories from "./screens/VODcategories";
 import SubCategory from "./screens/SubCategory";
 import TVShow from "./screens/TVShow";
 import SubTvShow from "./screens/SubTvShow";
 import LiveTv from "./screens/LiveTV";
-import Uskoro from "./screens/uskoro";
+import Uskoro from "./screens/Uskoro";
 import About from "./screens/About";
 import Settings from "./screens/Settings";
 
@@ -149,7 +149,6 @@ export default function App() {
       <Banner
         adSize="fullBanner"
         adUnitID="/272140683/hayat.ba_anchor_bottom_android_app"
-        // testDevices={[PublisherBanner.simulatorId]}
         onAdFailedToLoad={(error) => console.error(error)}
         onAppEvent={(event) => console.log(event.name, event.info)}
       />

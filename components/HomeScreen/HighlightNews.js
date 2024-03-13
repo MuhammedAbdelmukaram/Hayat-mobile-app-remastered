@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
+import { useSelector } from "react-redux";
+
 import Priority1 from "../Priority1";
 import Priority2 from "../Priority2";
 import Priority3 from "../Priority3";
 import Priority4 from "../Priority4";
 import Priority5 from "../Priority5";
-import { useSelector } from "react-redux";
 import image1 from "../../assets/news/newsBack-1.png";
 import image2 from "../../assets/news/newsBack-2.png";
 import image3 from "../../assets/news/newsBack-3.png";

@@ -26,17 +26,17 @@ const Account = () => {
 
       {userInfo && (
         <View style={styles.userInfoContainer}>
-          {/*<TouchableOpacity style={styles.button}>
-                        <Image
-                            source={require('../assets/userName.png')}
-                            style={styles.backIcon}
-                            resizeMode={"contain"}
-                        />
-                        <View style={styles.texts}>
-                            <Text style={styles.userInfoText}>Ime</Text>
-                            <Text style={styles.userInfo}>Hasan</Text>
-                        </View>
-                    </TouchableOpacity>*/}
+          {/* <TouchableOpacity style={styles.button}>
+            <Image
+              source={require("../assets/userName.png")}
+              style={styles.backIcon}
+              resizeMode={"contain"}
+            />
+            <View style={styles.texts}>
+              <Text style={styles.userInfoText}>Ime</Text>
+              <Text style={styles.userInfo}>Hasan</Text>
+            </View>
+          </TouchableOpacity> */}
 
           <TouchableOpacity style={styles.button}>
             <Image

@@ -12,14 +12,15 @@ import {
   Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import logo from "../assets/hayatLogo.png";
-import axios from "axios";
-import { API_URL } from "@env";
-import Show from "../assets/visible.png";
-import Hide from "../assets/invisible.png";
 import Checkbox from "expo-checkbox";
 import { useDispatch } from "react-redux";
 import * as SecureStore from "expo-secure-store";
+import axios from "axios";
+import { API_URL } from "@env";
+
+import logo from "../assets/hayatLogo.png";
+import Show from "../assets/visible.png";
+import Hide from "../assets/invisible.png";
 import { setUser } from "../redux/slices/userSlice";
 
 const Signup = ({ navigation }) => {
@@ -99,17 +100,17 @@ const Signup = ({ navigation }) => {
         />
       </View>
 
-      <View style={{backgroundColor:"#1A2F5A", paddingTop:10}}>
+      <View style={{ backgroundColor: "#1A2F5A", paddingTop: 10 }}>
         <TouchableOpacity
-            style={styles.buttonBack}
-            onPress={() => navigation.goBack()}
+          style={styles.buttonBack}
+          onPress={() => navigation.goBack()}
         >
           <Image
-              source={require("../assets/backIcon.png")}
-              style={styles.backIcon}
-              resizeMode="contain"
+            source={require("../assets/backIcon.png")}
+            style={styles.backIcon}
+            resizeMode="contain"
           />
-      </TouchableOpacity>
+        </TouchableOpacity>
       </View>
       <View
         style={{
@@ -119,15 +120,10 @@ const Signup = ({ navigation }) => {
           justifyContent: "center",
           alignItems: "center",
           paddingBottom: 20,
-          height:150,
+          height: 150,
         }}
       >
-
-
-
-
         <Image source={logo} style={styles.image} />
-
       </View>
       <View style={styles.container}>
         <View
@@ -238,43 +234,40 @@ const Signup = ({ navigation }) => {
             setModalVisible(!modalVisible);
           }}
         >
-
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <ScrollView style={styles.modalContent}>
-
-                  <Text style={styles.heading}>Pravila Upotrebe</Text>
-                  <Text style={styles.text}>
-                    Potvrđujem da imam 18 godina ili više i da sam pročitao/la i
-                    da prihvatam Opšte uslove korištenja Hayat d.o.o. Sarajevo.
-                    U skladu sa odredbom člana 5. Zakona o zaštiti
-                    ličnih/osobnih podataka („Sl. glasnik BiH“ broj 49/06), ovim
-                    izjavljujem i aceptiranjem potvrđujem svoju saglasnost da
-                    Hayat d.o.o. Sarajevo poduzima sve radnje vezano za obradu
-                    mojih ličnih/osobnih podataka i to: ime, prezime, email, a
-                    sve u svrhu ućešća za uručivanje poklona. Izjavljujem i
-                    aceptiranjem potvrđujem da sam od strane Hayat d.o.o.
-                    Sarajevo obaviješten/a o razlozima prikupljanja podataka i
-                    davanja ove saglasnosti u skladu sačlanom 22. Zakona o
-                    zaštiti ličnih podataka („Sl. glasnik BiH“ broj 49/06).
-                    Saglasnost za obradu gore navedenih ličnih/osobnih podataka
-                    se daje/odnosi na period do završetka odabira osobe kojoj će
-                    biti uručen poklon. Ova Suglasnost se daje u naprijed
-                    navedenu svrhu i u druge svrhe se ne može koristiti, a
-                    vrijedi do okončanja postupka odabira osobe kojoj će biti
-                    uručen poklon. Pod punom materijalnom i krivičnom
-                    odgovornošću izjavljujem da su svi upisani podaci istiniti.
-                  </Text>
-                </ScrollView>
-                <TouchableOpacity
-                  style={styles.closeButton}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <Text style={styles.closeButtonText}>Zatvori</Text>
-                </TouchableOpacity>
-              </View>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <ScrollView style={styles.modalContent}>
+                <Text style={styles.heading}>Pravila Upotrebe</Text>
+                <Text style={styles.text}>
+                  Potvrđujem da imam 18 godina ili više i da sam pročitao/la i
+                  da prihvatam Opšte uslove korištenja Hayat d.o.o. Sarajevo. U
+                  skladu sa odredbom člana 5. Zakona o zaštiti ličnih/osobnih
+                  podataka („Sl. glasnik BiH“ broj 49/06), ovim izjavljujem i
+                  aceptiranjem potvrđujem svoju saglasnost da Hayat d.o.o.
+                  Sarajevo poduzima sve radnje vezano za obradu mojih
+                  ličnih/osobnih podataka i to: ime, prezime, email, a sve u
+                  svrhu ućešća za uručivanje poklona. Izjavljujem i aceptiranjem
+                  potvrđujem da sam od strane Hayat d.o.o. Sarajevo
+                  obaviješten/a o razlozima prikupljanja podataka i davanja ove
+                  saglasnosti u skladu sačlanom 22. Zakona o zaštiti ličnih
+                  podataka („Sl. glasnik BiH“ broj 49/06). Saglasnost za obradu
+                  gore navedenih ličnih/osobnih podataka se daje/odnosi na
+                  period do završetka odabira osobe kojoj će biti uručen poklon.
+                  Ova Suglasnost se daje u naprijed navedenu svrhu i u druge
+                  svrhe se ne može koristiti, a vrijedi do okončanja postupka
+                  odabira osobe kojoj će biti uručen poklon. Pod punom
+                  materijalnom i krivičnom odgovornošću izjavljujem da su svi
+                  upisani podaci istiniti.
+                </Text>
+              </ScrollView>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.closeButtonText}>Zatvori</Text>
+              </TouchableOpacity>
             </View>
-
+          </View>
         </Modal>
       </View>
     </ScrollView>
@@ -408,9 +401,8 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     marginBottom: 20, // Space for scrolling
-    paddingRight:12,
-    width:"100%",
-
+    paddingRight: 12,
+    width: "100%",
   },
   acceptButton: {
     backgroundColor: "#1A2F5A",
@@ -475,7 +467,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-
 
   // Removed the registerText and linkText styles as they are not needed in the signup screen
 });
