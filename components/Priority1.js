@@ -68,12 +68,14 @@ const Priority1 = ({ article, image }) => {
             <View style={styles.SubTextDiv}>
               <Text style={styles.text}>2 sata</Text>
             </View>
-            {/*
-                        <View style={styles.textImageDiv}>
-                            <Text style={styles.text}>42</Text>
-                            <Image source={require('../assets/icons/shareIcon.png')} style={styles.shareIcon} />
-                        </View>
-                        */}
+            {/* 
+            <View style={styles.textImageDiv}>
+              <Text style={styles.text}>42</Text>
+              <Image
+                source={require("../assets/icons/shareIcon.png")}
+                style={styles.shareIcon}
+              />
+            </View> */}
           </View>
         </ImageBackground>
       </View>

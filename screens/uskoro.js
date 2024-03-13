@@ -20,12 +20,12 @@ const Uskoro = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#252324" }}>
       {/* <View style={{ height: STATUS_BAR_HEIGHT, backgroundColor: "#cd1717" }}>
-                <StatusBar
-                    translucent
-                    backgroundColor="#cd1717"
-                    barStyle="light-content"
-                />
-            </View> */}
+        <StatusBar
+          translucent
+          backgroundColor="#cd1717"
+          barStyle="light-content"
+        />
+      </View> */}
       <StatusBarView backgroundColor="#cd1717" />
 
       <View style={styles.container}>

@@ -60,7 +60,7 @@ const Najnovije = ({ isPageLoading }) => {
             articleTitle={article.title}
           />
         );
-      } 
+      }
 
       // Insert ads at specific positions
       if (index === 2 || index === 8 || index === 17) {

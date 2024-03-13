@@ -36,17 +36,17 @@ const Priority6 = ({
           </View>
         </View>
 
-        {/*
-                <View style={styles.lowerWrapper}>
-                    <Text style={styles.text}>3 sata</Text>
+        {/* <View style={styles.lowerWrapper}>
+          <Text style={styles.text}>3 sata</Text>
 
-                    <View style={styles.shareWrapper}>
-                        <Text style={styles.text}>13</Text>
-                        <Image source={require('../assets/icons/shareIconBlack.png')} style={styles.shareIcon}/>
-                    </View>
-
-                </View>
-                */}
+          <View style={styles.shareWrapper}>
+            <Text style={styles.text}>13</Text>
+            <Image
+              source={require("../assets/icons/shareIconBlack.png")}
+              style={styles.shareIcon}
+            />
+          </View>
+        </View> */}
       </View>
 
       <HorizontalLine />

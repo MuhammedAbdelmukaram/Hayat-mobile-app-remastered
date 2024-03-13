@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { API_URL } from "@env";
+
 import Priority2 from "./Priority2";
 import Priority3 from "./Priority3";
 import Priority4 from "./Priority4";
 import Priority5 from "./Priority5";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { API_URL } from "@env";
 import AdPlacement from "./Ads/AdPlacement";
 
 // Hypothetical Advertisement component
