@@ -5,7 +5,7 @@ import Priority2 from "../Priority2";
 import Priority3 from "../Priority3";
 import Priority5 from "../Priority5";
 import Priority6 from "../Priority6";
-import AdPlacement from "../../Ads/AdPlacement";
+import AdPlacement from "../Ads/AdPlacement";
 
 const NewsFeed = ({ onEndReached, isPageLoading }) => {
   const contentData = useSelector((state) => state.selectedContent.contentData);

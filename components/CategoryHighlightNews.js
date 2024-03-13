@@ -7,7 +7,7 @@ import Priority5 from "./Priority5";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { API_URL } from "@env";
-import AdPlacement from "../Ads/AdPlacement";
+import AdPlacement from "./Ads/AdPlacement";
 
 // Hypothetical Advertisement component
 const PriorityAd = ({}) => (

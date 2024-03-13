@@ -26,7 +26,7 @@ import ShareButtons from "../components/Articles/ShareButtons";
 import SuggestedNews from "../components/Articles/SuggestedNews";
 import Survey from "./Survey";
 import ArticleHeader from "../components/Articles/ArticleHeader";
-import AdPlacement from "../Ads/AdPlacement";
+import AdPlacement from "../components/Ads/AdPlacement";
 import StatusBarView from "../components/Common/StatusBarView";
 import Header from "../components/Common/Header";
 
