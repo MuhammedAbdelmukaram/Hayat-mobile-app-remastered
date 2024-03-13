@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -12,22 +12,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {Image} from "expo-image";
+import { Image } from "expo-image";
 import axios from "axios";
 import WebView from "react-native-webview";
-import {Video} from "expo-av";
-import {useDispatch, useSelector} from "react-redux";
-import {useFocusEffect, useNavigation} from "@react-navigation/native";
-import {BlurView} from "expo-blur";
-import {API_URL} from "@env";
+import { Video } from "expo-av";
+import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { BlurView } from "expo-blur";
+import { API_URL } from "@env";
 
 import image from "../assets/news/newsBack-2.png";
 import ShareButtons from "../components/Articles/ShareButtons";
 import SuggestedNews from "../components/Articles/SuggestedNews";
 import Survey from "./Survey";
 import ArticleHeader from "../components/Articles/ArticleHeader";
-import AdPlacement2 from "../Ads/AdPlacement2";
-import AdPlacement3 from "../Ads/AdPlacement3";
+import AdPlacement from "../Ads/AdPlacement";
 import StatusBarView from "../components/Common/StatusBarView";
 import Header from "../components/Common/Header";
 
@@ -286,7 +285,6 @@ const Article = ({ route }) => {
     );
   }
 
-
   const HEADER_HEIGHT = Platform.OS === "ios" ? 44 : 56;
 
   const handleSingleTap = (item, index) => {
@@ -299,7 +297,6 @@ const Article = ({ route }) => {
     // Set the desired width and height based on screen width and 16:9 aspect ratio
     const mediaWidth = screenWidth - 20; // Subtracting padding value (10 on each side)
     const mediaHeight = mediaWidth * (9 / 16); // Maintain 16:9 aspect ratio
-
 
     if (item.isVideo) {
       return (
@@ -340,7 +337,6 @@ const Article = ({ route }) => {
     }
   };
 
-
   const renderMediaModal = ({ item, index }) => {
     // Set the desired width based on screen width
     const mediaWidth = screenWidth - 20; // Subtracting padding value (10 on each side)
@@ -348,50 +344,49 @@ const Article = ({ route }) => {
     let mediaHeight = mediaWidth * (9 / 16) + 120;
 
     // Check if the aspect ratio is available and not 16:9
-    if (item.aspectRatio && item.aspectRatio !== (16 / 9)) {
+    if (item.aspectRatio && item.aspectRatio !== 16 / 9) {
       // Set height based on actual aspect ratio
       mediaHeight = mediaWidth / item.aspectRatio;
     }
 
     if (item.isVideo) {
       return (
-          <TouchableOpacity
-              onPress={() => handleSingleTap(item, index)}
-              activeOpacity={0.99}
-              style={{ marginVertical: 5, paddingHorizontal: 10 }}
-          >
-            <Video
-                source={{ uri: item.url }}
-                rate={1.0}
-                volume={1.0}
-                isMuted={false}
-                resizeMode="contain" // Using "contain" to ensure full visibility
-                shouldPlay={item.url === visibleItem && !isModalVisible}
-                isLooping
-                useNativeControls
-                style={{ width: mediaWidth, height: mediaHeight }}
-            />
-          </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleSingleTap(item, index)}
+          activeOpacity={0.99}
+          style={{ marginVertical: 5, paddingHorizontal: 10 }}
+        >
+          <Video
+            source={{ uri: item.url }}
+            rate={1.0}
+            volume={1.0}
+            isMuted={false}
+            resizeMode="contain" // Using "contain" to ensure full visibility
+            shouldPlay={item.url === visibleItem && !isModalVisible}
+            isLooping
+            useNativeControls
+            style={{ width: mediaWidth, height: mediaHeight }}
+          />
+        </TouchableOpacity>
       );
     } else {
       return (
-          <TouchableOpacity
-              onPress={() => handleSingleTap(item, index)}
-              activeOpacity={0.99}
-              style={{ marginVertical: 5, paddingHorizontal: 10 }}
-          >
-            <Image
-                source={{ uri: item.url }}
-                style={{ width: mediaWidth, height: mediaHeight }}
-                placeholder={blurhash}
-                contentFit="contain" // Ensuring the full image is visible
-                transition={1000}
-            />
-          </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleSingleTap(item, index)}
+          activeOpacity={0.99}
+          style={{ marginVertical: 5, paddingHorizontal: 10 }}
+        >
+          <Image
+            source={{ uri: item.url }}
+            style={{ width: mediaWidth, height: mediaHeight }}
+            placeholder={blurhash}
+            contentFit="contain" // Ensuring the full image is visible
+            transition={1000}
+          />
+        </TouchableOpacity>
       );
     }
   };
-
 
   // Determine the content to display based on the first item in image_list
   const contentToDisplay =
@@ -604,14 +599,16 @@ const Article = ({ route }) => {
 
             <View style={styles.dateTimeWrapper}>
               {article && article.create_date && (
-                  <Text style={styles.date}>{formatDate(article.create_date)}</Text>
+                <Text style={styles.date}>
+                  {formatDate(article.create_date)}
+                </Text>
               )}
             </View>
           </View>
 
           <Text style={styles.subTitle}>{article.subtitle}</Text>
 
-          <AdPlacement2 />
+          <AdPlacement id={2} />
           {article?.text?.map((textItem, index) => {
             if (textItem.regular) {
               return (
@@ -644,7 +641,7 @@ const Article = ({ route }) => {
                 textItem.youtube.changingThisBreaksApplicationSecurity;
               const modifiedytContent = modifyYTframeHtml(htmlContent);
 
-                const youtubeHTML = `
+              const youtubeHTML = `
     <html >
       <head>
         <style>
@@ -659,34 +656,34 @@ const Article = ({ route }) => {
       </body>
     </html>
   `;
-               // console.log(modifiedytContent);
-                return (
-                  <WebView
-                    key={index}
-                    originWhitelist={["*"]}
-                    style={{
-                      height: 300,
-                      minWidth: "100%",
-                      opacity: 0.99,
-                      overflow: "hidden",
-                      display: "flex",
-                      alignItems: "center",
-                      marginVertical: 30,
-                    }}
-                    source={{ html: youtubeHTML }}
-                    allowsFullscreenVideo={true}
-                    javaScriptEnabled={true}
-                  />
-                );
-              } else if (textItem.survey) {
-                // Assuming you have a component to handle survey embedding
-                return <Survey surveyId={textItem.survey} key={index} />;
-              } else if (textItem.facebook) {
-                // Modify the original HTML content using the function
-                const originalHtmlContent =
-                  textItem.facebook.changingThisBreaksApplicationSecurity;
-                const modifiedIframeHtml =
-                  modifyFacebookIframeHtml(originalHtmlContent);
+              // console.log(modifiedytContent);
+              return (
+                <WebView
+                  key={index}
+                  originWhitelist={["*"]}
+                  style={{
+                    height: 300,
+                    minWidth: "100%",
+                    opacity: 0.99,
+                    overflow: "hidden",
+                    display: "flex",
+                    alignItems: "center",
+                    marginVertical: 30,
+                  }}
+                  source={{ html: youtubeHTML }}
+                  allowsFullscreenVideo={true}
+                  javaScriptEnabled={true}
+                />
+              );
+            } else if (textItem.survey) {
+              // Assuming you have a component to handle survey embedding
+              return <Survey surveyId={textItem.survey} key={index} />;
+            } else if (textItem.facebook) {
+              // Modify the original HTML content using the function
+              const originalHtmlContent =
+                textItem.facebook.changingThisBreaksApplicationSecurity;
+              const modifiedIframeHtml =
+                modifyFacebookIframeHtml(originalHtmlContent);
 
               const facebookHTML = `
     <html>
@@ -822,8 +819,8 @@ const Article = ({ route }) => {
               );
             }
 
-              // Add more conditionals as needed for additional types
-            })}
+            // Add more conditionals as needed for additional types
+          })}
 
           <View style={styles.tagsShareWrapper}>
             <ScrollView
@@ -898,7 +895,7 @@ const Article = ({ route }) => {
             </View>
             */}
 
-        <AdPlacement3 />
+        <AdPlacement id={3} />
       </ScrollView>
     </View>
   );

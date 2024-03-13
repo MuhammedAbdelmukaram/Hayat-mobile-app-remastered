@@ -7,8 +7,7 @@ import Priority5 from "./Priority5";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { API_URL } from "@env";
-import AdPlacement5 from "../Ads/AdPlacement5";
-import AdPlacement6 from "../Ads/AdPlacement6";
+import AdPlacement from "../Ads/AdPlacement";
 
 // Hypothetical Advertisement component
 const PriorityAd = ({}) => (
@@ -30,7 +29,7 @@ const CategoryHighlightNews = () => {
     axios
       .get(`${API_URL}/articles/main`)
       .then((response) => {
-       // console.log("hihi" + response.data);
+        // console.log("hihi" + response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -139,8 +138,8 @@ const CategoryHighlightNews = () => {
                 {applyRenderingLogic(categoryArticles, categoryIndex)}
               </View>
             )}
-            {categoryIndex === 0 && <AdPlacement5 />}
-            {categoryIndex === 1 && <AdPlacement6 />}
+            {categoryIndex === 0 && <AdPlacement id={5} />}
+            {categoryIndex === 1 && <AdPlacement id={6} />}
           </React.Fragment>
         );
         //   const categoryContent = (

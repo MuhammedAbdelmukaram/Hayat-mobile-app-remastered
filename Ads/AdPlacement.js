@@ -11,7 +11,7 @@ const adUnits = [
   "/272140683/hayat.ba_320x100_in_page_3_android_app",
 ];
 
-const AdPlacement1 = ({ id }) => {
+const AdPlacement = ({ id }) => {
   return (
     <View>
       <Banner
@@ -24,4 +24,4 @@ const AdPlacement1 = ({ id }) => {
   );
 };
 
-export default AdPlacement1;
+export default AdPlacement;

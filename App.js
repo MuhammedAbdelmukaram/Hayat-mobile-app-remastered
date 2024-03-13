@@ -7,11 +7,8 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-import {
-  BannerAd,
-  BannerAdSize,
-  TestIds,
-} from "react-native-google-mobile-ads";
+
+import { Banner } from "react-native-ad-manager";
 
 import HomeScreen from "./screens/HomeScreen";
 import store from "./redux/store";
@@ -149,13 +146,12 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
 
-      <BannerAd
-        unitId={TestIds.BANNER}
-        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        requestOptions={{
-          networkExtras: { collapsible: "bottom" },
-          requestNonPersonalizedAdsOnly: true,
-        }}
+      <Banner
+        adSize="fullBanner"
+        adUnitID="/272140683/hayat.ba_anchor_bottom_android_app"
+        // testDevices={[PublisherBanner.simulatorId]}
+        onAdFailedToLoad={(error) => console.error(error)}
+        onAppEvent={(event) => console.log(event.name, event.info)}
       />
     </Provider>
   );

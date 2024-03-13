@@ -5,7 +5,7 @@ import Priority2 from "../Priority2";
 import Priority3 from "../Priority3";
 import Priority5 from "../Priority5";
 import Priority6 from "../Priority6";
-import AdPlacement4 from "../../Ads/AdPlacement4";
+import AdPlacement from "../../Ads/AdPlacement";
 
 const NewsFeed = ({ onEndReached, isPageLoading }) => {
   const contentData = useSelector((state) => state.selectedContent.contentData);
@@ -79,7 +79,7 @@ const NewsFeed = ({ onEndReached, isPageLoading }) => {
             style={{ alignItems: "center", marginVertical: 20 }}
           >
             {/* Placeholder for an advertisement */}
-            <AdPlacement4 />
+            <AdPlacement id={4} />
           </View>
         );
       }
