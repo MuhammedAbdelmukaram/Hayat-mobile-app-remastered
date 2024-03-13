@@ -11,12 +11,16 @@ const adUnits = [
   "/272140683/hayat.ba_320x100_in_page_3_android_app",
 ];
 
-const AdPlacement1 = ({ id }) => {
+const AdPlacement = ({ id }) => {
+  if (id - 1 > adUnits.length) {
+    console.log("Only " + adUnits.length + " ad units are given");
+    return;
+  }
   return (
     <View>
       <Banner
         adSize="fullBanner"
-        adUnitID={adUnits[id + 1]}
+        adUnitID={adUnits[id - 1]}
         onAdFailedToLoad={(error) => console.error(error)}
         onAppEvent={(event) => console.log(event.name, event.info)}
       />
@@ -24,4 +28,4 @@ const AdPlacement1 = ({ id }) => {
   );
 };
 
-export default AdPlacement1;
+export default AdPlacement;
