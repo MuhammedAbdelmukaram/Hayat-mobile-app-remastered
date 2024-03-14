@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Image,
   Modal,
-  Platform,
-  StatusBar,
   StyleSheet,
   Switch,
   Text,
@@ -11,6 +9,7 @@ import {
   View,
 } from "react-native";
 import messaging from "@react-native-firebase/messaging";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
 
 import Header from "../components/Common/Header";
@@ -19,6 +18,21 @@ import StatusBarView from "../components/Common/StatusBarView";
 const Settings = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+  const getTokenFromAsyncStorage = async () => {
+    try {
+      const value = await AsyncStorage.getItem("token");
+      if (value !== null) {
+        setNotificationsEnabled(true);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  useEffect(() => {
+    getTokenFromAsyncStorage();
+  }, []);
 
   const sendTokenToServer = async (token, value) => {
     try {
@@ -34,14 +48,23 @@ const Settings = () => {
     }
   };
 
+  const handleAsyncToken = async (token, value) => {
+    try {
+      if (value) await AsyncStorage.setItem("token", token);
+      else await AsyncStorage.removeItem("token");
+    } catch (e) {
+      // saving error
+    }
+  };
+
   const handleNotificationChange = async (value) => {
     setNotificationsEnabled((previousState) => !previousState);
 
     messaging()
       .getToken()
       .then((token) => {
-        console.log("Device token:", token);
-        sendTokenToServer(token, value); // Send the token to your server
+        sendTokenToServer(token, value);
+        handleAsyncToken(token, value);
       });
   };
 
