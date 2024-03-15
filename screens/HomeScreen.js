@@ -30,7 +30,7 @@ import {
   setMainArticles,
 } from "../redux/slices/selectedContentSlice";
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
-import Najnovije from "./Najnovije";
+import Najnovije from "../components/HomeScreen/Najnovije";
 import LoadingScreen from "../components/Common/LoadingScreen";
 import AdPlacement from "../components/Ads/AdPlacement";
 import NoConnection from "../components/NoConnection";
@@ -56,13 +56,11 @@ const HomeScreen = () => {
   const [isConnectionError, setIsConnectionError] = useState(false);
 
   // Function to update loading state
-
   const expoPushToken = useSelector(
     (state) => state.notification.expoPushToken
   );
 
   //console.log("Expo Push Token from Redux:", expoPushToken);
-
   const { loading: isLoading } = useSelector((state) => state.selectedContent);
 
   //console.log(userInfo);
@@ -106,19 +104,15 @@ const HomeScreen = () => {
     fetchData();
   }, [dispatch]);
 
-  {
-    /*
-        useEffect(() => {
-            if (userInfoLoaded && userInfo && !userInfo.confirmed) {
-                // User is logged in but not confirmed, show an alert
-                Alert.alert(
-                    "Verify Your Account",
-                    "You need to verify your account. Check your email."
-                );
-            }
-        }, [userInfo, userInfoLoaded]);
-    */
-  }
+  // useEffect(() => {
+  //   if (userInfoLoaded && userInfo && !userInfo.confirmed) {
+  //     // User is logged in but not confirmed, show an alert
+  //     Alert.alert(
+  //       "Verify Your Account",
+  //       "You need to verify your account. Check your email."
+  //     );
+  //   }
+  // }, [userInfo, userInfoLoaded]);
 
   const categoriesData = useSelector(
     (state) => state.selectedContent.categoriesData
@@ -192,13 +186,14 @@ const HomeScreen = () => {
       <Header />
       <NavList />
       {isConnectionError && <NoConnection />}
-      {/* <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={(item) => item.id}
-      /> */}
       {isLoading && <LoadingScreen />}
       {!isLoading && !isConnectionError && (
+        // <FlatList
+        //   style={{ height: "100%" }}
+        //   data={DATA}
+        //   renderItem={({ item }) => <Item title={item.title} />}
+        //   keyExtractor={(item) => item.id}
+        // />
         <ScrollView
           bounces={false}
           overScrollMode="never"
@@ -219,7 +214,7 @@ const HomeScreen = () => {
             <>
               <HighlightNews />
               <AdPlacement id={2} />
-              <CategoryHighlightNews />
+              {/* <CategoryHighlightNews /> */}
             </>
           )}
           {selectedCategory === "najnovije" && (
