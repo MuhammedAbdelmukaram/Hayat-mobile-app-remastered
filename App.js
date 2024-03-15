@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { Provider } from "react-redux";
 import { StyleSheet, PermissionsAndroid, Platform } from "react-native";
@@ -8,7 +7,7 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 
-import { Banner } from "react-native-ad-manager";
+// import { Banner } from "react-native-ad-manager";
 
 import HomeScreen from "./screens/HomeScreen";
 import store from "./redux/store";
@@ -146,12 +145,12 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
 
-      <Banner
+      {/* <Banner
         adSize="fullBanner"
         adUnitID="/272140683/hayat.ba_anchor_bottom_android_app"
         onAdFailedToLoad={(error) => console.error(error)}
         onAppEvent={(event) => console.log(event.name, event.info)}
-      />
+      /> */}
     </Provider>
   );
 }

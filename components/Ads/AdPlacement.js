@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { Banner } from "react-native-ad-manager";
+// import { Banner } from "react-native-ad-manager";
 
 const adUnits = [
   "/272140683/hayat.ba_anchor_bottom_android_app",
@@ -18,12 +18,12 @@ const AdPlacement = ({ id }) => {
   }
   return (
     <View>
-      <Banner
+      {/* <Banner
         adSize="fullBanner"
         adUnitID={adUnits[id - 1]}
         onAdFailedToLoad={(error) => console.error(error)}
         onAppEvent={(event) => console.log(event.name, event.info)}
-      />
+      /> */}
     </View>
   );
 };
