@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
-import HorizontalLine from "./Menu/HorizontalLine";
 import { useNavigation } from "@react-navigation/native";
+
+import HorizontalLine from "./Menu/HorizontalLine";
 
 const Priority4 = ({
   image,
