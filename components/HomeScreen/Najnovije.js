@@ -8,12 +8,12 @@ import {
   setHasMore,
   setCurrentPage,
   fetchNajnovijeArticles,
-} from "../redux/slices/selectedContentSlice";
-import Priority2 from "../components/Priority2";
-import Priority3 from "../components/Priority3";
-import Priority5 from "../components/Priority5";
+} from "../../redux/slices/selectedContentSlice";
+import Priority2 from "../Priority2";
+import Priority3 from "../Priority3";
+import Priority5 from "../Priority5";
 import { API_URL } from "@env";
-import Priority6 from "../components/Priority6";
+import Priority6 from "../Priority6";
 
 const Najnovije = ({ isPageLoading }) => {
   const dispatch = useDispatch();
@@ -82,7 +82,7 @@ const Najnovije = ({ isPageLoading }) => {
   return (
     <View>
       {renderArticles()}
-      {isPageLoading && <ActivityIndicator size="large" color="#1A2F5A" />}
+      {/* {isPageLoading && <ActivityIndicator size="large" color="#1A2F5A" />} */}
     </View>
   );
 };
