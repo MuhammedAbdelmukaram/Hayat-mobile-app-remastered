@@ -4,15 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import HorizontalLine from "./Menu/HorizontalLine";
 
-const Priority = ({
-  // image,
-  // articleTitle,
-  // articleSubtitle,
-  // articleID,
-  // article,
-  // priority,
-  article,
-}) => {
+const Priority = ({ article }) => {
   const navigation = useNavigation();
 
   const {
