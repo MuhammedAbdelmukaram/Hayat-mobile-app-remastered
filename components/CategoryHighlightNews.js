@@ -26,16 +26,16 @@ const CategoryHighlightNews = () => {
     (state) => state.selectedContent.categoriesData
   );
 
-  useEffect(() => {
-    axios
-      .get(`${API_URL}/articles/main`)
-      .then((response) => {
-        // console.log("hihi" + response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_URL}/articles/main`)
+  //     .then((response) => {
+  //       // console.log("hihi" + response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
 
   const getCategoryName = (categoryId) => {
     const category = categoriesData?.find((c) => c._id === categoryId);
