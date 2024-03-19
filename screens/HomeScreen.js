@@ -22,12 +22,17 @@ import StatusBarView from "../components/Common/StatusBarView";
 import HighlightNews from "../components/HomeScreen/HighlightNews";
 import CategoryContent from "../components/CategoryContent";
 import {
+  fetchHighlightData,
+  fetchMainArticlesData,
+  fetchCategories,
   fetchArticlesByCategory,
   fetchNajnovijeArticles,
+  getCategories,
   setCurrentPage,
   setHighlightData,
   setLoading,
   setMainArticles,
+  setAllCategories,
 } from "../redux/slices/selectedContentSlice";
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
 import Najnovije from "../components/HomeScreen/Najnovije";
@@ -44,12 +49,6 @@ const theme = {
 };
 
 const HomeScreen = () => {
-  const selectedCategory = useSelector(
-    (state) => state.selectedContent.selectedCategory
-  );
-  const highlightData = useSelector(
-    (state) => state.selectedContent.highlightData
-  );
   const dispatch = useDispatch();
   const [dataLoaded, setDataLoaded] = useState(false);
   const userInfo = useSelector((state) => state.user.userInfo);
@@ -63,9 +62,14 @@ const HomeScreen = () => {
   );
 
   //console.log("Expo Push Token from Redux:", expoPushToken);
-  const { loading: isLoading, categoriesData } = useSelector(
-    (state) => state.selectedContent
-  );
+  const {
+    loading: isLoading,
+    categoriesData,
+    selectedCategory,
+    highlightData,
+    mainArticles,
+  } = useSelector((state) => state.selectedContent);
+  console.log("highlightData", highlightData);
 
   const getCategoryName = (categoryId) => {
     const category = categoriesData?.find((c) => c._id == categoryId);
@@ -105,24 +109,80 @@ const HomeScreen = () => {
     return sortedData;
   };
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const highlightData = await dispatch(fetchHighlightData());
+  //     const mainArticles = await dispatch(fetchMainArticlesData());
+  //     console.log("hig", mainArticles);
+
+  //     const highlightSortedData = sortHighlightArticlesAccordingToPriority(
+  //       highlightData.payload
+  //     );
+
+  //     const listData = [];
+
+  //     highlightSortedData &&
+  //       listData.push({
+  //         title: "Highlight",
+  //         data: highlightSortedData,
+  //         adId: 2,
+  //       });
+
+  //     const categoryDataSortOrders = [
+  //       [2, 3, 3, 5, 5, 5, 3],
+  //       [2, 4, 4, 3, 3, 5, 5],
+  //       [2, 5, 4, 4, 3, 3, 5],
+  //     ];
+
+  //     mainArticles?.payload.forEach((categoryArticles, categoryIndex) => {
+  //       const categoryName = getCategoryName(categoryArticles[0].category);
+  //       const algoIndex = categoryIndex % 3;
+  //       const selectedArticles = categoryArticles.slice(0, 7);
+
+  //       const categorySortedData = setPriorityAccordingToSortOrder(
+  //         selectedArticles,
+  //         categoryDataSortOrders[algoIndex]
+  //       );
+
+  //       listData.push({
+  //         title: categoryName,
+  //         data: categorySortedData,
+  //         adId: categoryIndex === 0 ? 5 : categoryIndex === 1 ? 6 : null,
+  //       });
+  //     });
+
+  //     setData(listData);
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   //console.log(userInfo);
   useEffect(() => {
     const fetchData = async () => {
       setDataLoaded(false); // THE LOADER WHICH WORKS NOW
       dispatch(setLoading(true));
+      // await dispatch(fetchHighlightData());
+      // dispatch(fetchMainArticlesData());
 
       try {
-        // Fetching highlight data
-        const highlightResponse = await axios.get(
-          `${API_URL}/articles/highlight`
-        );
-        dispatch(setHighlightData(highlightResponse.data));
+        const categories = await dispatch(fetchCategories());
+        dispatch(setAllCategories(categories.payload));
+        const highlightData = await dispatch(fetchHighlightData());
+        const mainArticles = await dispatch(fetchMainArticlesData());
 
-        // Fetching main articles data (moved from CategoryHighlightNews)
-        const mainArticlesResponse = await axios.get(
-          `${API_URL}/articles/main`
+        const highlightSortedData = sortHighlightArticlesAccordingToPriority(
+          highlightData.payload
         );
-        dispatch(setMainArticles(mainArticlesResponse.data)); // Dispatch the action for main articles
+
+        const listData = [];
+
+        highlightSortedData &&
+          listData.push({
+            title: "Highlight",
+            data: highlightSortedData,
+            adId: 2,
+          });
 
         const categoryDataSortOrders = [
           [2, 3, 3, 5, 5, 5, 3],
@@ -130,14 +190,7 @@ const HomeScreen = () => {
           [2, 5, 4, 4, 3, 3, 5],
         ];
 
-        const highlightSortedData = sortHighlightArticlesAccordingToPriority(
-          highlightResponse.data
-        );
-
-        const listData = [
-          { title: "Highlight", data: highlightSortedData, adId: 2 },
-        ];
-        mainArticlesResponse.data.forEach((categoryArticles, categoryIndex) => {
+        mainArticles?.payload.forEach((categoryArticles, categoryIndex) => {
           const categoryName = getCategoryName(categoryArticles[0].category);
           const algoIndex = categoryIndex % 3;
           const selectedArticles = categoryArticles.slice(0, 7);
@@ -155,6 +208,60 @@ const HomeScreen = () => {
         });
 
         setData(listData);
+        // Fetching highlight data
+        // const highlightResponse = await axios.get(
+        //   `${API_URL}/articles/highlight`
+        // );
+        // dispatch(setHighlightData(highlightResponse.data));
+
+        // Fetching main articles data (moved from CategoryHighlightNews)
+        // const mainArticlesResponse = await axios.get(
+        //   `${API_URL}/articles/main`
+        // );
+        // dispatch(setMainArticles(mainArticlesResponse.data));
+
+        // if (highlightData) {
+        //   // console.log("show");
+        //   const highlightSortedData =
+        //     sortHighlightArticlesAccordingToPriority(highlightData);
+
+        //   const listData = [];
+
+        //   highlightSortedData &&
+        //     listData.push({
+        //       title: "Highlight",
+        //       data: highlightSortedData,
+        //       adId: 2,
+        //     });
+
+        //   const categoryDataSortOrders = [
+        //     [2, 3, 3, 5, 5, 5, 3],
+        //     [2, 4, 4, 3, 3, 5, 5],
+        //     [2, 5, 4, 4, 3, 3, 5],
+        //   ];
+        //   mainArticlesResponse.data.forEach(
+        //     (categoryArticles, categoryIndex) => {
+        //       const categoryName = getCategoryName(
+        //         categoryArticles[0].category
+        //       );
+        //       const algoIndex = categoryIndex % 3;
+        //       const selectedArticles = categoryArticles.slice(0, 7);
+
+        //       const categorySortedData = setPriorityAccordingToSortOrder(
+        //         selectedArticles,
+        //         categoryDataSortOrders[algoIndex]
+        //       );
+
+        //       listData.push({
+        //         title: categoryName,
+        //         data: categorySortedData,
+        //         adId: categoryIndex === 0 ? 5 : categoryIndex === 1 ? 6 : null,
+        //       });
+        //     }
+        //   );
+
+        //   setData(listData);
+        // }
 
         setDataLoaded(true); // Indicate that data has been loaded
         dispatch(setLoading(false));
@@ -279,7 +386,7 @@ const HomeScreen = () => {
             stickySectionHeadersEnabled={false}
             keyExtractor={(item, index) => `${item.title}-${index}`}
           />
-          <ScrollView
+          {/* <ScrollView
             bounces={false}
             overScrollMode="never"
             ref={scrollViewRef}
@@ -308,7 +415,7 @@ const HomeScreen = () => {
             {selectedCategory !== "pocetna" && (
               <CategoryContent isPageLoading={isPageLoading} />
             )}
-          </ScrollView>
+          </ScrollView> */}
         </>
       )}
     </View>
