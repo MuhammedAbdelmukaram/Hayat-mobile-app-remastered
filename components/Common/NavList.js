@@ -26,12 +26,11 @@ import {
 
 const NavList = () => {
   const dispatch = useDispatch();
-  const selectedCategory = useSelector(
-    (state) => state.selectedContent.selectedCategory
+
+  const { categoriesData, selectedCategory } = useSelector(
+    (state) => state.selectedContent
   );
-  let categoriesData = useSelector(
-    (state) => state.selectedContent.categoriesData
-  ); // Get categoriesData from Redux
+
   const scrollViewRef = useRef(null);
   const scrollPosition = useSelector(
     (state) => state.selectedContent.scrollPosition
@@ -42,10 +41,15 @@ const NavList = () => {
     scrollViewRef.current?.scrollTo({ x: scrollPosition, animated: true });
   }, [scrollPosition]);
 
+  const categoryUrls = ["pocetna", "najnovije"];
+
   // In both NavList and Menu components
   const handleCategoryPress = async ({ categoryUrl, index, page = 1 }) => {
     dispatch(setLoading(true));
     dispatch(setSelectedCategory(categoryUrl));
+
+    dispatch(setHighlightData(null));
+    dispatch(setMainArticles(null));
 
     if (selectedCategory !== categoryUrl) {
       dispatch(setCurrentPage(1)); // Assuming you have such an action
@@ -89,7 +93,7 @@ const NavList = () => {
     dispatch(setScrollPosition(scrollToPosition));
   };
 
-  const handlepocetnaPress = async ({ categoryUrl }) => {
+  const handlePocetnaPress = async ({ categoryUrl }) => {
     dispatch(setSelectedCategory(categoryUrl));
 
     dispatch(setLoading(true));
@@ -144,29 +148,29 @@ const NavList = () => {
   };
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/categories`);
-        dispatch(setAllCategories(response.data)); // Dispatch setAllCategories with fetched data
-        setCategoriesLoaded(true);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+    // const fetchCategories = async () => {
+    //   try {
+    //     const response = await axios.get(`${API_URL}/categories`);
+    //     dispatch(setAllCategories(response.data)); // Dispatch setAllCategories with fetched data
+    //     setCategoriesLoaded(true);
+    //   } catch (error) {
+    //     console.error("Error fetching categories:", error);
+    //   }
+    // };
 
-    const fetchPocetna = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/articles/highlight`);
+    // const fetchPocetna = async () => {
+    //   try {
+    //     const response = await axios.get(`${API_URL}/articles/highlight`);
 
-        // Assuming the categories are under the key 'categories' within the response object
-        const newHighlightData = response.data;
+    //     // Assuming the categories are under the key 'categories' within the response object
+    //     const newHighlightData = response.data;
 
-        // Dispatch an action to update contentData in Redux
-        dispatch(setHighlightData(newHighlightData));
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+    //     // Dispatch an action to update contentData in Redux
+    //     dispatch(setHighlightData(newHighlightData));
+    //   } catch (error) {
+    //     console.error("Error fetching categories:", error);
+    //   }
+    // };
 
     const fetchNajnovije = async () => {
       try {
@@ -177,9 +181,9 @@ const NavList = () => {
         console.error("Error fetching najnovije:", error);
       }
     };
-    fetchCategories();
+    // fetchCategories();
     fetchNajnovije();
-    fetchPocetna();
+    // fetchPocetna();
   }, [dispatch]);
 
   return (
@@ -191,11 +195,11 @@ const NavList = () => {
       bounces={false}
       overScrollMode="never"
     >
-      {categoriesLoaded && (
+      {categoriesData && (
         <>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => handlepocetnaPress({ categoryUrl: "pocetna" })}
+            onPress={() => handlePocetnaPress({ categoryUrl: "pocetna" })}
           >
             <Text
               style={[
@@ -262,7 +266,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#ffffff",
     fontSize: 13,
-    paddingBottom: 5,
+    // paddingBottom: 5,
   },
   selectedText: {
     fontWeight: "700", // Increased weight for better emphasis
@@ -270,7 +274,8 @@ const styles = StyleSheet.create({
     textDecorationLine: "none", // Removing the underline for a cleaner look
     borderBottomWidth: 0.8, // Adding a bottom border for a subtle indicator
     borderBottomColor: "#ffffff", // Gold color for the border to add a sophisticated touch without being too loud
-    paddingBottom: 5, // Adjust padding to accommodate the border without increasing the overall height
+    paddingBottom: 30, // Adjust padding to accommodate the border without increasing the overall height
+    paddingTop: 20,
   },
 });
 
