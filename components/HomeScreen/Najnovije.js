@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, View, Text } from "react-native";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { API_URL } from "@env";
+
 import {
   setNajnovijeData,
   setLoading,
@@ -12,7 +14,6 @@ import {
 import Priority2 from "../Priority2";
 import Priority3 from "../Priority3";
 import Priority5 from "../Priority5";
-import { API_URL } from "@env";
 import Priority6 from "../Priority6";
 
 const Najnovije = ({ isPageLoading }) => {
