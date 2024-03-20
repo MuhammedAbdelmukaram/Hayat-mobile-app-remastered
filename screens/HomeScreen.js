@@ -24,7 +24,6 @@ import CategoryContent from "../components/CategoryContent";
 import {
   fetchHighlightData,
   fetchMainArticlesData,
-  fetchCategories,
   fetchArticlesByCategory,
   fetchNajnovijeArticles,
   getCategories,
@@ -32,7 +31,6 @@ import {
   setHighlightData,
   setLoading,
   setMainArticles,
-  setAllCategories,
 } from "../redux/slices/selectedContentSlice";
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
 import Najnovije from "../components/HomeScreen/Najnovije";
@@ -61,15 +59,14 @@ const HomeScreen = () => {
     (state) => state.notification.expoPushToken
   );
 
-  //console.log("Expo Push Token from Redux:", expoPushToken);
   const {
     loading: isLoading,
     categoriesData,
     selectedCategory,
     highlightData,
     mainArticles,
+    najnovijeData,
   } = useSelector((state) => state.selectedContent);
-  console.log("highlightData", highlightData);
 
   const getCategoryName = (categoryId) => {
     const category = categoriesData?.find((c) => c._id == categoryId);
@@ -105,6 +102,18 @@ const HomeScreen = () => {
         // Take the next article from the corresponding category
         sortedData.push(articlesByPriority[priority].shift());
       }
+    });
+    return sortedData;
+  };
+
+  const setPriorityAccordingToNajnovijeArticles = (articles) => {
+    const sortedData = [];
+    articles.forEach((article, index) => {
+      const newArticle = {
+        ...article,
+        priority: article.video_post ? 2 : article.photo_post ? 3 : 6,
+      };
+      sortedData.push(newArticle);
     });
     return sortedData;
   };
@@ -159,21 +168,14 @@ const HomeScreen = () => {
 
   //console.log(userInfo);
   useEffect(() => {
-    const fetchData = async () => {
+    if (highlightData && mainArticles) {
+      // const fetchData = async () => {
       setDataLoaded(false); // THE LOADER WHICH WORKS NOW
       dispatch(setLoading(true));
-      // await dispatch(fetchHighlightData());
-      // dispatch(fetchMainArticlesData());
 
       try {
-        const categories = await dispatch(fetchCategories());
-        dispatch(setAllCategories(categories.payload));
-        const highlightData = await dispatch(fetchHighlightData());
-        const mainArticles = await dispatch(fetchMainArticlesData());
-
-        const highlightSortedData = sortHighlightArticlesAccordingToPriority(
-          highlightData.payload
-        );
+        const highlightSortedData =
+          sortHighlightArticlesAccordingToPriority(highlightData);
 
         const listData = [];
 
@@ -190,7 +192,7 @@ const HomeScreen = () => {
           [2, 5, 4, 4, 3, 3, 5],
         ];
 
-        mainArticles?.payload.forEach((categoryArticles, categoryIndex) => {
+        mainArticles?.forEach((categoryArticles, categoryIndex) => {
           const categoryName = getCategoryName(categoryArticles[0].category);
           const algoIndex = categoryIndex % 3;
           const selectedArticles = categoryArticles.slice(0, 7);
@@ -263,26 +265,34 @@ const HomeScreen = () => {
         //   setData(listData);
         // }
 
-        setDataLoaded(true); // Indicate that data has been loaded
+        setDataLoaded(true);
         dispatch(setLoading(false));
         setIsConnectionError(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         if (!error.response) {
           setIsConnectionError(true);
-          setDataLoaded(false); // Ensure the dataLoaded state is set even in case of an error
-          // Check if error is network error (no response received)
-          // Display a custom message if there is no internet connection
-          //   Alert.alert(
-          //     "Došlo je do problema s povezivanjem s Hayat aplikacijom",
-          //     "Provjerite vašu konekciju i pokušajte opet"
-          //   );
+          setDataLoaded(false);
         }
       }
-    };
+      // };
 
-    fetchData();
-  }, [dispatch]);
+      // if (highlightData && mainArticles) fetchData();
+    }
+
+    if (najnovijeData) {
+      const najnovijeSortedData =
+        setPriorityAccordingToNajnovijeArticles(najnovijeData);
+
+      const listData = [];
+
+      listData.push({
+        title: "Najnovije",
+        data: najnovijeSortedData,
+      });
+      setData(listData);
+    }
+  }, [highlightData, mainArticles, najnovijeData]);
 
   // useEffect(() => {
   //   if (userInfoLoaded && userInfo && !userInfo.confirmed) {
@@ -336,11 +346,16 @@ const HomeScreen = () => {
     }
   };
 
+  const najnovijeAdsOrderId = { 2: 4, 8: 5, 17: 6 };
+
   const Item = ({ item, section, index }) => (
     <>
       <Priority key={item._id} article={item} />
       {section.adId && index === section?.data?.length - 1 && (
         <AdPlacement id={section.adId} />
+      )}
+      {selectedCategory === "najnovije" && [2, 8, 17].includes(index) && (
+        <AdPlacement id={najnovijeAdsOrderId[index]} />
       )}
     </>
   );
@@ -363,17 +378,11 @@ const HomeScreen = () => {
             style={{ height: "100%" }}
             sections={data}
             renderItem={({ item, section, index, seperators }) => {
-              return (
-                <Item
-                  item={item}
-                  section={section}
-                  index={index}
-                  seperators={seperators}
-                />
-              );
+              return <Item item={item} section={section} index={index} />;
             }}
             renderSectionHeader={({ section: { title } }) =>
-              title !== "Highlight" && (
+              title !== "Highlight" &&
+              selectedCategory === "pocetna" && (
                 <View style={styles.categoryContainer}>
                   <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
                     <View style={styles.categoryName}>
