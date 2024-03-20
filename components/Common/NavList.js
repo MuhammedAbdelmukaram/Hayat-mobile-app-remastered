@@ -60,6 +60,7 @@ const NavList = () => {
         categoryUrl: previousCategory.category_url,
         index: index - 1,
       });
+      dispatch(setLoading(true));
     }
     if (direction === "left" && index !== categoriesData.length - 1) {
       const nextCategory = categoriesData[index + 1];
@@ -68,8 +69,8 @@ const NavList = () => {
         categoryUrl: nextCategory.category_url,
         index: index + 1,
       });
+      dispatch(setLoading(true));
     }
-    dispatch(setLoading(true));
     console.log("swipe", swipeObject, currentCategory, index);
   }, [swipeObject]);
 
