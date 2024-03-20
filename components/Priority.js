@@ -65,7 +65,9 @@ const Priority = ({ article }) => {
             <View style={styles.rightSide}>
               <View style={styles.upperWrapper}>
                 <View style={styles.textsWrapper}>
-                  <Text style={styles.heading}>{formattedArticleTitle}</Text>
+                  <Text style={priority === 3 ? styles.heading3 : styles.heading}>
+                    {formattedArticleTitle}
+                  </Text>
                   {[3, 4].includes(priority) && (
                     <Text
                       style={
@@ -183,10 +185,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: 10,
   },
+  heading3: {
+    fontWeight: "600",
+    textAlign: "justify",
+    width: 234,
+    marginBottom: 4,
+    // Add any additional styles specific to priority 3 here
+  },
   heading: {
     fontWeight: "600",
     textAlign: "justify",
-    width: 276,
+    width: 254,
     marginBottom: 4,
   },
   heading4: {
