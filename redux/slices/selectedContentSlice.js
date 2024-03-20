@@ -14,49 +14,8 @@ const initialState = {
   currentPage: 1, // Add this line
   hasMore: true, // Ensure this is here and properly initialized
   scrollPosition: 0,
+  swipeObject: null,
 };
-
-// export const fetchHighlightData = createAsyncThunk(
-//   "selectedContent/highlightData",
-//   async (thunkAPI) => {
-//     try {
-//       const response = await axios.get(`${API_URL}/articles/highlight`);
-//       const data = response.data;
-
-//       return data;
-//     } catch (error) {
-//       console.log("error", error);
-//     }
-//   }
-// );
-
-// export const fetchMainArticlesData = createAsyncThunk(
-//   "selectedContent/mainArticles",
-//   async (thunkAPI) => {
-//     try {
-//       const response = await axios.get(`${API_URL}/articles/main`);
-//       const data = response.data;
-
-//       return data;
-//     } catch (error) {
-//       console.log("error", error);
-//     }
-//   }
-// );
-
-// export const fetchCategories = createAsyncThunk(
-//   "selectedContent/categoriesData",
-//   async () => {
-//     try {
-//       const response = await axios.get(`${API_URL}/categories`);
-//       const data = response.data;
-
-//       return data;
-//     } catch (error) {
-//       console.log("error", error);
-//     }
-//   }
-// );
 
 export const fetchNajnovijeArticles = createAsyncThunk(
   "selectedContent/fetchNajnovijeArticles",
@@ -122,6 +81,10 @@ const selectedContentSlice = createSlice({
 
     setScrollPosition: (state, action) => {
       state.scrollPosition = action.payload;
+    },
+
+    setSwipeObject: (state, action) => {
+      state.swipeObject = action.payload;
     },
 
     /* categoriesData EXAMPLE:
@@ -217,5 +180,6 @@ export const {
   setNajnovijeData,
   setContentData,
   setHighlightData,
+  setSwipeObject,
 } = selectedContentSlice.actions;
 export default selectedContentSlice.reducer;
