@@ -340,53 +340,52 @@ const Article = ({ route }) => {
   const renderMediaModal = ({ item, index }) => {
     // Set the desired width based on screen width
     const mediaWidth = screenWidth - 20; // Subtracting padding value (10 on each side)
-    // Default height for 16:9 aspect ratio
-    let mediaHeight = mediaWidth * (9 / 16) + 120;
-
-    // Check if the aspect ratio is available and not 16:9
-    if (item.aspectRatio && item.aspectRatio !== 16 / 9) {
-      // Set height based on actual aspect ratio
-      mediaHeight = mediaWidth / item.aspectRatio;
-    }
+    let mediaHeight;
 
     if (item.isVideo) {
+      mediaHeight = mediaWidth * (9 / 16) + 120; // Default height for 16:9 aspect ratio videos
       return (
-        <TouchableOpacity
-          onPress={() => handleSingleTap(item, index)}
-          activeOpacity={0.99}
-          style={{ marginVertical: 5, paddingHorizontal: 10 }}
-        >
-          <Video
-            source={{ uri: item.url }}
-            rate={1.0}
-            volume={1.0}
-            isMuted={false}
-            resizeMode="contain" // Using "contain" to ensure full visibility
-            shouldPlay={item.url === visibleItem && !isModalVisible}
-            isLooping
-            useNativeControls
-            style={{ width: mediaWidth, height: mediaHeight }}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+              onPress={() => handleSingleTap(item, index)}
+              activeOpacity={0.99}
+              style={{ marginVertical: 5, paddingHorizontal: 10 }}
+          >
+            <Video
+                source={{ uri: item.url }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="contain" // Using "contain" to ensure full visibility
+                shouldPlay={item.url === visibleItem && !isModalVisible}
+                isLooping
+                useNativeControls
+                style={{ width: mediaWidth, height: mediaHeight }}
+            />
+          </TouchableOpacity>
       );
     } else {
+      // Calculate height for images with aspect ratios other than 16:9
+      const aspectRatio = item.aspectRatio || 1; // If aspectRatio is not provided, default to 1:1
+
+      mediaHeight = mediaWidth / aspectRatio;
       return (
-        <TouchableOpacity
-          onPress={() => handleSingleTap(item, index)}
-          activeOpacity={0.99}
-          style={{ marginVertical: 5, paddingHorizontal: 10 }}
-        >
-          <Image
-            source={{ uri: item.url }}
-            style={{ width: mediaWidth, height: mediaHeight }}
-            placeholder={blurhash}
-            contentFit="contain" // Ensuring the full image is visible
-            transition={1000}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+              onPress={() => handleSingleTap(item, index)}
+              activeOpacity={0.99}
+              style={{ marginVertical: 5, paddingHorizontal: 10, height:"100%" }}
+          >
+            <Image
+                source={{ uri: item.url }}
+                style={{ width: mediaWidth, height:"100%"}}
+                placeholder={blurhash}
+                contentFit={"contain"} // Ensuring the full image is visible
+                transition={1000}
+            />
+          </TouchableOpacity>
       );
     }
   };
+
 
   // Determine the content to display based on the first item in image_list
   const contentToDisplay =
@@ -539,7 +538,7 @@ const Article = ({ route }) => {
           }}
         >
           <BlurView
-            intensity={120}
+            intensity={130}
             tint={"dark"}
             style={styles.fullScreenCentered}
           >

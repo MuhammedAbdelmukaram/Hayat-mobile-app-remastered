@@ -341,42 +341,43 @@ const Menu = ({ visible, onClose }) => {
               <HorizontalLine />
             </View>
 
-            <View style={styles.menuBottomSection}>
-              <View style={styles.menuCategories}>
-                <TouchableOpacity
+
+
+            {/* Add more menu items */}
+          </ScrollView>
+          <View style={styles.menuBottomSection}>
+            <View style={styles.menuCategories}>
+              <TouchableOpacity
                   style={styles.menuItemBottom}
                   onPress={() => {
                     navigation.navigate("Settings");
                     // Use your HomeScreen's route name
                     onClose(); // Optionally close the menu
                   }}
-                >
-                  <Image
+              >
+                <Image
                     source={require("../../assets/settings.png")} // Your home icon
                     style={getIconStyle(28)}
-                  />
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.menuCategories}>
-                <TouchableOpacity
-                  style={styles.menuItemBottom}
-                  onPress={() => {
-                    navigation.navigate("About");
-                    // Use your HomeScreen's route name
-                    onClose(); // Optionally close the menu
-                  }}
-                >
-                  {/*<Image*/}
-                  {/*    source={require('../../assets/about.png')} // Your home icon*/}
-                  {/*    style={getIconStyle(28)}*/}
-                  {/*/>*/}
-                </TouchableOpacity>
-              </View>
+                />
+              </TouchableOpacity>
             </View>
 
-            {/* Add more menu items */}
-          </ScrollView>
+
+            <TouchableOpacity
+                style={styles.menuItemBottom}
+                onPress={() => {
+                  navigation.navigate("About");
+                  // Use your HomeScreen's route name
+                  onClose(); // Optionally close the menu
+                }}
+            >
+              {/*<Image*/}
+              {/*    source={require('../../assets/about.png')} // Your home icon*/}
+              {/*    style={getIconStyle(28)}*/}
+              {/*/>*/}
+            </TouchableOpacity>
+
+          </View>
         </Animated.View>
       </TouchableOpacity>
     </Modal>
@@ -429,16 +430,14 @@ const styles = StyleSheet.create({
   },
 
   menuItemBottom: {
-    display: "inline",
-    flexDirection: "row",
     alignItems: "center",
-    width: 50,
-    height: 50,
     justifyContent: "center",
     backgroundColor: "#1A2F5A",
-
-    paddingVertical: 12,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
   },
+
 
   gledajHayatIcon: {
     height: 35,
@@ -451,7 +450,7 @@ const styles = StyleSheet.create({
 
   menuItemText: {
     color: "#fff",
-    fontSize: 17,
+    fontSize: 15,
     marginLeft: "8%",
     fontWeight: "600",
   },
@@ -477,10 +476,12 @@ const styles = StyleSheet.create({
   },
 
   menuBottomSection: {
-    display: "flex",
     flexDirection: "row",
-    gap: 2,
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 16,
+    marginBottom:52
   },
 
   menuCategories: {
