@@ -394,6 +394,8 @@ const HomeScreen = () => {
             }
             stickySectionHeadersEnabled={false}
             keyExtractor={(item, index) => `${item.title}-${index}`}
+            onEndReached={loadMoreContent}
+            onEndReachedThreshold={2}
           />
           {/* <ScrollView
             bounces={false}
