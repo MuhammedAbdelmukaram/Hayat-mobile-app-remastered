@@ -51,6 +51,7 @@ const NavList = () => {
 
     dispatch(setHighlightData(null));
     dispatch(setMainArticles(null));
+    dispatch(setNajnovijeData(null));
 
     if (selectedCategory !== categoryUrl) {
       dispatch(setCurrentPage(1)); // Assuming you have such an action
@@ -126,6 +127,7 @@ const NavList = () => {
 
     dispatch(setHighlightData(null));
     dispatch(setMainArticles(null));
+    dispatch(setContentData(null));
 
     try {
       const response = await axios.get(
