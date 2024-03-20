@@ -58,7 +58,7 @@ const Settings = () => {
   };
 
   const handleNotificationChange = async (value) => {
-    setNotificationsEnabled((previousState) => !previousState);
+    setNotificationsEnabled(value); // Update state immediately
 
     // messaging()
     //   .getToken()
@@ -69,66 +69,73 @@ const Settings = () => {
   };
 
   return (
-    <View>
-      <StatusBarView backgroundColor="#1A2F5A" />
-      <Header isHome={false} isSettings />
+      <View>
+        <StatusBarView backgroundColor="#1A2F5A" />
+        <Header isHome={false} isSettings />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setModalVisible(true)}
-      >
-        <Image
-          source={require("../assets/notificationIcon.png")}
-          style={styles.backIcon}
-          resizeMode={"contain"}
-        />
-        <View style={styles.texts}>
-          <Text style={styles.userInfoText}>Notifikacije</Text>
-          <Text style={styles.userInfo}>Isključeno</Text>
-        </View>
-      </TouchableOpacity>
+        <TouchableOpacity
+            style={styles.button}
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Upalite Notifikacije</Text>
+        >
+          <Image
+              source={require("../assets/notificationIcon.png")}
+              style={styles.backIcon}
+              resizeMode={"contain"}
+          />
+          <View style={styles.texts}>
+            <Text style={styles.userInfoText}>Notifikacije</Text>
             <Switch
-              trackColor={{ false: "#767577", true: "#1a2f5a" }}
-              style={styles.switchStyle}
-              thumbColor={notificationsEnabled ? "#b2c7f5" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={(value) => handleNotificationChange(value)}
-              value={notificationsEnabled}
+                trackColor={{ false: "#767577", true: "#1a2f5a" }}
+                style={styles.switchStyle}
+                thumbColor={notificationsEnabled ? "#b2c7f5" : "#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={(value) => handleNotificationChange(value)}
+                value={notificationsEnabled}
             />
-            <TouchableOpacity
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Zatvori</Text>
-            </TouchableOpacity>
           </View>
-        </View>
-      </Modal>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button}>
-        <Image
-          source={require("../assets/version.png")}
-          style={styles.backIcon}
-          resizeMode={"contain"}
-        />
-        <View style={styles.texts}>
-          <Text style={styles.userInfoText}>Verzija</Text>
-          <Text style={styles.userInfo}>1.0.0</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Upalite Notifikacije</Text>
+              <Switch
+                  trackColor={{ false: "#767577", true: "#1a2f5a" }}
+                  style={styles.switchStyle}
+                  thumbColor={notificationsEnabled ? "#b2c7f5" : "#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={(value) => handleNotificationChange(value)}
+                  value={notificationsEnabled}
+              />
+              <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Zatvori</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        <TouchableOpacity style={styles.button}>
+          <Image
+              source={require("../assets/version.png")}
+              style={styles.backIcon}
+              resizeMode={"contain"}
+          />
+          <View style={styles.texts}>
+            <Text style={styles.userInfoText}>Verzija</Text>
+            <Text style={styles.userInfo}>1.0.0</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
   );
 };
 
@@ -139,14 +146,16 @@ const styles = StyleSheet.create({
   },
   userInfo: {},
   switchStyle: {
-    transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }], // Scale by 1.5 times the original size
+    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }], // Scale by 1.5 times the original size
     marginVertical: 10, // Add some vertical margin if needed
+
   },
   button: {
     display: "flex",
     alignItems: "center",
     flexDirection: "row",
     backgroundColor: "#ffffff",
+    height:90,
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderWidth: 1,
@@ -154,6 +163,10 @@ const styles = StyleSheet.create({
   },
   texts: {
     marginLeft: 20,
+    flex: 1, // Added flex to make the texts take the remaining space
+    flexDirection: "row", // Align texts and switch horizontally
+    alignItems:"center",
+    justifyContent: "space-between", // Align texts and switch horizontally
   },
   backIcon: {
     width: 36,

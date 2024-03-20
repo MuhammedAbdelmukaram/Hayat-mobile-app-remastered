@@ -7,7 +7,7 @@ const HorizontalLine = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 1,
+    height: 0.5,
     backgroundColor: "#fff",
   },
 });

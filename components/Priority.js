@@ -11,15 +11,17 @@ const Priority = ({ article }) => {
     image_list,
     title: articleTitle,
     subtitle: articleSubtitle,
-    id: articleID,
+    _id: articleID,
     priority,
   } = article;
 
   const imageUri = image_list[0]?.url;
 
   const handlePress = () => {
+    console.log("Article ID:", article); // Log the articleID
     navigation.navigate("Article", { articleID: articleID });
   };
+
   const formattedArticleTitle = articleTitle.replace(/\n/g, " ");
   const formattedArticleSubtitle = articleTitle.replace(/\n/g, " ");
 
