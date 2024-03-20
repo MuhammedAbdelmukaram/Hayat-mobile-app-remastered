@@ -16,47 +16,47 @@ const initialState = {
   scrollPosition: 0,
 };
 
-export const fetchHighlightData = createAsyncThunk(
-  "selectedContent/highlightData",
-  async (thunkAPI) => {
-    try {
-      const response = await axios.get(`${API_URL}/articles/highlight`);
-      const data = response.data;
+// export const fetchHighlightData = createAsyncThunk(
+//   "selectedContent/highlightData",
+//   async (thunkAPI) => {
+//     try {
+//       const response = await axios.get(`${API_URL}/articles/highlight`);
+//       const data = response.data;
 
-      return data;
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
-);
+//       return data;
+//     } catch (error) {
+//       console.log("error", error);
+//     }
+//   }
+// );
 
-export const fetchMainArticlesData = createAsyncThunk(
-  "selectedContent/mainArticles",
-  async (thunkAPI) => {
-    try {
-      const response = await axios.get(`${API_URL}/articles/main`);
-      const data = response.data;
+// export const fetchMainArticlesData = createAsyncThunk(
+//   "selectedContent/mainArticles",
+//   async (thunkAPI) => {
+//     try {
+//       const response = await axios.get(`${API_URL}/articles/main`);
+//       const data = response.data;
 
-      return data;
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
-);
+//       return data;
+//     } catch (error) {
+//       console.log("error", error);
+//     }
+//   }
+// );
 
-export const fetchCategories = createAsyncThunk(
-  "selectedContent/categories",
-  async (thunkAPI) => {
-    try {
-      const response = await axios.get(`${API_URL}/categories`);
-      const data = response.data;
+// export const fetchCategories = createAsyncThunk(
+//   "selectedContent/categoriesData",
+//   async () => {
+//     try {
+//       const response = await axios.get(`${API_URL}/categories`);
+//       const data = response.data;
 
-      return data;
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
-);
+//       return data;
+//     } catch (error) {
+//       console.log("error", error);
+//     }
+//   }
+// );
 
 export const fetchNajnovijeArticles = createAsyncThunk(
   "selectedContent/fetchNajnovijeArticles",
@@ -131,10 +131,6 @@ const selectedContentSlice = createSlice({
         order_number:1
         hidden:false
         */
-    // getCategories: async (state, action) => {
-    //   const response = await axios.get(`${API_URL}/categories`);
-    //   state.categoriesData = response.data.payload;
-    // },
     setAllCategories: (state, action) => {
       state.categoriesData = action.payload;
     },
