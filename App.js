@@ -17,14 +17,14 @@ import Login from "./screens/Login";
 import Signup from "./screens/Signup";
 import Survey from "./screens/Survey";
 import TermsOfService from "./screens/TermsOfService";
-import Account from "./screens/account";
+import Account from "./screens/Account";
 import HayatPlay from "./screens/HayatPlay";
 import VODcategories from "./screens/VODcategories";
 import SubCategory from "./screens/SubCategory";
 import TVShow from "./screens/TVShow";
 import SubTvShow from "./screens/SubTvShow";
 import LiveTv from "./screens/LiveTV";
-import Uskoro from "./screens/uskoro";
+import Uskoro from "./screens/Uskoro";
 import About from "./screens/About";
 import Settings from "./screens/Settings";
 
