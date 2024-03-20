@@ -66,6 +66,7 @@ const HomeScreen = () => {
     highlightData,
     mainArticles,
     najnovijeData,
+    contentData,
   } = useSelector((state) => state.selectedContent);
 
   const getCategoryName = (categoryId) => {
@@ -109,6 +110,47 @@ const HomeScreen = () => {
   const setPriorityAccordingToNajnovijeArticles = (articles) => {
     const sortedData = [];
     articles.forEach((article, index) => {
+      const newArticle = {
+        ...article,
+        priority: article.video_post ? 2 : article.photo_post ? 3 : 6,
+      };
+      sortedData.push(newArticle);
+    });
+    return sortedData;
+  };
+
+  const sortCategoryArticles = (articles) => {
+    const sortedData = [];
+    const firstVideo = articles.find((article) => article.video_post);
+    const firstPhoto = articles.find((article) => article.photo_post);
+    const firstText = articles.find((article) => article.text_post);
+
+    let newArticle = {
+      ...firstVideo,
+      priority: 2,
+    };
+    firstVideo && sortedData.push(newArticle);
+
+    newArticle = {
+      ...firstPhoto,
+      priority: 3,
+    };
+    firstPhoto && sortedData.push(newArticle);
+
+    newArticle = {
+      ...firstText,
+      priority: 5,
+    };
+    firstText && sortedData.push(newArticle);
+
+    articles.forEach((article, index) => {
+      if (
+        [firstVideo, firstPhoto, firstText].some(
+          (firstArticle) => firstArticle && firstArticle._id === article._id
+        )
+      )
+        return;
+
       const newArticle = {
         ...article,
         priority: article.video_post ? 2 : article.photo_post ? 3 : 6,
@@ -292,7 +334,22 @@ const HomeScreen = () => {
       });
       setData(listData);
     }
-  }, [highlightData, mainArticles, najnovijeData]);
+
+    if (contentData) {
+      const contentSortedData = sortCategoryArticles(contentData);
+      // console.log("contentSortedData", contentSortedData);
+      // const najnovijeSortedData =
+      //   setPriorityAccordingToNajnovijeArticles(najnovijeData);
+
+      const listData = [];
+
+      listData.push({
+        title: "Category",
+        data: contentSortedData,
+      });
+      setData(listData);
+    }
+  }, [highlightData, mainArticles, najnovijeData, contentData]);
 
   // useEffect(() => {
   //   if (userInfoLoaded && userInfo && !userInfo.confirmed) {
