@@ -13,6 +13,7 @@ import { API_URL } from "@env";
 import {
   appendContentData,
   setAllCategories,
+  fetchCategories,
   setContentData,
   setCurrentPage,
   setHasMore,
@@ -22,6 +23,8 @@ import {
   setNajnovijeData,
   setScrollPosition,
   setSelectedCategory,
+  fetchHighlightData,
+  fetchMainArticlesData,
 } from "../../redux/slices/selectedContentSlice";
 
 const NavList = () => {
@@ -40,8 +43,6 @@ const NavList = () => {
   useEffect(() => {
     scrollViewRef.current?.scrollTo({ x: scrollPosition, animated: true });
   }, [scrollPosition]);
-
-  const categoryUrls = ["pocetna", "najnovije"];
 
   // In both NavList and Menu components
   const handleCategoryPress = async ({ categoryUrl, index, page = 1 }) => {
@@ -95,10 +96,11 @@ const NavList = () => {
 
   const handlePocetnaPress = async ({ categoryUrl }) => {
     dispatch(setSelectedCategory(categoryUrl));
-
     dispatch(setLoading(true));
-
     dispatch(setCurrentPage(1));
+
+    dispatch(setNajnovijeData(null));
+
     try {
       const response = await axios.get(`${API_URL}/articles/highlight`);
 
@@ -121,6 +123,10 @@ const NavList = () => {
     dispatch(setSelectedCategory(categoryUrl));
     dispatch(setCurrentPage(1));
     dispatch(setLoading(true));
+
+    dispatch(setHighlightData(null));
+    dispatch(setMainArticles(null));
+
     try {
       const response = await axios.get(
         `${API_URL}/articles/mob/najnovije/${page}`
@@ -148,42 +154,34 @@ const NavList = () => {
   };
 
   useEffect(() => {
-    // const fetchCategories = async () => {
-    //   try {
-    //     const response = await axios.get(`${API_URL}/categories`);
-    //     dispatch(setAllCategories(response.data)); // Dispatch setAllCategories with fetched data
-    //     setCategoriesLoaded(true);
-    //   } catch (error) {
-    //     console.error("Error fetching categories:", error);
-    //   }
-    // };
-
-    // const fetchPocetna = async () => {
-    //   try {
-    //     const response = await axios.get(`${API_URL}/articles/highlight`);
-
-    //     // Assuming the categories are under the key 'categories' within the response object
-    //     const newHighlightData = response.data;
-
-    //     // Dispatch an action to update contentData in Redux
-    //     dispatch(setHighlightData(newHighlightData));
-    //   } catch (error) {
-    //     console.error("Error fetching categories:", error);
-    //   }
-    // };
-
-    const fetchNajnovije = async () => {
+    const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${API_URL}/articles/mob/najnovije/1`);
-        //   console.log('Fetched data with axios:', response.data);
-        dispatch(setNajnovijeData(response.data)); // Dispatch the action to set najnovije data
+        const response = await axios.get(`${API_URL}/categories`);
+        const data = response.data;
+        dispatch(setAllCategories(data));
       } catch (error) {
-        console.error("Error fetching najnovije:", error);
+        console.error("Error fetching categories:", error);
       }
     };
-    // fetchCategories();
-    fetchNajnovije();
-    // fetchPocetna();
+
+    const fetchPocetna = async () => {
+      try {
+        const highlightRes = await axios.get(`${API_URL}/articles/highlight`);
+        const highlightData = highlightRes.data;
+        dispatch(setHighlightData(highlightData));
+
+        const mainArticlesRes = await axios.get(`${API_URL}/articles/main`);
+        const mainArticlesData = mainArticlesRes.data;
+        dispatch(setMainArticles(mainArticlesData));
+        dispatch(setLoading(false));
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    dispatch(setLoading(true));
+    fetchCategories();
+    fetchPocetna();
   }, [dispatch]);
 
   return (
