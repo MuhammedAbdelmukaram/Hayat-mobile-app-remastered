@@ -143,7 +143,7 @@ const HomeScreen = () => {
     };
     firstText && sortedData.push(newArticle);
 
-    articles.forEach((article, index) => {
+    articles.forEach((article) => {
       if (
         [firstVideo, firstPhoto, firstText].some(
           (firstArticle) => firstArticle && firstArticle._id === article._id
@@ -404,6 +404,7 @@ const HomeScreen = () => {
   };
 
   const najnovijeAdsOrderId = { 2: 4, 8: 5, 17: 6 };
+  const categoryAdsOrderId = [3, 9, 18];
 
   const Item = ({ item, section, index }) => (
     <>
@@ -414,6 +415,8 @@ const HomeScreen = () => {
       {selectedCategory === "najnovije" && [2, 8, 17].includes(index) && (
         <AdPlacement id={najnovijeAdsOrderId[index]} />
       )}
+      {!["pocetna", "najnovije"].includes(selectedCategory) &&
+        categoryAdsOrderId.includes(index) && <AdPlacement id={4} />}
     </>
   );
 
