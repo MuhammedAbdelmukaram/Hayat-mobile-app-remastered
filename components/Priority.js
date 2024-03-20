@@ -42,6 +42,7 @@ const Priority = ({ article }) => {
           <View style={styles.leftSide}>
             <Image
               source={{ uri: imageUri }}
+              resizeMethod= "resize"
               style={
                 priority === 3
                   ? styles.newsImage3
@@ -55,6 +56,7 @@ const Priority = ({ article }) => {
           <Image
             source={{ uri: imageUri }}
             style={styles.image}
+            resizeMethod= "resize"
             resizeMode="cover"
           />
         ) : null}
