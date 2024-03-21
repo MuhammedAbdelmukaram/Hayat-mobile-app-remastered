@@ -141,83 +141,27 @@ const NavList = () => {
 
     dispatch(setLoading(false));
 
-    if (!mainCategories.includes(categoryUrl)) {
-      const buttonWidth = 120; // Width of each button including padding
-      const viewportWidth = Dimensions.get("window").width; // Width of the viewport
+    const buttonWidth = 120; // Width of each button including padding
+    const viewportWidth = Dimensions.get("window").width; // Width of the viewport
 
-      // Calculate the center position of the button to be centered in the viewport
-      const buttonCenter = index * buttonWidth + buttonWidth / 2 + 240; // Adjust center position for the offset of the first two unaccounted buttons
-      const halfViewportWidth = viewportWidth / 2;
-      let scrollToPosition = buttonCenter - halfViewportWidth; // Adjust so button is in the middle of the viewport
+    // Calculate the center position of the button to be centered in the viewport
+    const buttonCenter = index * buttonWidth + buttonWidth / 2; // Adjust center position for the offset of the first two unaccounted buttons
+    const halfViewportWidth = viewportWidth / 2;
+    let scrollToPosition = buttonCenter - halfViewportWidth; // Adjust so button is in the middle of the viewport
 
-      // Adjust the maximum scrollable position to ensure we don't scroll beyond content
-      // No need to change the calculation for maxScrollPosition here since it accommodates for all categories
-      const maxScrollPosition =
-        categoriesData.length * buttonWidth + 240 - viewportWidth; // Adjusted for additional offset
-      // Ensure the scrollToPosition is within the bounds [0, maxScrollPosition]
-      scrollToPosition = Math.max(
-        0,
-        Math.min(scrollToPosition, maxScrollPosition)
-      );
+    // Adjust the maximum scrollable position to ensure we don't scroll beyond content
+    // No need to change the calculation for maxScrollPosition here since it accommodates for all categories
+    const maxScrollPosition =
+      categoriesData.length * buttonWidth + 120 - viewportWidth; // Adjusted for additional offset
+    // Ensure the scrollToPosition is within the bounds [0, maxScrollPosition]
+    scrollToPosition = Math.max(
+      0,
+      Math.min(scrollToPosition, maxScrollPosition)
+    );
 
-      scrollViewRef.current?.scrollTo({ x: scrollToPosition, animated: true });
-      dispatch(setScrollPosition(scrollToPosition));
-    }
+    scrollViewRef.current?.scrollTo({ x: scrollToPosition, animated: true });
+    dispatch(setScrollPosition(scrollToPosition));
   };
-
-  // const handlePocetnaPress = async ({ categoryUrl }) => {
-  //   dispatch(setSelectedCategory(categoryUrl));
-  //   dispatch(setLoading(true));
-  //   dispatch(setCurrentPage(1));
-
-  //   dispatch(setNajnovijeData(null));
-
-  //   try {
-  //     const response = await axios.get(`${API_URL}/articles/highlight`);
-  //     const newHighlightData = response.data;
-
-  //     const mainArticlesResponse = await axios.get(`${API_URL}/articles/main`);
-
-  //     dispatch(setMainArticles(mainArticlesResponse.data));
-
-  //     dispatch(setHighlightData(newHighlightData));
-  //   } catch (error) {
-  //     console.error("Error fetching categories:", error);
-  //   }
-  //   dispatch(setLoading(false));
-  // };
-
-  // const handleNajnovijePress = async ({ categoryUrl, index, page = 1 }) => {
-  //   dispatch(setSelectedCategory(categoryUrl));
-  //   dispatch(setCurrentPage(1));
-  //   dispatch(setLoading(true));
-
-  //   dispatch(setHighlightData(null));
-  //   dispatch(setMainArticles(null));
-  //   dispatch(setContentData(null));
-
-  //   try {
-  //     const response = await axios.get(
-  //       `${API_URL}/articles/mob/najnovije/${page}`
-  //     );
-
-  //     if (selectedCategory !== categoryUrl) {
-  //       dispatch(setCurrentPage(1));
-  //       dispatch(setNajnovijeData([]));
-  //       dispatch(setHasMore(true));
-  //     }
-
-  //     if (page === 1) {
-  //       dispatch(setNajnovijeData(response.data));
-  //     }
-  //     const newNajnovijeData = response.data;
-
-  //     dispatch(setNajnovijeData(newNajnovijeData));
-  //   } catch (error) {
-  //     console.error("Error fetching categories:", error);
-  //   }
-  //   dispatch(setLoading(false));
-  // };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -230,7 +174,7 @@ const NavList = () => {
             {
               _id: "01",
               category_url: "pocetna",
-              name: "Pocetna",
+              name: "Početna",
               order_number: 0,
             },
             {
@@ -276,37 +220,6 @@ const NavList = () => {
       bounces={false}
       overScrollMode="never"
     >
-      {/* {categoriesData && (
-        <>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => handlePocetnaPress({ categoryUrl: "pocetna" })}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                selectedCategory === "pocetna" ? styles.selectedText : null,
-              ]}
-            >
-              Početna
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => handleNajnovijePress({ categoryUrl: "najnovije" })}
-          >
-            <Text
-              style={[
-                styles.buttonText,
-                selectedCategory === "najnovije" ? styles.selectedText : null,
-              ]}
-            >
-              Najnovije
-            </Text>
-          </TouchableOpacity>
-        </>
-      )} */}
-
       {categoriesData?.map((category, index) => (
         <TouchableOpacity
           key={category._id}
@@ -318,7 +231,9 @@ const NavList = () => {
           <Text
             style={[
               styles.buttonText,
-              selectedCategory === category.category_url && styles.selectedText,
+              selectedCategory === category.category_url
+                ? styles.selectedText
+                : null,
             ]}
           >
             {category.name}
@@ -331,35 +246,33 @@ const NavList = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#1A2F5A',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1A2F5A",
     borderBottomWidth: 1,
-    borderBottomColor: '#000',
-    height:70,
+    borderBottomColor: "#000",
+    height: 70,
   },
   button: {
     width: 120,
-    marginBottom:10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginBottom: 10,
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 4,
-
   },
   buttonText: {
-    fontWeight: '500',
-    color: '#fff',
+    fontWeight: "500",
+    color: "#fff",
     fontSize: 13,
   },
   selectedText: {
-    fontWeight: '700', // Increased weight for better emphasis
-    color: '#E3E3E3', // A slightly lighter shade for better contrast against the dark background
-    textDecorationLine: "none", // Removing the underline for a cleaner look
-    borderBottomWidth:0.8, // Adding a bottom border for a subtle indicator
-    borderBottomColor: '#ffffff', // Gold color for the border to add a sophisticated touch without being too loud
-    paddingBottom: 2, // Adjust padding to accommodate the border without increasing the overall height
+    fontWeight: "700",
+    color: "#E3E3E3",
+    textDecorationLine: "none",
+    borderBottomWidth: 0.8,
+    borderBottomColor: "#ffffff",
+    paddingBottom: 2,
   },
 });
-
 
 export default NavList;
