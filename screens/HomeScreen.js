@@ -53,6 +53,7 @@ const HomeScreen = () => {
   const [userInfoLoaded, setUserInfoLoaded] = useState(false);
   const [isConnectionError, setIsConnectionError] = useState(false);
   const [data, setData] = useState([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   // Function to update loading state
   const expoPushToken = useSelector(
@@ -296,6 +297,7 @@ const HomeScreen = () => {
   const loadMoreContent = async () => {
     if (!isPageLoading && hasMore) {
       setIsPageLoading(true);
+
       const nextPage = currentPage + 1;
       if (selectedCategory === "najnovije") {
         await dispatch(

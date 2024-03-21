@@ -331,33 +331,35 @@ const NavList = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#1A2F5A",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1A2F5A',
     borderBottomWidth: 1,
-    height: 60,
+    borderBottomColor: '#000',
+    height:70,
   },
   button: {
     width: 120,
-    justifyContent: "center",
-    alignItems: "center",
+    marginBottom:10,
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 4,
+
   },
   buttonText: {
-    fontWeight: "500",
-    color: "#ffffff",
+    fontWeight: '500',
+    color: '#fff',
     fontSize: 13,
-    // paddingBottom: 5,
   },
   selectedText: {
-    fontWeight: "700", // Increased weight for better emphasis
-    color: "#E3E3E3", // A slightly lighter shade for better contrast against the dark background
+    fontWeight: '700', // Increased weight for better emphasis
+    color: '#E3E3E3', // A slightly lighter shade for better contrast against the dark background
     textDecorationLine: "none", // Removing the underline for a cleaner look
-    borderBottomWidth: 0.8, // Adding a bottom border for a subtle indicator
-    borderBottomColor: "#ffffff", // Gold color for the border to add a sophisticated touch without being too loud
-    paddingBottom: 30, // Adjust padding to accommodate the border without increasing the overall height
-    paddingTop: 20,
+    borderBottomWidth:0.8, // Adding a bottom border for a subtle indicator
+    borderBottomColor: '#ffffff', // Gold color for the border to add a sophisticated touch without being too loud
+    paddingBottom: 2, // Adjust padding to accommodate the border without increasing the overall height
   },
 });
+
 
 export default NavList;

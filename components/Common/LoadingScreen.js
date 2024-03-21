@@ -9,7 +9,7 @@ import {
 
 import { STATUS_BAR_HEIGHT } from "./StatusBarView";
 
-let loadingHeight = Dimensions.get("window").height - STATUS_BAR_HEIGHT - 237;
+let loadingHeight = Dimensions.get("window").height - STATUS_BAR_HEIGHT - 80;
 
 const LoadingScreen = () => {
   return (
