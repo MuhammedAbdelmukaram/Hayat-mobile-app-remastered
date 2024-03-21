@@ -13,8 +13,6 @@ import { API_URL } from "@env";
 import {
   appendContentData,
   setAllCategories,
-  categoriesData,
-  fetchCategories,
   setContentData,
   setCurrentPage,
   setHasMore,
@@ -24,8 +22,6 @@ import {
   setNajnovijeData,
   setScrollPosition,
   setSelectedCategory,
-  fetchHighlightData,
-  fetchMainArticlesData,
 } from "../../redux/slices/selectedContentSlice";
 
 const NavList = () => {
@@ -40,7 +36,6 @@ const NavList = () => {
   } = useSelector((state) => state.selectedContent);
 
   const scrollViewRef = useRef(null);
-  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
 
   useEffect(() => {
     scrollViewRef.current?.scrollTo({ x: scrollPosition, animated: true });
@@ -64,14 +59,12 @@ const NavList = () => {
     }
     if (direction === "left" && index !== categoriesData.length - 1) {
       const nextCategory = categoriesData[index + 1];
-      console.log("next", nextCategory);
       handleCategoryPress({
         categoryUrl: nextCategory.category_url,
         index: index + 1,
       });
       dispatch(setLoading(true));
     }
-    console.log("swipe", swipeObject, currentCategory, index);
   }, [swipeObject]);
 
   const mainCategories = ["pocetna", "najnovije"];
@@ -79,7 +72,6 @@ const NavList = () => {
   const handleCategoryPress = async ({ categoryUrl, index, page = 1 }) => {
     dispatch(setLoading(true));
     dispatch(setSelectedCategory(categoryUrl));
-    console.log("called", categoryUrl);
 
     try {
       if (categoryUrl === "pocetna") {
