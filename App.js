@@ -6,6 +6,7 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
+import "react-native-gesture-handler";
 
 // import { Banner } from "react-native-ad-manager";
 
