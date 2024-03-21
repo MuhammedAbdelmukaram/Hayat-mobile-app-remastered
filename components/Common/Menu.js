@@ -74,14 +74,14 @@ const Menu = ({ visible, onClose }) => {
     const viewportWidth = Dimensions.get("window").width; // Width of the viewport
 
     // Calculate the center position of the button to be centered in the viewport
-    const buttonCenter = index * buttonWidth + buttonWidth / 2 + 240; // Adjust center position for the offset of the first two unaccounted buttons
+    const buttonCenter = index * buttonWidth + buttonWidth / 2; // Adjust center position for the offset of the first two unaccounted buttons
     const halfViewportWidth = viewportWidth / 2;
     let scrollToPosition = buttonCenter - halfViewportWidth; // Adjust so button is in the middle of the viewport
 
     // Adjust the maximum scrollable position to ensure we don't scroll beyond content
     // No need to change the calculation for maxScrollPosition here since it accommodates for all categories
     const maxScrollPosition =
-      categoriesData.length * buttonWidth + 240 - viewportWidth; // Adjusted for additional offset
+      categoriesData.length * buttonWidth + 120 - viewportWidth; // Adjusted for additional offset
     // Ensure the scrollToPosition is within the bounds [0, maxScrollPosition]
     scrollToPosition = Math.max(
       0,
@@ -341,42 +341,38 @@ const Menu = ({ visible, onClose }) => {
               <HorizontalLine />
             </View>
 
-
-
             {/* Add more menu items */}
           </ScrollView>
           <View style={styles.menuBottomSection}>
             <View style={styles.menuCategories}>
               <TouchableOpacity
-                  style={styles.menuItemBottom}
-                  onPress={() => {
-                    navigation.navigate("Settings");
-                    // Use your HomeScreen's route name
-                    onClose(); // Optionally close the menu
-                  }}
+                style={styles.menuItemBottom}
+                onPress={() => {
+                  navigation.navigate("Settings");
+                  // Use your HomeScreen's route name
+                  onClose(); // Optionally close the menu
+                }}
               >
                 <Image
-                    source={require("../../assets/settings.png")} // Your home icon
-                    style={getIconStyle(28)}
+                  source={require("../../assets/settings.png")} // Your home icon
+                  style={getIconStyle(28)}
                 />
               </TouchableOpacity>
             </View>
 
-
             <TouchableOpacity
-                style={styles.menuItemBottom}
-                onPress={() => {
-                  navigation.navigate("About");
-                  // Use your HomeScreen's route name
-                  onClose(); // Optionally close the menu
-                }}
+              style={styles.menuItemBottom}
+              onPress={() => {
+                navigation.navigate("About");
+                // Use your HomeScreen's route name
+                onClose(); // Optionally close the menu
+              }}
             >
               {/*<Image*/}
               {/*    source={require('../../assets/about.png')} // Your home icon*/}
               {/*    style={getIconStyle(28)}*/}
               {/*/>*/}
             </TouchableOpacity>
-
           </View>
         </Animated.View>
       </TouchableOpacity>
@@ -438,7 +434,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
 
-
   gledajHayatIcon: {
     height: 35,
     width: 35,
@@ -481,7 +476,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     paddingHorizontal: 16,
-    marginBottom:14
+    marginBottom: 14,
   },
 
   menuCategories: {
