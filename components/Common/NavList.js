@@ -13,6 +13,7 @@ import { API_URL } from "@env";
 import {
   appendContentData,
   setAllCategories,
+  categoriesData,
   fetchCategories,
   setContentData,
   setCurrentPage,
@@ -30,42 +31,109 @@ import {
 const NavList = () => {
   const dispatch = useDispatch();
 
-  const { categoriesData, selectedCategory } = useSelector(
-    (state) => state.selectedContent
-  );
+  const {
+    categoriesData,
+    selectedCategory,
+    scrollPosition,
+    swipeObject,
+    loading,
+  } = useSelector((state) => state.selectedContent);
 
   const scrollViewRef = useRef(null);
-  const scrollPosition = useSelector(
-    (state) => state.selectedContent.scrollPosition
-  );
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
 
   useEffect(() => {
     scrollViewRef.current?.scrollTo({ x: scrollPosition, animated: true });
   }, [scrollPosition]);
 
-  // In both NavList and Menu components
+  useEffect(() => {
+    if (!swipeObject || loading || !categoriesData) return;
+
+    const { categoryUrl, direction } = swipeObject;
+    const currentCategory = categoriesData.find(
+      (category) => category.category_url === categoryUrl
+    );
+    const index = categoriesData.indexOf(currentCategory);
+    if (direction === "right" && index !== 0) {
+      const previousCategory = categoriesData[index - 1];
+      handleCategoryPress({
+        categoryUrl: previousCategory.category_url,
+        index: index - 1,
+      });
+      dispatch(setLoading(true));
+    }
+    if (direction === "left" && index !== categoriesData.length - 1) {
+      const nextCategory = categoriesData[index + 1];
+      console.log("next", nextCategory);
+      handleCategoryPress({
+        categoryUrl: nextCategory.category_url,
+        index: index + 1,
+      });
+      dispatch(setLoading(true));
+    }
+    console.log("swipe", swipeObject, currentCategory, index);
+  }, [swipeObject]);
+
+  const mainCategories = ["pocetna", "najnovije"];
+
   const handleCategoryPress = async ({ categoryUrl, index, page = 1 }) => {
     dispatch(setLoading(true));
     dispatch(setSelectedCategory(categoryUrl));
-
-    dispatch(setHighlightData(null));
-    dispatch(setMainArticles(null));
-    dispatch(setNajnovijeData(null));
-
-    if (selectedCategory !== categoryUrl) {
-      dispatch(setCurrentPage(1)); // Assuming you have such an action
-      dispatch(setContentData([])); // Clear existing content data
-      dispatch(setHasMore(true));
-    }
+    console.log("called", categoryUrl);
 
     try {
-      const url = `${API_URL}/articles/mob/${categoryUrl}/${page}`;
-      const response = await axios.get(url);
-      if (page === 1) {
-        dispatch(setContentData(response.data)); // Replace data for the first page
-      } else {
-        dispatch(appendContentData(response.data)); // Append data for subsequent pages
+      if (categoryUrl === "pocetna") {
+        dispatch(setCurrentPage(1));
+        dispatch(setNajnovijeData(null));
+        dispatch(setContentData(null));
+
+        const response = await axios.get(`${API_URL}/articles/highlight`);
+        const newHighlightData = response.data;
+        dispatch(setHighlightData(newHighlightData));
+
+        const mainArticlesResponse = await axios.get(
+          `${API_URL}/articles/main`
+        );
+        dispatch(setMainArticles(mainArticlesResponse.data));
+      }
+
+      if (categoryUrl === "najnovije") {
+        dispatch(setHighlightData(null));
+        dispatch(setMainArticles(null));
+        dispatch(setContentData(null));
+
+        const response = await axios.get(
+          `${API_URL}/articles/mob/najnovije/${page}`
+        );
+
+        if (selectedCategory !== categoryUrl) {
+          dispatch(setCurrentPage(1));
+          dispatch(setNajnovijeData([]));
+          dispatch(setHasMore(true));
+        }
+
+        if (page === 1) {
+          dispatch(setNajnovijeData(response.data));
+        }
+        const newNajnovijeData = response.data;
+        dispatch(setNajnovijeData(newNajnovijeData));
+      }
+
+      if (!mainCategories.includes(categoryUrl)) {
+        if (selectedCategory !== categoryUrl) {
+          dispatch(setCurrentPage(1)); // Assuming you have such an action
+          dispatch(setContentData([]));
+          dispatch(setHasMore(true));
+        }
+
+        const response = await axios.get(
+          `${API_URL}/articles/mob/${categoryUrl}/${page}`
+        );
+        if (page === 1) {
+          dispatch(setContentData(response.data)); // Replace data for the first page
+        } else {
+          dispatch(appendContentData(response.data)); // Append data for subsequent pages
+        }
       }
     } catch (error) {
       console.error("Error fetching category specific:", error);
@@ -73,94 +141,107 @@ const NavList = () => {
 
     dispatch(setLoading(false));
 
-    const buttonWidth = 120; // Width of each button including padding
-    const viewportWidth = Dimensions.get("window").width; // Width of the viewport
+    if (!mainCategories.includes(categoryUrl)) {
+      const buttonWidth = 120; // Width of each button including padding
+      const viewportWidth = Dimensions.get("window").width; // Width of the viewport
 
-    // Calculate the center position of the button to be centered in the viewport
-    const buttonCenter = index * buttonWidth + buttonWidth / 2 + 240; // Adjust center position for the offset of the first two unaccounted buttons
-    const halfViewportWidth = viewportWidth / 2;
-    let scrollToPosition = buttonCenter - halfViewportWidth; // Adjust so button is in the middle of the viewport
+      // Calculate the center position of the button to be centered in the viewport
+      const buttonCenter = index * buttonWidth + buttonWidth / 2 + 240; // Adjust center position for the offset of the first two unaccounted buttons
+      const halfViewportWidth = viewportWidth / 2;
+      let scrollToPosition = buttonCenter - halfViewportWidth; // Adjust so button is in the middle of the viewport
 
-    // Adjust the maximum scrollable position to ensure we don't scroll beyond content
-    // No need to change the calculation for maxScrollPosition here since it accommodates for all categories
-    const maxScrollPosition =
-      categoriesData.length * buttonWidth + 240 - viewportWidth; // Adjusted for additional offset
-    // Ensure the scrollToPosition is within the bounds [0, maxScrollPosition]
-    scrollToPosition = Math.max(
-      0,
-      Math.min(scrollToPosition, maxScrollPosition)
-    );
-
-    scrollViewRef.current?.scrollTo({ x: scrollToPosition, animated: true });
-    dispatch(setScrollPosition(scrollToPosition));
-  };
-
-  const handlePocetnaPress = async ({ categoryUrl }) => {
-    dispatch(setSelectedCategory(categoryUrl));
-    dispatch(setLoading(true));
-    dispatch(setCurrentPage(1));
-
-    dispatch(setNajnovijeData(null));
-
-    try {
-      const response = await axios.get(`${API_URL}/articles/highlight`);
-
-      // Assuming the categories are under the key 'categories' within the response object
-      const newHighlightData = response.data;
-
-      const mainArticlesResponse = await axios.get(`${API_URL}/articles/main`);
-
-      dispatch(setMainArticles(mainArticlesResponse.data));
-
-      // Dispatch an action to update contentData in Redux
-      dispatch(setHighlightData(newHighlightData));
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-    dispatch(setLoading(false));
-  };
-
-  const handleNajnovijePress = async ({ categoryUrl, index, page = 1 }) => {
-    dispatch(setSelectedCategory(categoryUrl));
-    dispatch(setCurrentPage(1));
-    dispatch(setLoading(true));
-
-    dispatch(setHighlightData(null));
-    dispatch(setMainArticles(null));
-    dispatch(setContentData(null));
-
-    try {
-      const response = await axios.get(
-        `${API_URL}/articles/mob/najnovije/${page}`
+      // Adjust the maximum scrollable position to ensure we don't scroll beyond content
+      // No need to change the calculation for maxScrollPosition here since it accommodates for all categories
+      const maxScrollPosition =
+        categoriesData.length * buttonWidth + 240 - viewportWidth; // Adjusted for additional offset
+      // Ensure the scrollToPosition is within the bounds [0, maxScrollPosition]
+      scrollToPosition = Math.max(
+        0,
+        Math.min(scrollToPosition, maxScrollPosition)
       );
 
-      if (selectedCategory !== categoryUrl) {
-        dispatch(setCurrentPage(1)); // Assuming you have such an action
-        dispatch(setNajnovijeData([])); // Clear existing content data
-        dispatch(setHasMore(true));
-      }
-
-      if (page === 1) {
-        dispatch(setNajnovijeData(response.data)); // Replace data for the first page
-      }
-
-      // Assuming the categories are under the key 'categories' within the response object
-      const newNajnovijeData = response.data;
-
-      // Dispatch an action to update contentData in Redux
-      dispatch(setNajnovijeData(newNajnovijeData));
-    } catch (error) {
-      console.error("Error fetching categories:", error);
+      scrollViewRef.current?.scrollTo({ x: scrollToPosition, animated: true });
+      dispatch(setScrollPosition(scrollToPosition));
     }
-    dispatch(setLoading(false));
   };
+
+  // const handlePocetnaPress = async ({ categoryUrl }) => {
+  //   dispatch(setSelectedCategory(categoryUrl));
+  //   dispatch(setLoading(true));
+  //   dispatch(setCurrentPage(1));
+
+  //   dispatch(setNajnovijeData(null));
+
+  //   try {
+  //     const response = await axios.get(`${API_URL}/articles/highlight`);
+  //     const newHighlightData = response.data;
+
+  //     const mainArticlesResponse = await axios.get(`${API_URL}/articles/main`);
+
+  //     dispatch(setMainArticles(mainArticlesResponse.data));
+
+  //     dispatch(setHighlightData(newHighlightData));
+  //   } catch (error) {
+  //     console.error("Error fetching categories:", error);
+  //   }
+  //   dispatch(setLoading(false));
+  // };
+
+  // const handleNajnovijePress = async ({ categoryUrl, index, page = 1 }) => {
+  //   dispatch(setSelectedCategory(categoryUrl));
+  //   dispatch(setCurrentPage(1));
+  //   dispatch(setLoading(true));
+
+  //   dispatch(setHighlightData(null));
+  //   dispatch(setMainArticles(null));
+  //   dispatch(setContentData(null));
+
+  //   try {
+  //     const response = await axios.get(
+  //       `${API_URL}/articles/mob/najnovije/${page}`
+  //     );
+
+  //     if (selectedCategory !== categoryUrl) {
+  //       dispatch(setCurrentPage(1));
+  //       dispatch(setNajnovijeData([]));
+  //       dispatch(setHasMore(true));
+  //     }
+
+  //     if (page === 1) {
+  //       dispatch(setNajnovijeData(response.data));
+  //     }
+  //     const newNajnovijeData = response.data;
+
+  //     dispatch(setNajnovijeData(newNajnovijeData));
+  //   } catch (error) {
+  //     console.error("Error fetching categories:", error);
+  //   }
+  //   dispatch(setLoading(false));
+  // };
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${API_URL}/categories`);
         const data = response.data;
-        dispatch(setAllCategories(data));
+
+        dispatch(
+          setAllCategories([
+            {
+              _id: "01",
+              category_url: "pocetna",
+              name: "Pocetna",
+              order_number: 0,
+            },
+            {
+              _id: "12",
+              category_url: "najnovije",
+              name: "Najnovije",
+              order_number: 0,
+            },
+            ...data,
+          ])
+        );
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -195,7 +276,7 @@ const NavList = () => {
       bounces={false}
       overScrollMode="never"
     >
-      {categoriesData && (
+      {/* {categoriesData && (
         <>
           <TouchableOpacity
             style={styles.button}
@@ -224,7 +305,7 @@ const NavList = () => {
             </Text>
           </TouchableOpacity>
         </>
-      )}
+      )} */}
 
       {categoriesData?.map((category, index) => (
         <TouchableOpacity

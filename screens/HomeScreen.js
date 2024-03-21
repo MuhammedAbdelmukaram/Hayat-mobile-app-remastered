@@ -13,8 +13,7 @@ import {
 } from "react-native";
 import { DefaultTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { API_URL } from "@env";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 
 import Header from "../components/Common/Header";
 import NavList from "../components/Common/NavList";
@@ -31,6 +30,7 @@ import {
   setHighlightData,
   setLoading,
   setMainArticles,
+  setSwipeObject,
 } from "../redux/slices/selectedContentSlice";
 import CategoryHighlightNews from "../components/CategoryHighlightNews";
 import Najnovije from "../components/HomeScreen/Najnovije";
@@ -59,6 +59,30 @@ const HomeScreen = () => {
   const expoPushToken = useSelector(
     (state) => state.notification.expoPushToken
   );
+
+  const handleGestureEvent = (event) => {
+    if (
+      event.nativeEvent.translationX > 50 &&
+      event.nativeEvent.state === State.ACTIVE
+    ) {
+      dispatch(
+        setSwipeObject({ categoryUrl: selectedCategory, direction: "right" })
+      );
+      console.log("Swiped right", selectedCategory);
+      // Call your function or navigate to another screen
+      // navigation.navigate("Other");
+    } else if (
+      event.nativeEvent.translationX < -50 &&
+      event.nativeEvent.state === State.ACTIVE
+    ) {
+      dispatch(
+        setSwipeObject({ categoryUrl: selectedCategory, direction: "left" })
+      );
+      console.log("Swiped left", selectedCategory);
+      // Call your function or navigate to another screen
+      // For example, navigation.navigate('AnotherScreen');
+    }
+  };
 
   const {
     loading: isLoading,
@@ -161,58 +185,8 @@ const HomeScreen = () => {
     return sortedData;
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const highlightData = await dispatch(fetchHighlightData());
-  //     const mainArticles = await dispatch(fetchMainArticlesData());
-  //     console.log("hig", mainArticles);
-
-  //     const highlightSortedData = sortHighlightArticlesAccordingToPriority(
-  //       highlightData.payload
-  //     );
-
-  //     const listData = [];
-
-  //     highlightSortedData &&
-  //       listData.push({
-  //         title: "Highlight",
-  //         data: highlightSortedData,
-  //         adId: 2,
-  //       });
-
-  //     const categoryDataSortOrders = [
-  //       [2, 3, 3, 5, 5, 5, 3],
-  //       [2, 4, 4, 3, 3, 5, 5],
-  //       [2, 5, 4, 4, 3, 3, 5],
-  //     ];
-
-  //     mainArticles?.payload.forEach((categoryArticles, categoryIndex) => {
-  //       const categoryName = getCategoryName(categoryArticles[0].category);
-  //       const algoIndex = categoryIndex % 3;
-  //       const selectedArticles = categoryArticles.slice(0, 7);
-
-  //       const categorySortedData = setPriorityAccordingToSortOrder(
-  //         selectedArticles,
-  //         categoryDataSortOrders[algoIndex]
-  //       );
-
-  //       listData.push({
-  //         title: categoryName,
-  //         data: categorySortedData,
-  //         adId: categoryIndex === 0 ? 5 : categoryIndex === 1 ? 6 : null,
-  //       });
-  //     });
-
-  //     setData(listData);
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  //console.log(userInfo);
   useEffect(() => {
     if (highlightData && mainArticles) {
-      // const fetchData = async () => {
       setDataLoaded(false); // THE LOADER WHICH WORKS NOW
       dispatch(setLoading(true));
 
@@ -253,60 +227,6 @@ const HomeScreen = () => {
         });
 
         setData(listData);
-        // Fetching highlight data
-        // const highlightResponse = await axios.get(
-        //   `${API_URL}/articles/highlight`
-        // );
-        // dispatch(setHighlightData(highlightResponse.data));
-
-        // Fetching main articles data (moved from CategoryHighlightNews)
-        // const mainArticlesResponse = await axios.get(
-        //   `${API_URL}/articles/main`
-        // );
-        // dispatch(setMainArticles(mainArticlesResponse.data));
-
-        // if (highlightData) {
-        //   // console.log("show");
-        //   const highlightSortedData =
-        //     sortHighlightArticlesAccordingToPriority(highlightData);
-
-        //   const listData = [];
-
-        //   highlightSortedData &&
-        //     listData.push({
-        //       title: "Highlight",
-        //       data: highlightSortedData,
-        //       adId: 2,
-        //     });
-
-        //   const categoryDataSortOrders = [
-        //     [2, 3, 3, 5, 5, 5, 3],
-        //     [2, 4, 4, 3, 3, 5, 5],
-        //     [2, 5, 4, 4, 3, 3, 5],
-        //   ];
-        //   mainArticlesResponse.data.forEach(
-        //     (categoryArticles, categoryIndex) => {
-        //       const categoryName = getCategoryName(
-        //         categoryArticles[0].category
-        //       );
-        //       const algoIndex = categoryIndex % 3;
-        //       const selectedArticles = categoryArticles.slice(0, 7);
-
-        //       const categorySortedData = setPriorityAccordingToSortOrder(
-        //         selectedArticles,
-        //         categoryDataSortOrders[algoIndex]
-        //       );
-
-        //       listData.push({
-        //         title: categoryName,
-        //         data: categorySortedData,
-        //         adId: categoryIndex === 0 ? 5 : categoryIndex === 1 ? 6 : null,
-        //       });
-        //     }
-        //   );
-
-        //   setData(listData);
-        // }
 
         setDataLoaded(true);
         dispatch(setLoading(false));
@@ -318,9 +238,6 @@ const HomeScreen = () => {
           setDataLoaded(false);
         }
       }
-      // };
-
-      // if (highlightData && mainArticles) fetchData();
     }
 
     if (najnovijeData) {
@@ -338,9 +255,6 @@ const HomeScreen = () => {
 
     if (contentData) {
       const contentSortedData = sortCategoryArticles(contentData);
-      // console.log("contentSortedData", contentSortedData);
-      // const najnovijeSortedData =
-      //   setPriorityAccordingToNajnovijeArticles(najnovijeData);
 
       const listData = [];
 
@@ -434,7 +348,7 @@ const HomeScreen = () => {
       {isConnectionError && <NoConnection />}
       {isLoading && <LoadingScreen />}
       {!isLoading && !isConnectionError && (
-        <>
+        <PanGestureHandler onGestureEvent={handleGestureEvent}>
           <SectionList
             refreshing={isLoading}
             style={{ height: "100%" }}
@@ -459,45 +373,7 @@ const HomeScreen = () => {
             onEndReached={loadMoreContent}
             onEndReachedThreshold={2}
           />
-          {/* <ScrollView
-            bounces={false}
-            overScrollMode="never"
-            ref={scrollViewRef}
-            style={{ height: "100%" }}
-            onMomentumScrollEnd={({ nativeEvent }) => {
-              const isEnd =
-                nativeEvent.layoutMeasurement.height +
-                  nativeEvent.contentOffset.y >=
-                nativeEvent.contentSize.height - 20;
-
-              if (isEnd && hasMore) {
-                loadMoreContent();
-              }
-            }}
-          >
-            {selectedCategory === "pocetna" && (
-              <>
-                <HighlightNews />
-                <AdPlacement id={2} />
-                <CategoryHighlightNews />
-              </>
-            )}
-            {selectedCategory === "najnovije" && (
-              <Najnovije isPageLoading={isPageLoading} />
-            )}
-            {selectedCategory !== "pocetna" && (
-              <CategoryContent isPageLoading={isPageLoading} />
-            )}
-          </ScrollView> */}
-          {isPageLoading && (
-              <ActivityIndicator
-                  style={{ marginVertical: 10 }}
-                  size="large"
-                  color="#1A2F5A" // Adjust the color as needed
-              />
-          )}
-
-        </>
+        </PanGestureHandler>
       )}
     </View>
   );
