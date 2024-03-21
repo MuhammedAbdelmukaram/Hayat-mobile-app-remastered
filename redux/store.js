@@ -12,6 +12,10 @@ const store = configureStore({
         selectedContent: selectedContentReducer,
         notification: notificationReducer,
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        immutableCheck: false,
+        serializableCheck: false,
+    })
 });
 
 export default store;

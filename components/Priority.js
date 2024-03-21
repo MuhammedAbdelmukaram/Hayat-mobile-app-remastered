@@ -1,11 +1,36 @@
-import React, { useEffect } from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, {useEffect, useRef} from "react";
+import {View, Image, Text, StyleSheet, TouchableOpacity, Animated} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import HorizontalLine from "./Menu/HorizontalLine";
 
 const Priority = ({ article }) => {
   const navigation = useNavigation();
+
+  const blinkAnim = useRef(new Animated.Value(0)).current; // Initial opacity is 0
+
+  useEffect(() => {
+    const animation = Animated.loop(
+        Animated.sequence([
+          Animated.timing(blinkAnim, {
+            toValue: 1,
+            duration: 500, // Reduced duration
+            useNativeDriver: true,
+          }),
+          Animated.timing(blinkAnim, {
+            toValue: 0,
+            duration: 500, // Reduced duration
+            useNativeDriver: true,
+          }),
+        ])
+    );
+
+    animation.start();
+
+    // Cleanup function to stop the animation when component unmounts
+    return () => animation.stop();
+  }, []); // Removed blinkAnim from dependencies
+
 
   const {
     image_list,
@@ -86,7 +111,14 @@ const Priority = ({ article }) => {
           </>
         ) : priority === 2 ? (
           <>
-            <View style={styles.textBox}>
+
+            <View style={styles.textBoxPrioTwo}>
+              <Animated.View
+                  style={{
+                    ...styles.blinkingDot,
+                    opacity: blinkAnim, // Bind opacity to animated value
+                  }}
+              />
               <Text style={styles.titleText}>{formattedArticleTitle}</Text>
             </View>
             <View style={styles.textBoxTwo}>
@@ -136,10 +168,20 @@ const styles = StyleSheet.create({
     paddingTop: 8, // Adjust vertical padding as needed
     paddingBottom: 4,
   },
+
+  textBoxPrioTwo:{
+    display:"flex",
+    flexDirection:"row",
+
+    width: "89%", // Adjust the width as needed
+    paddingTop: 8, // Adjust vertical padding as needed
+    paddingBottom: 4,
+  },
   textBoxTwo: {
     width: "92%", // Adjust the width as needed
     paddingBottom: 8, // Adjust vertical padding as needed
     marginBottom: 4,
+    marginLeft:10
   },
   titleText: {
     fontSize: 18, // Adjust the font size for the title text
@@ -158,6 +200,14 @@ const styles = StyleSheet.create({
   textsWrapper: {
     display: "flex",
     marginLeft: 12,
+  },
+  blinkingDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "red",
+    marginTop:9,
+    marginRight:8
   },
   image: {
     width: "93%", // Adjust the width as needed
@@ -215,7 +265,7 @@ const styles = StyleSheet.create({
   subtitle: {
     color: "#2d2d2d",
     fontSize: 11,
-    width: 260,
+    width: 240,
   },
   subtitle4: {
     color: "#2d2d2d",
