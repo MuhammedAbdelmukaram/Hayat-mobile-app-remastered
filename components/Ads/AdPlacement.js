@@ -19,7 +19,7 @@ const AdPlacement = ({ id }) => {
   return (
     <View>
       {/* <Banner
-        adSize="fullBanner"
+        adSize="Banner"
         adUnitID={adUnits[id - 1]}
         onAdFailedToLoad={(error) => console.error(error)}
         onAppEvent={(event) => console.log(event.name, event.info)}
