@@ -65,6 +65,13 @@ const NavList = () => {
       });
       dispatch(setLoading(true));
     }
+    if (!direction) {
+      handleCategoryPress({
+        categoryUrl,
+        index,
+      });
+      dispatch(setLoading(true));
+    }
   }, [swipeObject]);
 
   const mainCategories = ["pocetna", "najnovije"];

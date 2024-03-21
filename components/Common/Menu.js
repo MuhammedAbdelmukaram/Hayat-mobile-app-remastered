@@ -10,35 +10,22 @@ import {
   TouchableOpacity,
   View,
   Platform,
-  Dimensions,
 } from "react-native";
 import { useFonts } from "@expo-google-fonts/blinker";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
-import axios from "axios";
-import { API_URL } from "@env";
 
 import SocialMediaIcons from "../Menu/SocialMediaIcons";
 import HorizontalLine from "../Menu/HorizontalLine";
 import { checkLoginStatus, setLoginState } from "../../redux/slices/authSlice";
-import {
-  appendContentData,
-  setContentData,
-  setCurrentPage,
-  setScrollPosition,
-  setSelectedCategory,
-} from "../../redux/slices/selectedContentSlice";
+import { setSwipeObject } from "../../redux/slices/selectedContentSlice";
 import { clearUser } from "../../redux/slices/userSlice";
 
 const Menu = ({ visible, onClose }) => {
   const [slideAnim] = useState(new Animated.Value(-300)); // Initialize to a value off-screen
-  const selectedCategory = useSelector(
-    (state) => state.selectedContent.selectedCategory
-  );
-  const categoriesData = useSelector(
-    (state) => state.selectedContent.categoriesData
-  );
+  const { categoriesData } = useSelector((state) => state.selectedContent);
+
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const getIconStyle = (size) => ({
@@ -47,49 +34,9 @@ const Menu = ({ visible, onClose }) => {
     resizeMode: "contain", // Ensure the icon fits well within the given dimensions
   });
 
-  const handleCategoryPress = async ({ categoryUrl, index, page = 1 }) => {
-    dispatch(setSelectedCategory(categoryUrl));
-
-    if (selectedCategory !== categoryUrl) {
-      dispatch(setCurrentPage(1)); // Assuming you have such an action
-    }
-
-    try {
-      const url = `${API_URL}/articles/mob/${categoryUrl}/${page}`;
-      //console.log(url);
-      const response = await axios.get(url);
-      if (page === 1) {
-        dispatch(setContentData(response.data)); // Replace data for the first page
-      } else {
-        dispatch(appendContentData(response.data)); // Append data for subsequent pages
-      }
-    } catch (error) {
-      console.error("Error fetching categories specific:", error);
-    } finally {
-      // Close the modal after performing the necessary actions
-      onClose();
-    }
-
-    const buttonWidth = 120; // Width of each button including padding
-    const viewportWidth = Dimensions.get("window").width; // Width of the viewport
-
-    // Calculate the center position of the button to be centered in the viewport
-    const buttonCenter = index * buttonWidth + buttonWidth / 2; // Adjust center position for the offset of the first two unaccounted buttons
-    const halfViewportWidth = viewportWidth / 2;
-    let scrollToPosition = buttonCenter - halfViewportWidth; // Adjust so button is in the middle of the viewport
-
-    // Adjust the maximum scrollable position to ensure we don't scroll beyond content
-    // No need to change the calculation for maxScrollPosition here since it accommodates for all categories
-    const maxScrollPosition =
-      categoriesData.length * buttonWidth + 120 - viewportWidth; // Adjusted for additional offset
-    // Ensure the scrollToPosition is within the bounds [0, maxScrollPosition]
-    scrollToPosition = Math.max(
-      0,
-      Math.min(scrollToPosition, maxScrollPosition)
-    );
-
-    scrollViewRef.current?.scrollTo({ x: scrollToPosition, animated: true });
-    dispatch(setScrollPosition(scrollToPosition));
+  const handleCategoryPress = async ({ categoryUrl }) => {
+    dispatch(setSwipeObject({ categoryUrl }));
+    onClose();
   };
 
   useEffect(() => {
@@ -221,10 +168,9 @@ const Menu = ({ visible, onClose }) => {
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => {
-                  navigation.navigate("HomeScreen");
-                  dispatch(setSelectedCategory("pocetna"));
-                  // Use your HomeScreen's route name
-                  onClose(); // Optionally close the menu
+                  handleCategoryPress({
+                    categoryUrl: "pocetna",
+                  });
                 }}
               >
                 <Image
