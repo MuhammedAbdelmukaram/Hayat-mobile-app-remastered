@@ -1,16 +1,6 @@
 // components/HomeScreen.js
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Platform,
-  ScrollView,
-  SectionList,
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-} from "react-native";
+import { SectionList, StyleSheet, View, Text } from "react-native";
 import { DefaultTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
@@ -18,22 +8,13 @@ import { PanGestureHandler, State } from "react-native-gesture-handler";
 import Header from "../components/Common/Header";
 import NavList from "../components/Common/NavList";
 import StatusBarView from "../components/Common/StatusBarView";
-import HighlightNews from "../components/HomeScreen/HighlightNews";
-import CategoryContent from "../components/CategoryContent";
 import {
-  fetchHighlightData,
-  fetchMainArticlesData,
   fetchArticlesByCategory,
   fetchNajnovijeArticles,
-  getCategories,
   setCurrentPage,
-  setHighlightData,
   setLoading,
-  setMainArticles,
   setSwipeObject,
 } from "../redux/slices/selectedContentSlice";
-import CategoryHighlightNews from "../components/CategoryHighlightNews";
-import Najnovije from "../components/HomeScreen/Najnovije";
 import LoadingScreen from "../components/Common/LoadingScreen";
 import AdPlacement from "../components/Ads/AdPlacement";
 import NoConnection from "../components/NoConnection";
@@ -68,9 +49,6 @@ const HomeScreen = () => {
       dispatch(
         setSwipeObject({ categoryUrl: selectedCategory, direction: "right" })
       );
-      console.log("Swiped right", selectedCategory);
-      // Call your function or navigate to another screen
-      // navigation.navigate("Other");
     } else if (
       event.nativeEvent.translationX < -50 &&
       event.nativeEvent.state === State.ACTIVE
@@ -78,9 +56,6 @@ const HomeScreen = () => {
       dispatch(
         setSwipeObject({ categoryUrl: selectedCategory, direction: "left" })
       );
-      console.log("Swiped left", selectedCategory);
-      // Call your function or navigate to another screen
-      // For example, navigation.navigate('AnotherScreen');
     }
   };
 
