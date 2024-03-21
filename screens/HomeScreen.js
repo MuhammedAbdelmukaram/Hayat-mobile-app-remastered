@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { SectionList, StyleSheet, View, Text } from "react-native";
 import { DefaultTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
 
 import Header from "../components/Common/Header";
 import NavList from "../components/Common/NavList";
@@ -323,32 +322,30 @@ const HomeScreen = () => {
       {isConnectionError && <NoConnection />}
       {isLoading && <LoadingScreen />}
       {!isLoading && !isConnectionError && (
-        <PanGestureHandler onGestureEvent={handleGestureEvent}>
-          <SectionList
-            refreshing={isLoading}
-            style={{ height: "100%" }}
-            sections={data}
-            renderItem={({ item, section, index, seperators }) => {
-              return <Item item={item} section={section} index={index} />;
-            }}
-            renderSectionHeader={({ section: { title } }) =>
-              title !== "Highlight" &&
-              selectedCategory === "pocetna" && (
-                <View style={styles.categoryContainer}>
-                  <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
-                    <View style={styles.categoryName}>
-                      <Text style={styles.category}>{title}</Text>
-                    </View>
+        <SectionList
+          refreshing={isLoading}
+          style={{ height: "100%" }}
+          sections={data}
+          renderItem={({ item, section, index, seperators }) => {
+            return <Item item={item} section={section} index={index} />;
+          }}
+          renderSectionHeader={({ section: { title } }) =>
+            title !== "Highlight" &&
+            selectedCategory === "pocetna" && (
+              <View style={styles.categoryContainer}>
+                <View style={{ backgroundColor: "#fff", paddingBottom: 10 }}>
+                  <View style={styles.categoryName}>
+                    <Text style={styles.category}>{title}</Text>
                   </View>
                 </View>
-              )
-            }
-            stickySectionHeadersEnabled={false}
-            keyExtractor={(item, index) => `${item.title}-${index}`}
-            onEndReached={loadMoreContent}
-            onEndReachedThreshold={2}
-          />
-        </PanGestureHandler>
+              </View>
+            )
+          }
+          stickySectionHeadersEnabled={false}
+          keyExtractor={(item, index) => `${item.title}-${index}`}
+          onEndReached={loadMoreContent}
+          onEndReachedThreshold={2}
+        />
       )}
     </View>
   );
