@@ -12,12 +12,12 @@ const adUnits = [
 ];
 
 const adSizes = [
-  "Banner",
-  "medium",
-  "fullbanner",
-  "fullbanner",
-  "fullbanner",
-  "medium",
+  "LARGE_BANNER",
+  "MEDIUM_RECTANGLE",
+  "LARGE_BANNER",
+  "LARGE_BANNER",
+  "LARGE_BANNER",
+  "LARGE_BANNER",
 ];
 
 const AdPlacement = ({ id }) => {
