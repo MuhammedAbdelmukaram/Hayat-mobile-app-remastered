@@ -58,7 +58,7 @@ const Settings = () => {
   };
 
   const handleNotificationChange = async (value) => {
-    setNotificationsEnabled((previousState) => !previousState);
+    setNotificationsEnabled(value); // Update state immediately
 
     messaging()
       .getToken()
@@ -73,10 +73,7 @@ const Settings = () => {
       <StatusBarView backgroundColor="#1A2F5A" />
       <Header isHome={false} isSettings />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setModalVisible(true)}
-      >
+      <TouchableOpacity style={styles.button}>
         <Image
           source={require("../assets/notificationIcon.png")}
           style={styles.backIcon}
@@ -84,7 +81,14 @@ const Settings = () => {
         />
         <View style={styles.texts}>
           <Text style={styles.userInfoText}>Notifikacije</Text>
-          <Text style={styles.userInfo}>Isključeno</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: "#1a2f5a" }}
+            style={styles.switchStyle}
+            thumbColor={notificationsEnabled ? "#b2c7f5" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={(value) => handleNotificationChange(value)}
+            value={notificationsEnabled}
+          />
         </View>
       </TouchableOpacity>
 
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
   },
   userInfo: {},
   switchStyle: {
-    transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }], // Scale by 1.5 times the original size
+    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }], // Scale by 1.5 times the original size
     marginVertical: 10, // Add some vertical margin if needed
   },
   button: {
@@ -147,6 +151,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     backgroundColor: "#ffffff",
+    height: 90,
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderWidth: 1,
@@ -154,6 +159,10 @@ const styles = StyleSheet.create({
   },
   texts: {
     marginLeft: 20,
+    flex: 1, // Added flex to make the texts take the remaining space
+    flexDirection: "row", // Align texts and switch horizontally
+    alignItems: "center",
+    justifyContent: "space-between", // Align texts and switch horizontally
   },
   backIcon: {
     width: 36,

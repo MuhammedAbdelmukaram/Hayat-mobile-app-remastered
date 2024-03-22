@@ -1,7 +1,8 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import HorizontalLine from "./Menu/HorizontalLine";
 import { useNavigation } from "@react-navigation/native";
+
+import HorizontalLine from "./Menu/HorizontalLine";
 
 const Priority3 = ({
   image,
@@ -97,7 +98,6 @@ const styles = StyleSheet.create({
     height: 101,
     width: 133,
   },
-
   heading: {
     fontWeight: "600",
     textAlign: "left",

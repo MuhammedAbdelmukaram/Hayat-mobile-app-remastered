@@ -1,39 +1,28 @@
 // components/HomeScreen.js
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Platform,
-  ScrollView,
-  FlatList,
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-} from "react-native";
+import { SectionList, StyleSheet, View, Text } from "react-native";
 import { DefaultTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { API_URL } from "@env";
+import {
+  GestureDetector,
+  Gesture,
+  Directions,
+} from "react-native-gesture-handler";
 
 import Header from "../components/Common/Header";
 import NavList from "../components/Common/NavList";
 import StatusBarView from "../components/Common/StatusBarView";
-import HighlightNews from "../components/HomeScreen/HighlightNews";
-import CategoryContent from "../components/CategoryContent";
 import {
   fetchArticlesByCategory,
   fetchNajnovijeArticles,
   setCurrentPage,
-  setHighlightData,
   setLoading,
-  setMainArticles,
+  setSwipeObject,
 } from "../redux/slices/selectedContentSlice";
-import CategoryHighlightNews from "../components/CategoryHighlightNews";
-import Najnovije from "./Najnovije";
 import LoadingScreen from "../components/Common/LoadingScreen";
 import AdPlacement from "../components/Ads/AdPlacement";
 import NoConnection from "../components/NoConnection";
+import Priority from "../components/Priority";
 
 const theme = {
   ...DefaultTheme,
@@ -43,86 +32,228 @@ const theme = {
 };
 
 const HomeScreen = () => {
-  const selectedCategory = useSelector(
-    (state) => state.selectedContent.selectedCategory
-  );
-  const highlightData = useSelector(
-    (state) => state.selectedContent.highlightData
-  );
   const dispatch = useDispatch();
   const [dataLoaded, setDataLoaded] = useState(false);
   const userInfo = useSelector((state) => state.user.userInfo);
   const [userInfoLoaded, setUserInfoLoaded] = useState(false);
   const [isConnectionError, setIsConnectionError] = useState(false);
+  const [data, setData] = useState([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   // Function to update loading state
-
   const expoPushToken = useSelector(
     (state) => state.notification.expoPushToken
   );
 
-  //console.log("Expo Push Token from Redux:", expoPushToken);
+  const flingLeft = Gesture.Fling();
+  flingLeft.direction(Directions.LEFT).onStart((e) => {
+    dispatch(
+      setSwipeObject({ categoryUrl: selectedCategory, direction: "left" })
+    );
+  });
+  const flingRight = Gesture.Fling();
+  flingRight.direction(Directions.RIGHT).onStart((e) => {
+    dispatch(
+      setSwipeObject({ categoryUrl: selectedCategory, direction: "right" })
+    );
+  });
 
-  const { loading: isLoading } = useSelector((state) => state.selectedContent);
+  const {
+    loading: isLoading,
+    categoriesData,
+    selectedCategory,
+    highlightData,
+    mainArticles,
+    najnovijeData,
+    contentData,
+  } = useSelector((state) => state.selectedContent);
 
-  //console.log(userInfo);
+  const getCategoryName = (categoryId) => {
+    const category = categoriesData?.find((c) => c._id == categoryId);
+    return category ? category.name : "Unknown Category";
+  };
+
+  const setPriorityAccordingToSortOrder = (articles, sortOrder) => {
+    const sortedData = [];
+    articles.forEach((article, index) => {
+      const newArticle = { ...article, priority: sortOrder[index] };
+      sortedData.push(newArticle);
+    });
+    return sortedData;
+  };
+
+  const sortHighlightArticlesAccordingToPriority = (articles) => {
+    const sortOrder = [2, 5, 4, 3, 4, 3, 6];
+    const sortedData = [];
+
+    const articlesByPriority = {};
+    articles.forEach((article) => {
+      if (!articlesByPriority[article.priority]) {
+        articlesByPriority[article.priority] = [];
+      }
+      articlesByPriority[article.priority].push(article);
+    });
+
+    sortOrder.forEach((priority) => {
+      if (
+        articlesByPriority[priority] &&
+        articlesByPriority[priority].length > 0
+      ) {
+        // Take the next article from the corresponding category
+        sortedData.push(articlesByPriority[priority].shift());
+      }
+    });
+    return sortedData;
+  };
+
+  const setPriorityAccordingToNajnovijeArticles = (articles) => {
+    const sortedData = [];
+    articles.forEach((article, index) => {
+      const newArticle = {
+        ...article,
+        priority: article.video_post ? 2 : article.photo_post ? 3 : 6,
+      };
+      sortedData.push(newArticle);
+    });
+    return sortedData;
+  };
+
+  const sortCategoryArticles = (articles) => {
+    const sortedData = [];
+    const firstVideo = articles.find((article) => article.video_post);
+    const firstPhoto = articles.find((article) => article.photo_post);
+    const firstText = articles.find((article) => article.text_post);
+
+    let newArticle = {
+      ...firstVideo,
+      priority: 2,
+    };
+    firstVideo && sortedData.push(newArticle);
+
+    newArticle = {
+      ...firstPhoto,
+      priority: 3,
+    };
+    firstPhoto && sortedData.push(newArticle);
+
+    newArticle = {
+      ...firstText,
+      priority: 5,
+    };
+    firstText && sortedData.push(newArticle);
+
+    articles.forEach((article) => {
+      if (
+        [firstVideo, firstPhoto, firstText].some(
+          (firstArticle) => firstArticle && firstArticle._id === article._id
+        )
+      )
+        return;
+
+      const newArticle = {
+        ...article,
+        priority: article.video_post ? 2 : article.photo_post ? 3 : 6,
+      };
+      sortedData.push(newArticle);
+    });
+    return sortedData;
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
+    if (highlightData && mainArticles) {
       setDataLoaded(false); // THE LOADER WHICH WORKS NOW
       dispatch(setLoading(true));
 
       try {
-        // Fetching highlight data
-        const highlightResponse = await axios.get(
-          `${API_URL}/articles/highlight`
-        );
-        dispatch(setHighlightData(highlightResponse.data));
+        const highlightSortedData =
+          sortHighlightArticlesAccordingToPriority(highlightData);
 
-        // Fetching main articles data (moved from CategoryHighlightNews)
-        const mainArticlesResponse = await axios.get(
-          `${API_URL}/articles/main`
-        );
+        const listData = [];
 
-        dispatch(setMainArticles(mainArticlesResponse.data)); // Dispatch the action for main articles
+        highlightSortedData &&
+          listData.push({
+            title: "Highlight",
+            data: highlightSortedData,
+            adId: 2,
+          });
 
-        setDataLoaded(true); // Indicate that data has been loaded
+        const categoryDataSortOrders = [
+          [2, 3, 3, 5, 5, 5, 3],
+          [2, 4, 4, 3, 3, 5, 5],
+          [2, 5, 4, 4, 3, 3, 5],
+        ];
+
+        mainArticles?.forEach((categoryArticles, categoryIndex) => {
+          const categoryName = getCategoryName(categoryArticles[0].category);
+          const algoIndex = categoryIndex % 3;
+          const selectedArticles = categoryArticles.slice(0, 7);
+
+          const categorySortedData = setPriorityAccordingToSortOrder(
+            selectedArticles,
+            categoryDataSortOrders[algoIndex]
+          );
+
+          listData.push({
+            title: categoryName,
+            data: categorySortedData,
+            adId: categoryIndex === 0 ? 5 : categoryIndex === 1 ? 6 : null,
+          });
+        });
+
+        setData(listData);
+
+        setDataLoaded(true);
         dispatch(setLoading(false));
         setIsConnectionError(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         if (!error.response) {
           setIsConnectionError(true);
-          setDataLoaded(false); // Ensure the dataLoaded state is set even in case of an error
-          // Check if error is network error (no response received)
-          // Display a custom message if there is no internet connection
-          //   Alert.alert(
-          //     "Došlo je do problema s povezivanjem s Hayat aplikacijom",
-          //     "Provjerite vašu konekciju i pokušajte opet"
-          //   );
+          setDataLoaded(false);
         }
       }
-    };
+    }
 
-    fetchData();
-  }, [dispatch]);
+    if (najnovijeData) {
+      const najnovijeSortedData =
+        setPriorityAccordingToNajnovijeArticles(najnovijeData);
 
-  {
-    /*
-        useEffect(() => {
-            if (userInfoLoaded && userInfo && !userInfo.confirmed) {
-                // User is logged in but not confirmed, show an alert
-                Alert.alert(
-                    "Verify Your Account",
-                    "You need to verify your account. Check your email."
-                );
-            }
-        }, [userInfo, userInfoLoaded]);
-    */
-  }
+      const listData = [];
 
-  const categoriesData = useSelector(
-    (state) => state.selectedContent.categoriesData
-  ); // Assuming this holds the full categories array
+      listData.push({
+        title: "Najnovije",
+        data: najnovijeSortedData,
+      });
+      setData(listData);
+    }
+
+    if (contentData) {
+      const contentSortedData = sortCategoryArticles(contentData);
+
+      const listData = [];
+
+      listData.push({
+        title: "Category",
+        data: contentSortedData,
+      });
+      setData(listData);
+    }
+  }, [highlightData, mainArticles, najnovijeData, contentData]);
+
+  // useEffect(() => {
+  //   if (userInfoLoaded && userInfo && !userInfo.confirmed) {
+  //     // User is logged in but not confirmed, show an alert
+  //     Alert.alert(
+  //       "Verify Your Account",
+  //       "You need to verify your account. Check your email."
+  //     );
+  //   }
+  // }, [userInfo, userInfoLoaded]);
+
+  // const categoriesData = useSelector(
+  //   (state) => state.selectedContent.categoriesData
+  // );
+  // Assuming this holds the full categories array
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
@@ -140,6 +271,7 @@ const HomeScreen = () => {
   const loadMoreContent = async () => {
     if (!isPageLoading && hasMore) {
       setIsPageLoading(true);
+
       const nextPage = currentPage + 1;
       if (selectedCategory === "najnovije") {
         await dispatch(
@@ -161,25 +293,21 @@ const HomeScreen = () => {
     }
   };
 
-  const DATA = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      title: "First Item",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      title: "Second Item",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      title: "Third Item",
-    },
-  ];
+  const najnovijeAdsOrderId = { 2: 4, 8: 5, 17: 6 };
+  const categoryAdsOrderId = [3, 9, 18];
 
-  const Item = ({ title }) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
+  const Item = ({ item, section, index }) => (
+    <>
+      <Priority key={item._id} article={item} />
+      {section.adId && index === section?.data?.length - 1 && (
+        <AdPlacement id={section.adId} />
+      )}
+      {selectedCategory === "najnovije" && [2, 8, 17].includes(index) && (
+        <AdPlacement id={najnovijeAdsOrderId[index]} />
+      )}
+      {!["pocetna", "najnovije"].includes(selectedCategory) &&
+        categoryAdsOrderId.includes(index) && <AdPlacement id={4} />}
+    </>
   );
 
   return (
@@ -192,43 +320,38 @@ const HomeScreen = () => {
       <Header />
       <NavList />
       {isConnectionError && <NoConnection />}
-      {/* <FlatList
-        data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
-        keyExtractor={(item) => item.id}
-      /> */}
       {isLoading && <LoadingScreen />}
       {!isLoading && !isConnectionError && (
-        <ScrollView
-          bounces={false}
-          overScrollMode="never"
-          ref={scrollViewRef}
-          style={{ height: "100%" }}
-          onMomentumScrollEnd={({ nativeEvent }) => {
-            const isEnd =
-              nativeEvent.layoutMeasurement.height +
-                nativeEvent.contentOffset.y >=
-              nativeEvent.contentSize.height - 20;
-
-            if (isEnd && hasMore) {
-              loadMoreContent();
-            }
-          }}
-        >
-          {selectedCategory === "pocetna" && (
-            <>
-              <HighlightNews />
-              <AdPlacement id={2} />
-              <CategoryHighlightNews />
-            </>
-          )}
-          {selectedCategory === "najnovije" && (
-            <Najnovije isPageLoading={isPageLoading} />
-          )}
-          {selectedCategory !== "pocetna" && (
-            <CategoryContent isPageLoading={isPageLoading} />
-          )}
-        </ScrollView>
+        <GestureDetector gesture={flingLeft}>
+          <GestureDetector gesture={flingRight}>
+            <SectionList
+              refreshing={isLoading}
+              style={{ height: "100%" }}
+              sections={data}
+              renderItem={({ item, section, index, seperators }) => {
+                return <Item item={item} section={section} index={index} />;
+              }}
+              renderSectionHeader={({ section: { title } }) =>
+                title !== "Highlight" &&
+                selectedCategory === "pocetna" && (
+                  <View style={styles.categoryContainer}>
+                    <View
+                      style={{ backgroundColor: "#fff", paddingBottom: 10 }}
+                    >
+                      <View style={styles.categoryName}>
+                        <Text style={styles.category}>{title}</Text>
+                      </View>
+                    </View>
+                  </View>
+                )
+              }
+              stickySectionHeadersEnabled={false}
+              keyExtractor={(item, index) => `${item.title}-${index}`}
+              onEndReached={loadMoreContent}
+              onEndReachedThreshold={2}
+            />
+          </GestureDetector>
+        </GestureDetector>
       )}
     </View>
   );
@@ -242,6 +365,20 @@ const styles = StyleSheet.create({
   },
   statusBar: {
     color: "#fff",
+  },
+  categoryName: {
+    backgroundColor: "#1A2F5A",
+    paddingHorizontal: 20,
+    paddingVertical: 4,
+    alignSelf: "flex-start",
+  },
+  category: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "500",
+  },
+  categoryContainer: {
+    marginTop: 20,
   },
 });
 

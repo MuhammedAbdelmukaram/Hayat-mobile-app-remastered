@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { Provider } from "react-redux";
 import { StyleSheet, PermissionsAndroid, Platform } from "react-native";
@@ -7,8 +6,7 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-
-import { Banner } from "react-native-ad-manager";
+import "react-native-gesture-handler";
 
 import HomeScreen from "./screens/HomeScreen";
 import store from "./redux/store";
@@ -28,6 +26,7 @@ import LiveTv from "./screens/LiveTV";
 import Uskoro from "./screens/Uskoro";
 import About from "./screens/About";
 import Settings from "./screens/Settings";
+import AdPlacement from "./components/Ads/AdPlacement";
 
 Platform.OS === "android" &&
   PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
@@ -146,12 +145,7 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
 
-      <Banner
-        adSize="fullBanner"
-        adUnitID="/272140683/hayat.ba_anchor_bottom_android_app"
-        onAdFailedToLoad={(error) => console.error(error)}
-        onAppEvent={(event) => console.log(event.name, event.info)}
-      />
+      <AdPlacement id={1} />
     </Provider>
   );
 }
