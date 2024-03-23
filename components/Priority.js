@@ -1,5 +1,12 @@
-import React, {useEffect, useRef} from "react";
-import {View, Image, Text, StyleSheet, TouchableOpacity, Animated} from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import HorizontalLine from "./Menu/HorizontalLine";
@@ -11,18 +18,18 @@ const Priority = ({ article }) => {
 
   useEffect(() => {
     const animation = Animated.loop(
-        Animated.sequence([
-          Animated.timing(blinkAnim, {
-            toValue: 1,
-            duration: 500, // Reduced duration
-            useNativeDriver: true,
-          }),
-          Animated.timing(blinkAnim, {
-            toValue: 0,
-            duration: 500, // Reduced duration
-            useNativeDriver: true,
-          }),
-        ])
+      Animated.sequence([
+        Animated.timing(blinkAnim, {
+          toValue: 1,
+          duration: 500, // Reduced duration
+          useNativeDriver: true,
+        }),
+        Animated.timing(blinkAnim, {
+          toValue: 0,
+          duration: 500, // Reduced duration
+          useNativeDriver: true,
+        }),
+      ])
     );
 
     animation.start();
@@ -31,13 +38,13 @@ const Priority = ({ article }) => {
     return () => animation.stop();
   }, []); // Removed blinkAnim from dependencies
 
-
   const {
     image_list,
     title: articleTitle,
     subtitle: articleSubtitle,
     _id: articleID,
     priority,
+    video_post,
   } = article;
 
   const imageUri = image_list[0]?.url;
@@ -67,7 +74,7 @@ const Priority = ({ article }) => {
           <View style={styles.leftSide}>
             <Image
               source={{ uri: imageUri }}
-              resizeMethod= "resize"
+              resizeMethod="resize"
               style={
                 priority === 3
                   ? styles.newsImage3
@@ -81,7 +88,7 @@ const Priority = ({ article }) => {
           <Image
             source={{ uri: imageUri }}
             style={styles.image}
-            resizeMethod= "resize"
+            resizeMethod="resize"
             resizeMode="cover"
           />
         ) : null}
@@ -90,7 +97,9 @@ const Priority = ({ article }) => {
             <View style={styles.rightSide}>
               <View style={styles.upperWrapper}>
                 <View style={styles.textsWrapper}>
-                  <Text style={priority === 3 ? styles.heading3 : styles.heading}>
+                  <Text
+                    style={priority === 3 ? styles.heading3 : styles.heading}
+                  >
                     {formattedArticleTitle}
                   </Text>
                   {[3, 4].includes(priority) && (
@@ -111,16 +120,17 @@ const Priority = ({ article }) => {
           </>
         ) : priority === 2 ? (
           <>
-
-            <View style={styles.textBoxPrioTwo}>
-              <Animated.View
+            {video_post && (
+              <View style={styles.textBoxPrioTwo}>
+                <Animated.View
                   style={{
                     ...styles.blinkingDot,
                     opacity: blinkAnim, // Bind opacity to animated value
                   }}
-              />
-              <Text style={styles.titleText}>{formattedArticleTitle}</Text>
-            </View>
+                />
+                <Text style={styles.titleText}>{formattedArticleTitle}</Text>
+              </View>
+            )}
             <View style={styles.textBoxTwo}>
               <Text style={styles.descriptionText}>
                 {formattedArticleSubtitle}
@@ -169,9 +179,9 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
 
-  textBoxPrioTwo:{
-    display:"flex",
-    flexDirection:"row",
+  textBoxPrioTwo: {
+    display: "flex",
+    flexDirection: "row",
 
     width: "89%", // Adjust the width as needed
     paddingTop: 8, // Adjust vertical padding as needed
@@ -181,7 +191,7 @@ const styles = StyleSheet.create({
     width: "92%", // Adjust the width as needed
     paddingBottom: 8, // Adjust vertical padding as needed
     marginBottom: 4,
-    marginLeft:10
+    marginLeft: 10,
   },
   titleText: {
     fontSize: 18, // Adjust the font size for the title text
@@ -206,8 +216,8 @@ const styles = StyleSheet.create({
     height: 10,
     borderRadius: 5,
     backgroundColor: "red",
-    marginTop:9,
-    marginRight:8
+    marginTop: 9,
+    marginRight: 8,
   },
   image: {
     width: "93%", // Adjust the width as needed
