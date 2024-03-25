@@ -106,6 +106,7 @@ const Priority = ({ article }) => {
                   </Text>
                   {[3, 4].includes(priority) && (
                     <Text
+                      numberOfLines={3}
                       style={
                         [3].includes(priority)
                           ? styles.subtitle
