@@ -62,7 +62,7 @@ const Priority = ({ article }) => {
       style={
         [3, 4, 6].includes(priority)
           ? styles.container3
-          : priority === 5
+          : [5].includes(priority)
           ? styles.container5
           : styles.container2
       }
@@ -76,15 +76,15 @@ const Priority = ({ article }) => {
               source={{ uri: imageUri }}
               resizeMethod="resize"
               style={
-                priority === 3
+                [3].includes(priority)
                   ? styles.newsImage3
-                  : priority == 4
+                  : [4].includes(priority)
                   ? styles.newsImage4
                   : styles.newsImage
               }
             />
           </View>
-        ) : priority === 2 ? (
+        ) : [2].includes(priority) ? (
           <Image
             source={{ uri: imageUri }}
             style={styles.image}
@@ -98,17 +98,21 @@ const Priority = ({ article }) => {
               <View style={styles.upperWrapper}>
                 <View style={styles.textsWrapper}>
                   <Text
-                    style={priority === 3 ? styles.heading3 : styles.heading}
+                    style={
+                      [3].includes(priority) ? styles.heading3 : styles.heading
+                    }
                   >
                     {formattedArticleTitle}
                   </Text>
                   {[3, 4].includes(priority) && (
                     <Text
                       style={
-                        priority === 3 ? styles.subtitle : styles.subtitle4
+                        [3].includes(priority)
+                          ? styles.subtitle
+                          : styles.subtitle4
                       }
                     >
-                      {priority === 3
+                      {[3].includes(priority)
                         ? formattedArticleSubtitle
                         : articleSubtitle}
                     </Text>
@@ -118,19 +122,19 @@ const Priority = ({ article }) => {
             </View>
             <HorizontalLine />
           </>
-        ) : priority === 2 ? (
+        ) : [2].includes(priority) ? (
           <>
-            {video_post && (
-              <View style={styles.textBoxPrioTwo}>
+            <View style={styles.textBoxPrioTwo}>
+              {video_post && (
                 <Animated.View
                   style={{
                     ...styles.blinkingDot,
                     opacity: blinkAnim, // Bind opacity to animated value
                   }}
                 />
-                <Text style={styles.titleText}>{formattedArticleTitle}</Text>
-              </View>
-            )}
+              )}
+              <Text style={styles.titleText}>{formattedArticleTitle}</Text>
+            </View>
             <View style={styles.textBoxTwo}>
               <Text style={styles.descriptionText}>
                 {formattedArticleSubtitle}
