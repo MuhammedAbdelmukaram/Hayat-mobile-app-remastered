@@ -179,24 +179,23 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   textBox: {
-    width: "92%", // Adjust the width as needed
-    paddingTop: 8, // Adjust vertical padding as needed
+    width: "92%",
+    paddingTop: 8,
     paddingBottom: 4,
   },
-
   textBoxPrioTwo: {
     display: "flex",
     flexDirection: "row",
-
-    width: "89%", // Adjust the width as needed
-    paddingTop: 8, // Adjust vertical padding as needed
+    alignContent: "flex-start",
+    width: "92%",
+    paddingTop: 8,
     paddingBottom: 4,
   },
   textBoxTwo: {
-    width: "92%", // Adjust the width as needed
-    paddingBottom: 8, // Adjust vertical padding as needed
+    width: "92%",
+    paddingBottom: 8,
     marginBottom: 4,
-    marginLeft: 10,
+    // marginLeft: 10,
   },
   titleText: {
     fontSize: 18, // Adjust the font size for the title text
