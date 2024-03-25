@@ -8,6 +8,9 @@ import {
   Gesture,
   Directions,
 } from "react-native-gesture-handler";
+import messaging from "@react-native-firebase/messaging";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_URL } from "@env";
 
 import Header from "../components/Common/Header";
 import NavList from "../components/Common/NavList";
@@ -39,6 +42,52 @@ const HomeScreen = () => {
   const [isConnectionError, setIsConnectionError] = useState(false);
   const [data, setData] = useState([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const sendTokenToServer = async (token, value) => {
+    try {
+      await fetch(`${API_URL}/fcm-tokens`, {
+        method: value ? "POST" : "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fcmToken: token }),
+      });
+      console.log("token saved to server", token);
+    } catch (error) {
+      console.error("Error sending token to server:", error);
+    }
+  };
+
+  const checkIfTokenExistsOnServer = async (token) => {
+    // try {
+    const response = await fetch(`${API_URL}/fcm-tokens?fcmToken=${token}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      sendTokenToServer(token);
+      console.log("===error====", response.body);
+    }
+    const jsonData = await response.json();
+    console.log("token==========================", jsonData);
+    // } catch (error) {
+    //   console.error("Error sending token to server:", error);
+    // }
+  };
+
+  const getToken = () => {
+    messaging()
+      .getToken()
+      .then((token) => {
+        checkIfTokenExistsOnServer(token);
+      });
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
 
   // Function to update loading state
   const expoPushToken = useSelector(
@@ -250,10 +299,6 @@ const HomeScreen = () => {
   //   }
   // }, [userInfo, userInfoLoaded]);
 
-  // const categoriesData = useSelector(
-  //   (state) => state.selectedContent.categoriesData
-  // );
-  // Assuming this holds the full categories array
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
