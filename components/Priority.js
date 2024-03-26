@@ -120,18 +120,17 @@ const Priority = ({ article }) => {
           </>
         ) : priority === 2 ? (
           <>
-            <View style={styles.textBoxPrioTwo}>
-              {video_post && (
+            {video_post && (
+              <View style={styles.textBoxPrioTwo}>
                 <Animated.View
                   style={{
                     ...styles.blinkingDot,
                     opacity: blinkAnim, // Bind opacity to animated value
                   }}
                 />
-              )}
-              <Text style={styles.titleText}>{formattedArticleTitle}</Text>
-            </View>
-
+                <Text style={styles.titleText}>{formattedArticleTitle}</Text>
+              </View>
+            )}
             <View style={styles.textBoxTwo}>
               <Text style={styles.descriptionText}>
                 {formattedArticleSubtitle}
