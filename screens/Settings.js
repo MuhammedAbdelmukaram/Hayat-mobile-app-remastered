@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// import messaging from "@react-native-firebase/messaging";
+import messaging from "@react-native-firebase/messaging";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
 
@@ -60,12 +60,12 @@ const Settings = () => {
   const handleNotificationChange = async (value) => {
     setNotificationsEnabled(value); // Update state immediately
 
-    // messaging()
-    //   .getToken()
-    //   .then((token) => {
-    //     sendTokenToServer(token, value);
-    //     handleAsyncToken(token, value);
-    //   });
+    messaging()
+      .getToken()
+      .then((token) => {
+        sendTokenToServer(token, value);
+        handleAsyncToken(token, value);
+      });
   };
 
   return (
